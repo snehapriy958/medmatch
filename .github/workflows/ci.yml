@@ -38,7 +38,6 @@ jobs:
             ${{ runner.os }}-maven-
 
       - name: Make Maven Wrapper executable
-        working-directory: services/auth-service
         run: chmod +x mvnw
 
       - name: Run Tests
@@ -52,7 +51,6 @@ jobs:
         working-directory: services/ai-service
 
     services:
-
       redis:
         image: redis:8-alpine
         ports:
@@ -75,10 +73,17 @@ jobs:
         run: |
           cp .env.docker .env
 
+      - name: Debug configuration
+        env:
+          REDIS_HOST: localhost
+        run: |
+          python -c "from app.config.settings import settings; print('REDIS_HOST =', settings.REDIS_HOST)"
+
       - name: Run Tests
         env:
           REDIS_HOST: localhost
-        run: pytest
+        run: |
+          pytest
 
   frontend:
     runs-on: ubuntu-latest
