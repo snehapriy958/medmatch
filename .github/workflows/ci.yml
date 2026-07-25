@@ -20,6 +20,24 @@ jobs:
       run:
         working-directory: services/auth-service
 
+    services:
+      postgres:
+        image: pgvector/pgvector:pg17
+
+        env:
+          POSTGRES_DB: medmatch
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+
+        ports:
+          - 5432:5432
+
+        options: >-
+          --health-cmd="pg_isready -U postgres"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
     steps:
       - uses: actions/checkout@v4
 
@@ -41,6 +59,11 @@ jobs:
         run: chmod +x mvnw
 
       - name: Run Tests
+        env:
+          DB_URL: jdbc:postgresql://localhost:5432/medmatch
+          DB_USER: postgres
+          DB_PASSWORD: postgres
+          SPRING_PROFILES_ACTIVE: prod
         run: ./mvnw test
 
   ai-service:
@@ -53,8 +76,15 @@ jobs:
     services:
       redis:
         image: redis:8-alpine
+
         ports:
           - 6379:6379
+
+        options: >-
+          --health-cmd="redis-cli ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
 
     steps:
       - uses: actions/checkout@v4
@@ -70,8 +100,7 @@ jobs:
           pip install -r requirements.txt
 
       - name: Create test environment
-        run: |
-          cp .env.docker .env
+        run: cp .env.docker .env
 
       - name: Debug configuration
         env:
@@ -82,8 +111,7 @@ jobs:
       - name: Run Tests
         env:
           REDIS_HOST: localhost
-        run: |
-          pytest
+        run: pytest
 
   frontend:
     runs-on: ubuntu-latest
@@ -95,7 +123,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Node
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "22"
