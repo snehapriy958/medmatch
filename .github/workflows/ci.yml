@@ -37,6 +37,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-maven-
 
+      - name: Make Maven Wrapper executable
+        working-directory: services/auth-service
+        run: chmod +x mvnw
+
       - name: Run Tests
         run: ./mvnw test
 
@@ -72,8 +76,9 @@ jobs:
           cp .env.docker .env
 
       - name: Run Tests
-        run: |
-          pytest
+        env:
+          REDIS_HOST: localhost
+        run: pytest
 
   frontend:
     runs-on: ubuntu-latest
