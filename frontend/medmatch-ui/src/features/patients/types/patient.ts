@@ -4,7 +4,7 @@ export interface Patient {
   age: number;
   gender: string;
   diagnosis: string;
-  hospital_id: number;
+  hospital_id: string;
 }
 
 export interface PatientListResponse {

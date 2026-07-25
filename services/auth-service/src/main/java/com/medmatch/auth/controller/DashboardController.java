@@ -9,7 +9,7 @@ import com.medmatch.auth.dto.DashboardSummaryResponse;
 import com.medmatch.auth.service.DashboardService;
 
 @RestController
-@RequestMapping("/dashboard")
+@RequestMapping("auth/dashboard")
 public class DashboardController {
 
     private final DashboardService dashboardService;

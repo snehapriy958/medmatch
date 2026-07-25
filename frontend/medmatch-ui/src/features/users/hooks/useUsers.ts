@@ -11,7 +11,7 @@ import type {
 } from "../types/user";
 
 interface UpdateUserVariables {
-  id: number;
+  id: string;
   data: UpdateUserRequest;
 }
 
@@ -56,7 +56,7 @@ export function useDeleteUser() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (id: number) =>
+    mutationFn: (id: string) =>
       userService.deleteUser(id),
 
     onSuccess: () => {

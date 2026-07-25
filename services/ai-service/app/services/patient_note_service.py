@@ -39,7 +39,7 @@ class PatientNoteService:
         self,
         patient_id: UUID,
         note_data: PatientNoteCreate,
-        hospital_id: int,
+        hospital_id: UUID,
     ) -> PatientNote:
         """
         Create a patient note and generate its embedding.
@@ -75,7 +75,7 @@ class PatientNoteService:
 
             self.audit_service.log(
                 action="PATIENT_NOTE_CREATED",
-                resource="PatientNote",
+                resource_type="PatientNote",
                 resource_id=note.id,
                 details=(
                     f"Patient note created "

@@ -18,7 +18,7 @@ class MatchingRepository:
     def find_similar_criteria(
         self,
         embedding: list[float],
-        hospital_id: int,
+        hospital_id: UUID,
         limit: int = 10,
     ) -> list[dict]:
         """
@@ -70,7 +70,7 @@ class MatchingRepository:
     def find_similar_trials(
         self,
         embedding: list[float],
-        hospital_id: int,
+        hospital_id: UUID,
         limit: int = 10,
     ) -> list[dict]:
         """

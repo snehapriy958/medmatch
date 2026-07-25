@@ -31,7 +31,7 @@ class PatientNoteRepository(BaseRepository):
     def get_by_id(
         self,
         note_id: UUID,
-        hospital_id: int,
+        hospital_id: UUID,
     ) -> PatientNote | None:
         """
         Retrieve a patient note by its ID within the authenticated hospital.
@@ -49,7 +49,7 @@ class PatientNoteRepository(BaseRepository):
     def list_by_patient(
         self,
         patient_id: UUID,
-        hospital_id: int,
+        hospital_id: UUID,
     ) -> list[PatientNote]:
         return (
             self.db.query(PatientNote)

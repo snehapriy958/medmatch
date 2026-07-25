@@ -17,7 +17,7 @@ class HospitalService {
   /**
    * Get a hospital by ID.
    */
-  async getHospital(id: number): Promise<Hospital> {
+  async getHospital(id: string): Promise<Hospital> {
     const response = await authApi.get<Hospital>(`/hospitals/${id}`);
     return response.data;
   }
@@ -40,7 +40,7 @@ class HospitalService {
    * Update an existing hospital.
    */
   async updateHospital(
-    id: number,
+    id: string,
     request: UpdateHospitalRequest
   ): Promise<Hospital> {
     const response = await authApi.put<Hospital>(
@@ -54,7 +54,7 @@ class HospitalService {
   /**
    * Delete a hospital.
    */
-  async deleteHospital(id: number): Promise<void> {
+  async deleteHospital(id: string): Promise<void> {
     await authApi.delete(`/hospitals/${id}`);
   }
 }

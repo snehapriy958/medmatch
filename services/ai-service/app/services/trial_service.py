@@ -45,7 +45,7 @@ class TrialService:
     def create_trial(
         self,
         trial_data: TrialCreate,
-        hospital_id: int,
+        hospital_id: UUID,
     ) -> Trial:
         """
         Create a new clinical trial.
@@ -93,7 +93,7 @@ class TrialService:
     def get_trial(
         self,
         trial_id: UUID,
-        hospital_id: int,
+        hospital_id: UUID,
     ) -> Trial | None:
         """
         Retrieve a trial by ID.
@@ -105,7 +105,7 @@ class TrialService:
 
     def list_trials(
         self,
-        hospital_id: int,
+        hospital_id: UUID,
     ) -> list[Trial]:
         """
         Retrieve all clinical trials.
@@ -115,7 +115,7 @@ class TrialService:
     def delete_trial(
         self,
         trial_id: UUID,
-        hospital_id: int,
+        hospital_id: UUID,
     ) -> bool:
         """
         Delete a clinical trial.
@@ -161,7 +161,7 @@ class TrialService:
     def process_pdf(
         self,
         file_path: str,
-        hospital_id: int,
+        hospital_id: UUID,
     ) -> dict[str, str]:
         """
         Process a saved clinical trial PDF.

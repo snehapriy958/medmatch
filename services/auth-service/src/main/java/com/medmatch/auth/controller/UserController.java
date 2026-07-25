@@ -20,7 +20,7 @@ import com.medmatch.auth.service.UserService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/auth/users")
 @PreAuthorize("hasRole('ADMIN')")
 public class UserController {
 

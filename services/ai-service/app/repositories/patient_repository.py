@@ -36,7 +36,7 @@ class PatientRepository:
     def get_patient_by_id(
         self,
         patient_id: UUID,
-        hospital_id: int,
+        hospital_id: UUID,
     ) -> Patient | None:
         """
         Retrieve a patient only from the authenticated hospital.
@@ -56,7 +56,7 @@ class PatientRepository:
 
     def list_patients(
         self,
-        hospital_id: int,
+        hospital_id: UUID,
     ) -> list[Patient]:
         """
         Retrieve all patients belonging to a hospital.

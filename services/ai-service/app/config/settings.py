@@ -17,10 +17,12 @@ class Settings(BaseSettings):
         "docker",
         "production",
         "testing",
-    ]
+    ] = "development"
 
     ALLOWED_ORIGINS: list[str] = Field(
         default_factory=lambda: [
+            "http://localhost",
+            "http://localhost:80",
             "http://localhost:5173",
         ]
     )
@@ -31,6 +33,7 @@ class Settings(BaseSettings):
             "127.0.0.1",
             "ai-service",
             "medmatch-ai",
+            "frontend",
             "nginx",
         ]
     )
@@ -86,9 +89,9 @@ class Settings(BaseSettings):
     # ==========================================================
     # Gemini / LLM
     # ==========================================================
-    GOOGLE_API_KEY: str
+    GOOGLE_API_KEY: str | None = None
 
-    LLM_MODEL: str
+    LLM_MODEL: str = "gemini-2.5-flash"
 
     LLM_TIMEOUT_SECONDS: int = 60
 

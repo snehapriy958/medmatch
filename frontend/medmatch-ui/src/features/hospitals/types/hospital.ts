@@ -1,8 +1,8 @@
 export interface Hospital {
-  id: number;
+  id: string;
   code: string;
   name: string;
-  address: string;
+  address?: string;
 }
 
 export interface CreateHospitalRequest {

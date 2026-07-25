@@ -1,3 +1,4 @@
+from uuid import UUID
 from typing import TypedDict
 
 
@@ -9,6 +10,6 @@ class JWTClaims(TypedDict, total=False):
     sub: str
     email: str
     role: str
-    hospital_id: int
+    hospital_id: UUID
     iat: int
     exp: int

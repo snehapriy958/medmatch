@@ -25,7 +25,7 @@ import jakarta.validation.constraints.Min;
 
 @Validated
 @RestController
-@RequestMapping("/audit-logs")
+@RequestMapping("/auth/audit-logs")
 @PreAuthorize("hasRole('ADMIN')")
 public class AuditLogController {
 

@@ -4,8 +4,7 @@ export type UserRole = "ADMIN" | "DOCTOR" | "RESEARCHER";
 
 export interface JwtPayload {
   /**
-   * User ID
-   * Comes from JwtClaimsSet.subject(...)
+   * User ID (UUID)
    */
   sub: string;
 
@@ -20,9 +19,9 @@ export interface JwtPayload {
   role: UserRole;
 
   /**
-   * Hospital ID
+   * Hospital ID (UUID)
    */
-  hospital_id: number;
+  hospital_id: string;
 
   /**
    * Issued At (Unix timestamp)
@@ -35,18 +34,11 @@ export interface JwtPayload {
   exp: number;
 }
 
-/**
- * Decode the JWT payload.
- */
 export function decodeToken(token: string): JwtPayload {
   return jwtDecode<JwtPayload>(token);
 }
 
-/**
- * Returns true if the JWT has expired.
- */
 export function isTokenExpired(token: string): boolean {
   const payload = decodeToken(token);
-
   return payload.exp * 1000 <= Date.now();
 }

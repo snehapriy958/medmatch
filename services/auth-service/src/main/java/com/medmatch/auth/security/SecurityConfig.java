@@ -50,9 +50,9 @@ public class SecurityConfig {
                         // ---------- ADMIN ----------
                         .requestMatchers(
                                 "/auth/register",
-                                "/hospitals/**",
-                                "/users/**",
-                                "/audit-logs/**"
+                                "/auth/hospitals/**",
+                                "/auth/users/**",
+                                "/auth/audit-logs/**"
                         ).hasRole("ADMIN")
 
                         // ---------- ADMIN + RESEARCHER ----------
@@ -66,7 +66,7 @@ public class SecurityConfig {
 
                         // ---------- ADMIN + DOCTOR + RESEARCHER ----------
                         .requestMatchers(
-                                "/dashboard/**"
+                                "/auth/dashboard/**"
                         ).hasAnyRole(
                                 "ADMIN",
                                 "DOCTOR",
@@ -76,7 +76,7 @@ public class SecurityConfig {
 
                         // ---------- ADMIN + DOCTOR ----------
                         .requestMatchers(
-                                "/patients/**"
+                                "/auth/patients/**"
                         ).hasAnyRole(
                                 "ADMIN",
                                 "DOCTOR"

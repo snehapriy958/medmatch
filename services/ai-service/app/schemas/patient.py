@@ -56,7 +56,7 @@ class PatientResponse(BaseModel):
 
     diagnosis: str
 
-    hospital_id: int
+    hospital_id: uuid.UUID
 
 
 class PatientListResponse(BaseModel):

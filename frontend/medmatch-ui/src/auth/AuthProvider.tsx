@@ -64,7 +64,7 @@ export function AuthProvider({
     const payload = decodeToken(token);
 
     setUser({
-      id: Number(payload.sub),
+      id: payload.sub,
       email: payload.email,
       role: payload.role,
       hospitalId: payload.hospital_id,
@@ -86,7 +86,7 @@ export function AuthProvider({
       const payload = decodeToken(response.accessToken);
 
       setUser({
-        id: Number(payload.sub),
+        id: payload.sub,
         email: payload.email,
         role: payload.role,
         hospitalId: payload.hospital_id,

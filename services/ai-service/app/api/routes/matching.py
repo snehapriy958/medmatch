@@ -1,4 +1,5 @@
 from typing import Annotated, Any
+from uuid import UUID
 
 from fastapi import APIRouter, Depends, Request
 from pydantic import BaseModel, Field
@@ -30,7 +31,7 @@ class MatchingRequest(BaseModel):
 
 
 router = APIRouter(
-    prefix="/matching",
+    prefix=f"{settings.API_PREFIX}/matching",
     tags=["Matching"],
 )
 
@@ -52,7 +53,7 @@ def search_matching_trials(
         Depends(get_matching_service),
     ],
     hospital_id: Annotated[
-        int,
+        UUID,
         Depends(get_current_hospital_id),
     ],
 ) -> MatchingResponse:
@@ -84,7 +85,7 @@ def evaluate_patient_eligibility(
         Depends(get_matching_service),
     ],
     hospital_id: Annotated[
-        int,
+        UUID,
         Depends(get_current_hospital_id),
     ],
 ) -> EligibilityResponse:

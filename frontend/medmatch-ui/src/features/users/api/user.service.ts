@@ -17,7 +17,7 @@ class UserService {
   /**
    * Get a user by ID.
    */
-  async getUser(id: number): Promise<User> {
+  async getUser(id: string): Promise<User> {
     const response = await authApi.get<User>(`/users/${id}`);
     return response.data;
   }
@@ -38,7 +38,7 @@ class UserService {
    * Update an existing user.
    */
   async updateUser(
-    id: number,
+    id: string,
     request: UpdateUserRequest
   ): Promise<User> {
     const response = await authApi.put<User>(
@@ -52,7 +52,7 @@ class UserService {
   /**
    * Delete a user.
    */
-  async deleteUser(id: number): Promise<void> {
+  async deleteUser(id: string): Promise<void> {
     await authApi.delete(`/users/${id}`);
   }
 }

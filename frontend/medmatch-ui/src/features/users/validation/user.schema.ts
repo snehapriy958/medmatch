@@ -9,7 +9,7 @@ export const createUserSchema = z.object({
 
   role: z.enum(["ADMIN", "DOCTOR", "RESEARCHER"]),
 
-  hospitalId: z.number().min(1, "Hospital is required"),
+  hospitalId: z.string().uuid("Hospital is required"),
 });
 
 export const updateUserSchema = z.object({
@@ -19,7 +19,7 @@ export const updateUserSchema = z.object({
 
   role: z.enum(["ADMIN", "DOCTOR", "RESEARCHER"]),
 
-  hospitalId: z.number().min(1, "Hospital is required"),
+  hospitalId: z.string().uuid("Hospital is required"),
 });
 
 export type CreateUserFormData = z.infer<typeof createUserSchema>;

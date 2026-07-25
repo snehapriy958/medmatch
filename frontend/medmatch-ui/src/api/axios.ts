@@ -9,24 +9,23 @@ const DEFAULT_HEADERS = {
   "Content-Type": "application/json",
 };
 
-/**
- * Spring Boot API
- * Handles authentication, hospitals, users, etc.
- */
 export const authApi = axios.create({
   baseURL: import.meta.env.VITE_AUTH_API,
   timeout: 10000,
   headers: DEFAULT_HEADERS,
 });
 
-/**
- * FastAPI AI Service
- * Handles patients, trials, matching, embeddings, etc.
- */
 export const aiApi = axios.create({
   baseURL: import.meta.env.VITE_AI_API,
   timeout: 30000,
 });
+
+console.log("========== AXIOS ==========");
+console.log("ENV AUTH =", import.meta.env.VITE_AUTH_API);
+console.log("ENV AI   =", import.meta.env.VITE_AI_API);
+console.log("AUTH API =", authApi.defaults.baseURL);
+console.log("AI API   =", aiApi.defaults.baseURL);
+console.log("===========================");
 
 /**
  * Adds the JWT access token to every request.

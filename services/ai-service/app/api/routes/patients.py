@@ -1,4 +1,5 @@
 from typing import Annotated, Any
+from app.config.settings import settings
 from uuid import UUID
 
 from fastapi import (
@@ -17,12 +18,13 @@ from app.api.deps import (
     require_admin_or_doctor,
 )
 from app.config.rate_limit import limiter
-from app.config.settings import settings
+
 from app.schemas import (
     PatientCreate,
     PatientListResponse,
     PatientResponse,
 )
+
 from app.schemas.patient_note import (
     PatientNoteCreate,
     PatientNoteResponse,
@@ -57,7 +59,7 @@ def create_patient(
         Depends(get_patient_service),
     ],
     hospital_id: Annotated[
-        int,
+        UUID,
         Depends(get_current_hospital_id),
     ],
 ) -> PatientResponse:
@@ -68,6 +70,7 @@ def create_patient(
     return service.create_patient(
         patient_data=patient,
         hospital_id=hospital_id,
+        current_user=current_user,
     )
 
 
@@ -87,7 +90,7 @@ def list_patients(
         Depends(get_patient_service),
     ],
     hospital_id: Annotated[
-        int,
+        UUID,
         Depends(get_current_hospital_id),
     ],
 ) -> PatientListResponse:
@@ -121,7 +124,7 @@ def get_patient(
         Depends(get_patient_service),
     ],
     hospital_id: Annotated[
-        int,
+        UUID,
         Depends(get_current_hospital_id),
     ],
 ) -> PatientResponse:
@@ -160,7 +163,7 @@ def delete_patient(
         Depends(get_patient_service),
     ],
     hospital_id: Annotated[
-        int,
+        UUID,
         Depends(get_current_hospital_id),
     ],
 ) -> None:
@@ -201,7 +204,7 @@ def create_patient_note(
         Depends(get_patient_note_service),
     ],
     hospital_id: Annotated[
-        int,
+        UUID,
         Depends(get_current_hospital_id),
     ],
 ) -> PatientNoteResponse:

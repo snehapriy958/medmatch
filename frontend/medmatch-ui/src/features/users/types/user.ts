@@ -1,11 +1,11 @@
 export type Role = "ADMIN" | "DOCTOR" | "RESEARCHER";
 
 export interface User {
-  id: number;
+  id: string;
   username: string;
   email: string;
   role: Role;
-  hospitalId: number;
+  hospitalId: string;
   hospitalCode: string;
   hospitalName: string;
 }
@@ -15,12 +15,12 @@ export interface CreateUserRequest {
   email: string;
   password: string;
   role: Role;
-  hospitalId: number;
+  hospitalId: string;
 }
 
 export interface UpdateUserRequest {
   username: string;
   email: string;
   role: Role;
-  hospitalId: number;
+  hospitalId: string;
 }

@@ -43,7 +43,7 @@ def create_trial(
         Depends(require_admin_or_researcher()),
     ],
     hospital_id: Annotated[
-        int,
+        UUID,
         Depends(get_current_hospital_id),
     ],
     service: Annotated[
@@ -73,7 +73,7 @@ def list_trials(
         Depends(require_admin_or_researcher()),
     ],
     hospital_id: Annotated[
-        int,
+        UUID,
         Depends(get_current_hospital_id),
     ],
     service: Annotated[
@@ -101,7 +101,7 @@ def get_trial(
         Depends(require_admin_or_researcher()),
     ],
     hospital_id: Annotated[
-        int,
+        UUID,
         Depends(get_current_hospital_id),
     ],
     service: Annotated[
@@ -140,7 +140,7 @@ def delete_trial(
         Depends(require_admin_or_researcher()),
     ],
     hospital_id: Annotated[
-        int,
+        UUID,
         Depends(get_current_hospital_id),
     ],
     service: Annotated[
@@ -176,7 +176,7 @@ def upload_trial_pdf(
         Depends(require_admin_or_researcher()),
     ],
     hospital_id: Annotated[
-        int,
+        UUID,
         Depends(get_current_hospital_id),
     ],
     pdf_service: Annotated[

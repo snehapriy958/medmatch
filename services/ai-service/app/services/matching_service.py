@@ -1,5 +1,7 @@
 import logging
 
+from uuid import UUID
+
 from app.cache.cache_keys import CacheKeys
 from app.cache.cache_service import CacheService
 from app.config.settings import settings
@@ -38,7 +40,7 @@ class MatchingService:
     def _retrieve_matching_criteria(
         self,
         patient_note: str,
-        hospital_id: int,
+        hospital_id: UUID,
         limit: int,
     ) -> list[dict]:
         """
@@ -92,7 +94,7 @@ class MatchingService:
     def find_matching_criteria(
         self,
         patient_note: str,
-        hospital_id: int,
+        hospital_id: UUID,
         limit: int = 10,
     ) -> MatchingResponse:
         """
@@ -127,7 +129,7 @@ class MatchingService:
     def evaluate_eligibility(
         self,
         patient_note: str,
-        hospital_id: int,
+        hospital_id: UUID,
         limit: int = 10,
     ) -> EligibilityResponse:
         """
@@ -168,7 +170,7 @@ class MatchingService:
             try:
                 self.audit_service.log(
                     action="ELIGIBILITY_EVALUATED",
-                    resource="Matching",
+                    resource_type="Matching",
                     details=(
                         f"Eligibility evaluated using cached response. "
                         f"Result: {response.eligibility}"
@@ -205,7 +207,7 @@ class MatchingService:
         try:
             self.audit_service.log(
                 action="ELIGIBILITY_EVALUATED",
-                resource="Matching",
+                resource_type="Matching",
                 details=(
                     f"Eligibility evaluated. "
                     f"Result: {result.eligibility}"

@@ -25,8 +25,6 @@ import {
 import {
   createUserSchema,
   updateUserSchema,
-  type CreateUserFormData,
-  type UpdateUserFormData,
 } from "../validation/user.schema";
 
 import type {
@@ -58,13 +56,22 @@ export function UserFormDialog({
 
   const { data: hospitals = [] } = useHospitals();
 
+
+  type UserFormData = {
+    username: string;
+    email: string;
+    password?: string;
+    role: "ADMIN" | "DOCTOR" | "RESEARCHER";
+    hospitalId: string;
+  };
+
   const {
     register,
     control,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<CreateUserFormData | UpdateUserFormData>({
+  } = useForm<UserFormData>({
     resolver: zodResolver(
       isEdit ? updateUserSchema : createUserSchema
     ),
@@ -73,7 +80,7 @@ export function UserFormDialog({
       email: "",
       password: "",
       role: "DOCTOR",
-      hospitalId: hospitals.length > 0 ? hospitals[0].id : 0,
+      hospitalId: hospitals.length > 0 ? hospitals[0].id : "",
     },
   });
 
@@ -82,9 +89,10 @@ export function UserFormDialog({
       reset({
         username: user.username,
         email: user.email,
+        password: "",
         role: user.role,
         hospitalId: user.hospitalId,
-      } as UpdateUserFormData);
+      });
     } else {
       reset({
         username: "",
@@ -92,32 +100,28 @@ export function UserFormDialog({
         password: "",
         role: "DOCTOR",
         hospitalId:
-          hospitals.length > 0 ? hospitals[0].id : 0,
-      } as CreateUserFormData);
+          hospitals.length > 0 ? hospitals[0].id : "",
+      });
     }
   }, [user, hospitals, reset]);
 
-  const submitHandler = (
-    data: CreateUserFormData | UpdateUserFormData
-  ) => {
+  const submitHandler = (data: UserFormData) => {
     if (isEdit) {
-      const updateData = data as UpdateUserFormData;
 
       onUpdate({
-        username: updateData.username,
-        email: updateData.email,
-        role: updateData.role,
-        hospitalId: updateData.hospitalId,
+        username: data.username,
+        email: data.email,
+        role: data.role,
+        hospitalId: data.hospitalId,
       });
     } else {
-      const createData = data as CreateUserFormData;
 
       onCreate({
-        username: createData.username,
-        email: createData.email,
-        password: createData.password,
-        role: createData.role,
-        hospitalId: createData.hospitalId,
+        username: data.username,
+        email: data.email,
+        password: data.password ?? "",
+        role: data.role,
+        hospitalId: data.hospitalId,
       });
     }
   };
@@ -258,10 +262,8 @@ export function UserFormDialog({
               name="hospitalId"
               render={({ field }) => (
                 <Select
-                  value={String(field.value)}
-                  onValueChange={(value) =>
-                    field.onChange(Number(value))
-                  }
+                  value={field.value}
+                  onValueChange={field.onChange}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Select Hospital" />
@@ -269,7 +271,7 @@ export function UserFormDialog({
 
                   <SelectContent>
                     {hospitals.length === 0 ? (
-                      <SelectItem value="0" disabled>
+                      <SelectItem value="" disabled>
                         No hospitals available
                       </SelectItem>
                     ) : (

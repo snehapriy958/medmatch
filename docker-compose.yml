@@ -87,6 +87,7 @@ services:
       start_period: 30s
 
     restart: unless-stopped
+    stop_grace_period: 30s
 
     logging:
       driver: "json-file"
@@ -123,13 +124,14 @@ services:
         condition: service_healthy
 
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
       interval: 30s
       timeout: 10s
       retries: 5
       start_period: 30s
 
     restart: unless-stopped
+    stop_grace_period: 30s
 
     logging:
       driver: "json-file"
@@ -161,13 +163,12 @@ services:
       redis:
         condition: service_healthy
 
-      ai-service:
-        condition: service_healthy
-
     volumes:
       - ai_uploads:/app/uploads
 
     restart: unless-stopped
+    stop_grace_period: 30s
+    stop_signal: SIGTERM
 
     logging:
       driver: "json-file"

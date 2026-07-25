@@ -1,4 +1,5 @@
 from datetime import UTC, datetime
+from app.config.settings import settings
 from pathlib import Path
 from typing import Any
 
@@ -15,6 +16,7 @@ from app.config.settings import settings
 from app.db.database import engine
 
 router = APIRouter(
+    prefix=f"{settings.API_PREFIX}",
     tags=["Health"],
 )
 

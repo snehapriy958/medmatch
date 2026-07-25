@@ -22,7 +22,7 @@ class TrialRepository:
     def get_trial_by_id(
         self,
         trial_id: UUID,
-        hospital_id: int,
+        hospital_id: UUID,
     ) -> Trial | None:
         return (
             self.db.query(Trial)
@@ -36,7 +36,7 @@ class TrialRepository:
 
     def list_trials(
         self,
-        hospital_id: int,
+        hospital_id: UUID,
     ) -> list[Trial]:
         return (
             self.db.query(Trial)

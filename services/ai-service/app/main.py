@@ -49,7 +49,7 @@ async def lifespan(
 ) -> AsyncIterator[None]:
 
     try:
-        if settings.ENVIRONMENT == "development":
+        if settings.ENVIRONMENT in ("development", "docker"):
             logger.info(
                 "Initializing database..."
             )

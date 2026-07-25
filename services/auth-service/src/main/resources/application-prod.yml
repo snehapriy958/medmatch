@@ -8,9 +8,6 @@ spring:
     enabled: true
     baseline-on-migrate: true
 
-  lifecycle:
-    timeout-per-shutdown-phase: 30s
-
   jpa:
     hibernate:
       ddl-auto: validate
@@ -18,45 +15,13 @@ spring:
     open-in-view: false
     properties:
       hibernate:
-        format_sql: false
+        format_sql: true
 
 logging:
   level:
     root: INFO
-    org.springframework: INFO
-    org.springframework.security: WARN
-    org.springframework.security.oauth2: WARN
-    org.hibernate: WARN
-    org.flywaydb: INFO
-    com.medmatch: INFO
-
-  pattern:
-    console: >
-      %d{yyyy-MM-dd'T'HH:mm:ss.SSSXXX}
-      %-5level
-      [%X{requestId:-N/A}]
-      [%thread]
-      %logger{36}
-      - %msg%n
 
 server:
-  port: 8081
-
-  shutdown: graceful
-
-  forward-headers-strategy: framework
-
-  compression:
-    enabled: true
-    mime-types:
-      - application/json
-      - application/xml
-      - text/html
-      - text/plain
-      - text/css
-      - application/javascript
-    min-response-size: 1024
-
   error:
     include-message: never
     include-binding-errors: never

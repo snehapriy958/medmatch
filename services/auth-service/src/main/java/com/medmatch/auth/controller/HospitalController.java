@@ -22,7 +22,7 @@ import com.medmatch.auth.service.HospitalService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/hospitals")
+@RequestMapping("/auth/hospitals")
 public class HospitalController {
 
     private final HospitalService hospitalService;

@@ -4,7 +4,7 @@ import { hospitalService } from "../api/hospital.service";
 import type { UpdateHospitalRequest } from "../types/hospital";
 
 interface UpdateHospitalVariables {
-  id: number;
+  id: string;
   data: UpdateHospitalRequest;
 }
 
@@ -48,7 +48,7 @@ export function useDeleteHospital() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (id: number) => hospitalService.deleteHospital(id),
+    mutationFn: (id: string) => hospitalService.deleteHospital(id),
 
     onSuccess: () => {
       queryClient.invalidateQueries({

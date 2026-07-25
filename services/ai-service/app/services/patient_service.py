@@ -26,12 +26,14 @@ class PatientService:
     def create_patient(
         self,
         patient_data: PatientCreate,
-        hospital_id: int,
+        hospital_id: UUID,
+        current_user: dict,
     ) -> Patient:
         """
         Create a new patient inside the authenticated hospital.
         """
-
+        print(current_user)
+        
         patient = Patient(
             name=patient_data.name,
             age=patient_data.age,
@@ -51,14 +53,27 @@ class PatientService:
                 patient
             )
 
+            hospital_name = current_user.get("hospital_name", "")
+
+            if not hospital_name:
+                hospital_name = "Unknown Hospital"
+
+
             self.audit_service.log(
                 action="PATIENT_CREATED",
-                resource="Patient",
+                resource_type="Patient",
+
+                performed_by_id=UUID(str(current_user["sub"])),
+                performed_by_username=current_user["email"],
+                performed_by_role=current_user["role"],
+
+                hospital_id=hospital_id,
+                hospital_name=hospital_name,
+
                 resource_id=patient.id,
-                details=(
-                    f"Patient '{patient.name}' "
-                    "created."
-                ),
+
+                details=f"Patient '{patient.name}' created.",
+
             )
 
             return patient
@@ -75,7 +90,7 @@ class PatientService:
     def get_patient(
         self,
         patient_id: UUID,
-        hospital_id: int,
+        hospital_id: UUID,
     ) -> Patient | None:
         """
         Retrieve a patient belonging to the hospital.
@@ -88,7 +103,7 @@ class PatientService:
 
     def list_patients(
         self,
-        hospital_id: int,
+        hospital_id: UUID,
     ) -> list[Patient]:
         """
         Retrieve all patients belonging to the hospital.
@@ -101,7 +116,7 @@ class PatientService:
     def delete_patient(
         self,
         patient_id: UUID,
-        hospital_id: int,
+        hospital_id: UUID,
     ) -> bool:
         """
         Delete a patient belonging to the hospital.
@@ -124,7 +139,7 @@ class PatientService:
 
             self.audit_service.log(
                 action="PATIENT_DELETED",
-                resource="Patient",
+                resource_type="Patient",
                 resource_id=patient.id,
                 details=(
                     f"Patient '{patient.name}' "

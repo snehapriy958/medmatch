@@ -1,4 +1,6 @@
 import logging
+from uuid import UUID
+
 
 from app.celery.celery_app import celery_app
 from app.db.session import SessionLocal
@@ -26,7 +28,7 @@ logger = logging.getLogger(__name__)
 @celery_app.task(name="process_trial")
 def process_trial(
     file_path: str,
-    hospital_id: int,
+    hospital_id: UUID,
 ) -> dict[str, str]:
     db = SessionLocal()
 

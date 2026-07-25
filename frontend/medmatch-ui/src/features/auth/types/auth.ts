@@ -21,8 +21,8 @@ export interface LoginResponse {
  * Authenticated user extracted from the JWT.
  */
 export interface AuthenticatedUser {
-  id: number;
+  id: string;
   email: string;
   role: UserRole;
-  hospitalId: number;
+  hospitalId: string;
 }
