@@ -38,6 +38,7 @@ src/main/resources/keys/private_key.pem
 # Environment
 .env
 .env.*
+!.env.docker
 
 # Logs
 *.log
