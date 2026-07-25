@@ -1,0 +1,14 @@
+[project]
+name = "medmatch-ai-service"
+version = "0.1.0"
+description = "AI-powered Clinical Trial Matching Service"
+requires-python = ">=3.12"
+
+dependencies = [
+    "fastapi>=0.116.0",
+    "uvicorn[standard]>=0.35.0",
+    "sqlalchemy>=2.0.40",
+    "psycopg[binary]>=3.2.9",
+    "pydantic-settings>=2.10.0",
+    "pyjwt[crypto]>=2.10.1",
+]

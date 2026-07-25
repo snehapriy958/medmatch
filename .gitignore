@@ -1,0 +1,76 @@
+# =========================
+# Operating System
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# IDE
+# =========================
+.idea/
+.vscode/
+*.iml
+
+# =========================
+# Environment Files
+# =========================
+.env
+.env.*
+!.env.example
+
+# =========================
+# Python
+# =========================
+**/__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+**/.venv/
+**/venv/
+
+# =========================
+# Java
+# =========================
+**/target/
+
+# =========================
+# Node
+# =========================
+**/node_modules/
+**/dist/
+
+# =========================
+# Logs
+# =========================
+*.log
+logs/
+
+# =========================
+# Uploads
+# =========================
+services/ai-service/uploads/
+
+# =========================
+# Docker
+# =========================
+docker-data/
+
+# =========================
+# Private Keys (Never commit)
+# =========================
+services/auth-service/src/main/resources/keys/private_key.pem
+
+# =========================
+# Test Coverage
+# =========================
+.coverage
+coverage/
+htmlcov/
+
+# Temporary editor files
+*.tmp
+*.temp
+*.bak
+*~
+.LCK*

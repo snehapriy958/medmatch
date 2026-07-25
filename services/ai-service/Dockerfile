@@ -1,0 +1,48 @@
+# ==========================
+# Base Image
+# ==========================
+FROM python:3.12-slim
+
+LABEL org.opencontainers.image.title="MedMatch AI Service"
+LABEL org.opencontainers.image.description="FastAPI AI Service for MedMatch"
+LABEL org.opencontainers.image.vendor="MedMatch"
+LABEL org.opencontainers.image.version="1.0.0"
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    gcc \
+    libpq-dev \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Python dependencies
+COPY requirements.txt .
+
+RUN pip install --upgrade pip && \
+    pip install --no-cache-dir \
+        --index-url https://download.pytorch.org/whl/cpu \
+        torch==2.6.0 && \
+    pip install --no-cache-dir \
+        --disable-pip-version-check \
+        -r requirements.txt
+
+# Copy application
+RUN mkdir -p /app/uploads
+
+COPY . .
+
+# Create non-root user
+RUN useradd --create-home --shell /bin/bash appuser && \
+    chown -R appuser:appuser /app
+
+USER appuser
+
+EXPOSE 8000
+
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]

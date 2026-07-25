@@ -1,0 +1,217 @@
+name: medmatch
+
+services:
+
+  postgres:
+    image: pgvector/pgvector:pg17
+    container_name: medmatch-postgres
+
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+    ports:
+      - "${POSTGRES_PORT}:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+    restart: unless-stopped
+
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+    networks:
+      - medmatch-network
+
+  redis:
+    image: redis:8-alpine
+    container_name: medmatch-redis
+
+    ports:
+      - "${REDIS_PORT}:6379"
+
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+    restart: unless-stopped
+
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+    networks:
+      - medmatch-network
+
+  auth-service:
+    image: medmatch/auth-service:latest
+
+    build:
+      context: ./services/auth-service
+      dockerfile: Dockerfile
+
+    container_name: medmatch-auth
+
+    env_file:
+      - ./services/auth-service/.env.docker
+
+    ports:
+      - "${AUTH_PORT}:8081"
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+    restart: unless-stopped
+
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+    networks:
+      - medmatch-network
+
+  ai-service:
+    image: medmatch/ai-service:latest
+
+    build:
+      context: ./services/ai-service
+      dockerfile: Dockerfile
+
+    container_name: medmatch-ai
+
+    env_file:
+      - ./services/ai-service/.env.docker
+
+    ports:
+      - "${AI_PORT}:8000"
+
+    volumes:
+      - ai_uploads:/app/uploads
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+      redis:
+        condition: service_healthy
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+    restart: unless-stopped
+
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+    networks:
+      - medmatch-network
+
+  celery-worker:
+    image: medmatch/ai-service:latest
+
+    build:
+      context: ./services/ai-service
+      dockerfile: Dockerfile
+
+    container_name: medmatch-worker
+
+    command: celery -A app.celery.celery_app worker --loglevel=info
+
+    env_file:
+      - ./services/ai-service/.env.docker
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+      redis:
+        condition: service_healthy
+
+      ai-service:
+        condition: service_healthy
+
+    volumes:
+      - ai_uploads:/app/uploads
+
+    restart: unless-stopped
+
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+    networks:
+      - medmatch-network
+
+  frontend:
+    image: medmatch/frontend:latest
+
+    build:
+      context: ./frontend/medmatch-ui
+      dockerfile: Dockerfile
+
+    container_name: medmatch-frontend
+
+    ports:
+      - "${FRONTEND_PORT}:80"
+
+    depends_on:
+      auth-service:
+        condition: service_healthy
+
+      ai-service:
+        condition: service_healthy
+
+    restart: unless-stopped
+
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+    networks:
+      - medmatch-network
+
+volumes:
+  postgres_data:
+  ai_uploads:
+
+networks:
+  medmatch-network:
+    driver: bridge

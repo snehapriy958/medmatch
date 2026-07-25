@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: auth-service
+
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+
+server:
+  port: 8081
+
+rsa:
+  private-key: classpath:keys/private_key.pem
+  public-key: classpath:keys/public_key.pem

@@ -1,0 +1,43 @@
+# =========================
+# Environment
+# =========================
+.env
+.env.*
+
+# =========================
+# Virtual Environment
+# =========================
+.venv/
+venv/
+
+# =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage/
+htmlcov/
+
+# =========================
+# Uploads
+# =========================
+uploads/
+
+# =========================
+# IDE
+# =========================
+.vscode/
+.idea/
+
+# =========================
+# Operating System
+# =========================
+.DS_Store
+Thumbs.db
+
+# Storage
+storage/
