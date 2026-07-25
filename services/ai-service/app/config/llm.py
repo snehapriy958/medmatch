@@ -1,15 +1,15 @@
 from google import genai
-
 from app.config.settings import settings
 
-
-client = genai.Client(
-    api_key=settings.GOOGLE_API_KEY,
-)
+_client = None
 
 
 def get_llm():
-    """
-    Return the configured Gemini client.
-    """
-    return client
+    global _client
+
+    if _client is None:
+        _client = genai.Client(
+            api_key=settings.GOOGLE_API_KEY
+        )
+
+    return _client

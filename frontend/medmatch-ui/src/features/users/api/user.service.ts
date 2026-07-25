@@ -22,14 +22,14 @@ class UserService {
     return response.data;
   }
 
-/**
- * Register a new user.
- */
+  /**
+   * Register a new user.
+   */
   async createUser(
     request: CreateUserRequest
   ): Promise<void> {
     await authApi.post(
-      "/auth/register",
+      "/register",
       request
     );
   }

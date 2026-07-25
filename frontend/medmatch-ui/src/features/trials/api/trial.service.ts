@@ -8,7 +8,7 @@ import type {
 
 export async function listTrials() {
   const response =
-    await aiApi.get<Trial[]>("/api/trials");
+    await aiApi.get<Trial[]>("/trials");
 
   return response.data;
 }
@@ -16,7 +16,7 @@ export async function listTrials() {
 export async function getTrial(id: string) {
   const response =
     await aiApi.get<Trial>(
-      `/api/trials/${id}`
+      `/trials/${id}`
     );
 
   return response.data;
@@ -27,7 +27,7 @@ export async function createTrial(
 ) {
   const response =
     await aiApi.post<Trial>(
-      "/api/trials",
+      "/trials",
       data
     );
 
@@ -38,7 +38,7 @@ export async function deleteTrial(
   id: string
 ) {
   await aiApi.delete(
-    `/api/trials/${id}`
+    `/trials/${id}`
   );
 }
 
@@ -51,12 +51,11 @@ export async function uploadTrialPdf(
 
   const response =
     await aiApi.post<UploadTrialResponse>(
-      "/api/trials/upload",
+      "/trials/upload",
       formData,
       {
         headers: {
-          "Content-Type":
-            "multipart/form-data",
+          "Content-Type": "multipart/form-data",
         },
       }
     );

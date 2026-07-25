@@ -9,7 +9,7 @@ class AuthService {
     request: LoginRequest
   ): Promise<LoginResponse> {
     const response = await authApi.post<LoginResponse>(
-      "/auth/login",
+      "/login",
       request
     );
 
