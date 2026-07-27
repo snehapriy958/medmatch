@@ -259,7 +259,7 @@ jobs:
         run: docker compose up -d
 
       - name: Wait for Services
-        run: sleep 40
+        run: sleep 60
 
       - name: Show Container Status
         run: docker compose ps
@@ -276,8 +276,15 @@ jobs:
         if: always()
         run: |
           docker compose ps
+
+          echo "================ COMPOSE ================"
+          docker compose logs || true
+
           echo "================ AUTH ================"
           docker logs medmatch-auth || true
+
+          echo "============= AUTH STATE ============="
+          docker inspect medmatch-auth --format='ExitCode={{.State.ExitCode}} Error={{.State.Error}} Started={{.State.StartedAt}} Finished={{.State.FinishedAt}}' || true
 
           echo "================ AI =================="
           docker logs medmatch-ai || true
@@ -290,11 +297,17 @@ jobs:
         run: |
           docker compose ps
 
-          docker inspect medmatch-auth || true
-          docker inspect medmatch-ai || true
+          if docker inspect medmatch-ai >/dev/null 2>&1; then
+            AI_STATUS=$(docker inspect medmatch-ai --format='{{.State.Health.Status}}')
+          else
+            AI_STATUS="missing"
+          fi
 
-          AI_STATUS=$(docker inspect medmatch-ai --format='{{.State.Health.Status}}')
-          AUTH_STATUS=$(docker inspect medmatch-auth --format='{{.State.Health.Status}}')
+          if docker inspect medmatch-auth >/dev/null 2>&1; then
+            AUTH_STATUS=$(docker inspect medmatch-auth --format='{{.State.Health.Status}}')
+          else
+            AUTH_STATUS="missing"
+          fi
 
           echo "AI Status: $AI_STATUS"
           echo "Auth Status: $AUTH_STATUS"
