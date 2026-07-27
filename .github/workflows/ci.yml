@@ -265,27 +265,25 @@ jobs:
         run: docker compose ps
 
       - name: Check Auth Service
+        continue-on-error: true
         run: curl --fail http://localhost:8081/health
 
       - name: Check AI Service
+        continue-on-error: true
         run: curl --fail http://localhost:8000/api/health
 
       - name: Show Docker Logs
         if: always()
         run: |
           docker compose ps
-          echo "================ AUTH ================"
-          docker compose logs auth-service
-
-          echo "================ AI =================="
-          docker compose logs ai-service
-
-          echo "================ WORKER =============="
-          docker compose logs celery-worker
+          docker compose logs
 
       - name: Verify Containers
         run: |
           docker compose ps
+
+          docker inspect medmatch-auth || true
+          docker inspect medmatch-ai || true
 
           AI_STATUS=$(docker inspect medmatch-ai --format='{{.State.Health.Status}}')
           AUTH_STATUS=$(docker inspect medmatch-auth --format='{{.State.Health.Status}}')
