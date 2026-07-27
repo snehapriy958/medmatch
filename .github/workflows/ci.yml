@@ -227,7 +227,7 @@ jobs:
 
       - name: Set dummy Gemini key for Docker
         run: |
-          echo "GOOGLE_API_KEY=dummy-key" >> services/ai-service/.env.docker    
+          printf "\nGOOGLE_API_KEY=dummy-key\n" >> services/ai-service/.env.docker
       
       - name: Create Compose environment
         run: |
@@ -276,7 +276,15 @@ jobs:
         if: always()
         run: |
           docker compose ps
-          docker compose logs
+          echo "================ AUTH ================"
+          docker logs medmatch-auth || true
+
+          echo "================ AI =================="
+          docker logs medmatch-ai || true
+
+          echo "================ WORKER =============="
+          docker logs medmatch-worker || true
+
 
       - name: Verify Containers
         run: |
