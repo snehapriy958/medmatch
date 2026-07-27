@@ -312,8 +312,10 @@ jobs:
           echo "AI Status: $AI_STATUS"
           echo "Auth Status: $AUTH_STATUS"
 
-          test "$AI_STATUS" = "healthy"
-          test "$AUTH_STATUS" = "healthy"
+          if [ "$AI_STATUS" != "healthy" ] || [ "$AUTH_STATUS" != "healthy" ]; then
+            echo "One or more services are unhealthy."
+            exit 1
+          fi
       
       - name: Shutdown Docker Stack
         if: always()
