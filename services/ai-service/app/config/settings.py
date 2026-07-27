@@ -79,8 +79,8 @@ class Settings(BaseSettings):
     # ==========================================================
     # JWT Security
     # ==========================================================
-    JWT_PUBLIC_KEY_PATH: str = (
-        "keys/public_key.pem"
+    JWT_PUBLIC_KEY_PATH: str = Field(
+        default="keys/public_key.pem"
     )
 
     JWT_ALGORITHM: str = "RS256"

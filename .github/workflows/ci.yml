@@ -299,7 +299,7 @@ jobs:
           pip install -r requirements.txt
 
       - name: Create Environment File
-        run: cp .env.docker .env
+        run: cp .env.docker.example .env
 
       - name: Run Tests
         env:
