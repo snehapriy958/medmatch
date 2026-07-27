@@ -3,22 +3,31 @@
 # ==========================================================
 FROM maven:3.9.11-eclipse-temurin-21 AS builder
 
+RUN apt-get update && \
+    apt-get install -y openssl && \
+    rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 
-# Copy Maven wrapper and project metadata first for better layer caching
 COPY pom.xml .
 COPY mvnw .
 COPY .mvn .mvn
 
 RUN chmod +x mvnw
 
-# Download dependencies
 RUN ./mvnw dependency:go-offline --no-transfer-progress
 
-# Copy source code
 COPY src ./src
 
-# Build application
+RUN mkdir -p src/main/resources/keys && \
+    openssl genrsa \
+      -out src/main/resources/keys/private_key.pem \
+      2048 && \
+    openssl rsa \
+      -in src/main/resources/keys/private_key.pem \
+      -pubout \
+      -out src/main/resources/keys/public_key.pem
+
 RUN ./mvnw clean package \
     -DskipTests \
     --no-transfer-progress
@@ -58,9 +67,6 @@ EXPOSE 8081
 ENV SPRING_PROFILES_ACTIVE=prod
 
 # Optional JVM options (can be overridden via Docker Compose)
-ENV JAVA_OPTS=""
-
-# Start application
 ENV JAVA_OPTS=""
 
 ENTRYPOINT ["sh", "-c", "exec java $JAVA_OPTS -jar app.jar"]
