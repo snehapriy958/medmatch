@@ -9,5 +9,5 @@ server:
   port: 8081
 
 rsa:
-  private-key: classpath:keys/private_key.pem
-  public-key: classpath:keys/public_key.pem
+  private-key: ${RSA_PRIVATE_KEY_LOCATION:classpath:keys/private_key.pem}
+  public-key: ${RSA_PUBLIC_KEY_LOCATION:classpath:keys/public_key.pem}

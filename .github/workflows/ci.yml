@@ -210,6 +210,23 @@ jobs:
       - name: Make Maven Wrapper Executable
         run: chmod +x mvnw
 
+      - name: Generate RSA Keys
+        run: |
+          mkdir -p src/main/resources/keys
+
+          openssl genrsa \
+            -out src/main/resources/keys/private_key.pem \
+            2048
+
+          openssl rsa \
+            -in src/main/resources/keys/private_key.pem \
+            -pubout \
+            -out src/main/resources/keys/public_key.pem
+
+      - name: Verify Generated Keys
+        run: |
+          ls -la src/main/resources/keys
+      
       - name: Build & Test
         env:
           DB_URL: jdbc:postgresql://localhost:5432/medmatch
@@ -217,7 +234,10 @@ jobs:
           DB_PASSWORD: postgres
           SPRING_PROFILES_ACTIVE: prod
 
-        run: ./mvnw clean verify
+          RSA_PRIVATE_KEY_LOCATION: file:src/main/resources/keys/private_key.pem
+          RSA_PUBLIC_KEY_LOCATION: file:src/main/resources/keys/public_key.pem
+
+        run: ./mvnw --batch-mode clean verify
 
   ###########################################################
   # FastAPI AI Service
