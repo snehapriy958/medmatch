@@ -4,7 +4,7 @@
 FROM maven:3.9.11-eclipse-temurin-21 AS builder
 
 RUN apt-get update && \
-    apt-get install -y openssl && \
+    apt-get install -y --no-install-recommends openssl && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
@@ -15,7 +15,10 @@ COPY .mvn .mvn
 
 RUN chmod +x mvnw
 
-RUN ./mvnw dependency:go-offline --no-transfer-progress
+RUN ./mvnw \
+    --batch-mode \
+    dependency:go-offline \
+    --no-transfer-progress
 
 COPY src ./src
 
@@ -28,7 +31,9 @@ RUN mkdir -p src/main/resources/keys && \
       -pubout \
       -out src/main/resources/keys/public_key.pem
 
-RUN ./mvnw clean package \
+RUN ./mvnw \
+    --batch-mode \
+    clean package \
     -DskipTests \
     --no-transfer-progress
 
@@ -62,6 +67,12 @@ USER spring
 
 # Expose application port
 EXPOSE 8081
+
+HEALTHCHECK --interval=30s \
+            --timeout=5s \
+            --start-period=30s \
+            --retries=3 \
+  CMD curl -f http://localhost:8081/health || exit 1
 
 # Spring profile
 ENV SPRING_PROFILES_ACTIVE=prod

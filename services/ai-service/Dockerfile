@@ -24,18 +24,19 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Install Python dependencies
 COPY requirements.txt .
 
-RUN pip install --upgrade pip && \
-    pip install --no-cache-dir \
+RUN --mount=type=cache,target=/root/.cache/pip \
+    python -m pip install --upgrade pip && \
+    python -m pip install --no-cache-dir \
         --index-url https://download.pytorch.org/whl/cpu \
         torch==2.6.0 && \
-    pip install --no-cache-dir \
+    python -m pip install --no-cache-dir \
         --disable-pip-version-check \
         -r requirements.txt
 
 # Copy application
-RUN mkdir -p /app/uploads
-
 COPY . .
+
+RUN mkdir -p /app/uploads
 
 # Create non-root user
 RUN useradd --create-home --shell /bin/bash appuser && \
@@ -44,5 +45,11 @@ RUN useradd --create-home --shell /bin/bash appuser && \
 USER appuser
 
 EXPOSE 8000
+
+HEALTHCHECK --interval=30s \
+            --timeout=5s \
+            --start-period=30s \
+            --retries=3 \
+  CMD curl -f http://localhost:8000/api/health || exit 1
 
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]

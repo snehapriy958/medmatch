@@ -1,3 +1,81 @@
+# # =========================
+# # Operating System
+# # =========================
+# .DS_Store
+# Thumbs.db
+
+# # =========================
+# # IDE
+# # =========================
+# .idea/
+# .vscode/
+# *.iml
+
+# # =========================
+# # Environment Files
+# # =========================
+# .env
+# .env.*
+# !.env.example
+
+# # =========================
+# # Python
+# # =========================
+# **/__pycache__/
+# *.py[cod]
+# .pytest_cache/
+# .mypy_cache/
+# .ruff_cache/
+# **/.venv/
+# **/venv/
+
+# # =========================
+# # Java
+# # =========================
+# **/target/
+
+# # =========================
+# # Node
+# # =========================
+# **/node_modules/
+# **/dist/
+
+# # =========================
+# # Logs
+# # =========================
+# *.log
+# logs/
+
+# # =========================
+# # Uploads
+# # =========================
+# services/ai-service/uploads/
+
+# # =========================
+# # Docker
+# # =========================
+# docker-data/
+
+# # =========================
+# # Private Keys (Never commit)
+# # =========================
+# services/auth-service/src/main/resources/keys/private_key.pem
+
+# # =========================
+# # Test Coverage
+# # =========================
+# .coverage
+# coverage/
+# htmlcov/
+
+# # Temporary editor files
+# *.tmp
+# *.temp
+# *.bak
+# *~
+# .LCK*
+
+
 # =========================
 # Operating System
 # =========================
@@ -23,11 +101,19 @@ Thumbs.db
 # =========================
 **/__pycache__/
 *.py[cod]
+*$py.class
+
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
+.pytype/
+.pyre/
+.tox/
+.nox/
+
 **/.venv/
 **/venv/
+**/env/
 
 # =========================
 # Java
@@ -39,6 +125,7 @@ Thumbs.db
 # =========================
 **/node_modules/
 **/dist/
+**/build/
 
 # =========================
 # Logs
@@ -65,12 +152,22 @@ services/auth-service/src/main/resources/keys/private_key.pem
 # Test Coverage
 # =========================
 .coverage
+.coverage.*
 coverage/
 htmlcov/
 
-# Temporary editor files
+# =========================
+# Temporary Files
+# =========================
 *.tmp
 *.temp
 *.bak
 *~
 .LCK*
+
+# =========================
+# Archives
+# =========================
+*.zip
+*.tar
+*.gz
