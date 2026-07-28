@@ -248,7 +248,12 @@ jobs:
         run: docker compose build
 
       - name: Start Docker Stack
-        run: docker compose up -d
+        run: 
+      
+      - name: Show Container Logs
+        if: always()
+        run: |
+          docker compose logs auth-service
 
       - name: Wait for Services
         run: sleep 60
