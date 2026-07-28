@@ -270,21 +270,6 @@ jobs:
       - name: Start Docker Stack
         run: docker compose up -d
       
-      - name: Show Container Logs
-        if: always()
-        run: |
-          docker ps -a
-
-      - name: Inspect Auth Container
-        if: always()
-        run: |
-          docker inspect medmatch-auth
-
-      - name: Show Container Logs
-        if: always()
-        run: |
-          docker compose logs
-
       - name: Wait for Auth Service
         run: |
           timeout 180 bash -c 'until curl -fs http://localhost:8081/health; do sleep 5; done'
@@ -302,8 +287,6 @@ jobs:
       - name: Verify Containers
         run: |
 
-          docker ps -a
-
           docker inspect medmatch-auth --format='{{json .State.Health}}'
           docker inspect medmatch-ai --format='{{json .State.Health}}'
 
@@ -315,7 +298,22 @@ jobs:
 
           test "$AI_STATUS" = "healthy"
           test "$AUTH_STATUS" = "healthy"
-      
+
+      - name: Show Running Containers
+        if: failure()
+        run: |
+          docker ps -a
+
+      - name: Inspect Auth Container
+        if: failure()
+        run: |
+          docker inspect medmatch-auth
+
+      - name: Show Container Logs
+        if: failure()
+        run: |
+          docker compose logs --no-color
+
       - name: Shutdown Docker Stack
         if: always()
         run: docker compose down -v
