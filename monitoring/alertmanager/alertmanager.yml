@@ -1,0 +1,23 @@
+global:
+  resolve_timeout: 5m
+
+route:
+  receiver: "default"
+
+receivers:
+  - name: "default"
+
+    # Email example
+    # email_configs:
+    #   - to: you@example.com
+    #     from: medmatch@example.com
+    #     smarthost: smtp.gmail.com:587
+    #     auth_username: your_email
+    #     auth_password: app_password
+
+    # Slack example
+    # slack_configs:
+    #   - api_url: https://hooks.slack.com/services/...
+    #     channel: "#alerts"
+
+    # For development we keep an empty receiver.

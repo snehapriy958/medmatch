@@ -1,0 +1,2 @@
+ALTER TABLE audit_logs
+ALTER COLUMN resource_id DROP NOT NULL;

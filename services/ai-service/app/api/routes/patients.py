@@ -176,6 +176,7 @@ def delete_patient(
     deleted = service.delete_patient(
         patient_id=patient_id,
         hospital_id=hospital_id,
+        current_user=current_user,
     )
 
     if not deleted:
@@ -219,4 +220,5 @@ def create_patient_note(
         patient_id=patient_id,
         note_data=note,
         hospital_id=hospital_id,
+        current_user=current_user,
     )

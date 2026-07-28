@@ -1,4 +1,10 @@
 import {
+  BadgeCheck,
+  FlaskConical,
+  FileText,
+} from "lucide-react";
+
+import {
   Card,
   CardContent,
   CardHeader,
@@ -55,53 +61,94 @@ export function SearchResultsTable({
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-32">
-                  Trial ID
-                </TableHead>
-
-                <TableHead className="w-40">
-                  Criteria Type
+                <TableHead>
+                  Trial
                 </TableHead>
 
                 <TableHead>
-                  Description
+                  Condition
+                </TableHead>
+
+                <TableHead>
+                  Phase
+                </TableHead>
+
+                <TableHead>
+                  Type
+                </TableHead>
+
+                <TableHead>
+                  Criterion
                 </TableHead>
 
                 <TableHead className="text-right">
-                  Distance
+                  Similarity
                 </TableHead>
               </TableRow>
             </TableHeader>
 
             <TableBody>
-              {results.map((result) => (
-                <TableRow key={result.id}>
-                  <TableCell className="font-mono text-xs">
-                    {result.trial_id}
-                  </TableCell>
+              {results.map((result) => {
+                const similarity = Math.max(
+                  0,
+                  (1 - result.distance) * 100
+                );
 
-                  <TableCell className="font-medium capitalize">
-                    {result.criteria_type}
-                  </TableCell>
+                return (
+                  <TableRow key={result.id}>
+                    <TableCell className="min-w-[250px]">
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2 font-semibold">
+                          <FlaskConical className="h-4 w-4 text-blue-600" />
+                          {result.title}
+                        </div>
 
-                  <TableCell className="max-w-xl">
-                    <p className="line-clamp-2">
-                      {result.description}
-                    </p>
-                  </TableCell>
+                        {result.status && (
+                          <div>
+                            <BadgeCheck className="mr-1 inline h-3 w-3 text-green-600" />
+                            <span className="text-xs text-muted-foreground">
+                              {result.status}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    </TableCell>
 
-                  <TableCell className="text-right font-semibold">
-                    {result.distance.toFixed(4)}
-                  </TableCell>
-                </TableRow>
-              ))}
+                    <TableCell>
+                      {result.condition ?? "N/A"}
+                    </TableCell>
+
+                    <TableCell>
+                      {result.phase ?? "N/A"}
+                    </TableCell>
+
+                    <TableCell className="capitalize">
+                      {result.criteria_type}
+                    </TableCell>
+
+                    <TableCell className="min-w-[380px]">
+                      <div className="flex gap-2">
+                        <FileText className="mt-1 h-4 w-4 flex-shrink-0 text-slate-500" />
+
+                        <span className="text-sm leading-6">
+                          {result.description}
+                        </span>
+                      </div>
+                    </TableCell>
+
+                    <TableCell className="text-right font-semibold">
+                      {similarity.toFixed(1)}%
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
         </div>
 
         <p className="mt-4 text-sm text-muted-foreground">
-          Showing the {results.length} most relevant trial
-          criteria retrieved through semantic vector search.
+          Displaying the {results.length} most relevant clinical trial criteria
+          retrieved through semantic vector search.
         </p>
       </CardContent>
     </Card>

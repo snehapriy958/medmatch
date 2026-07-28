@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class MatchingResult(BaseModel):
@@ -9,14 +9,31 @@ class MatchingResult(BaseModel):
     """
 
     id: UUID
+
     trial_id: UUID
+
+    title: str
+
+    condition: str | None = None
+
+    phase: str | None = None
+
+    status: str | None = None
+
+    brief_summary: str | None = None
+
     criteria_type: str
+
     description: str
 
     distance: float = Field(
         ge=0.0,
         le=2.0,
         description="Cosine distance between embeddings.",
+    )
+
+    model_config = ConfigDict(
+        from_attributes=True,
     )
 
 
@@ -46,3 +63,7 @@ class MatchingResponse(BaseModel):
     )
 
     matches: list[MatchingResult]
+
+    model_config = ConfigDict(
+        from_attributes=True,
+    )

@@ -13,7 +13,7 @@ from app.repositories.patient_repository import (
 from app.schemas.patient_note import PatientNoteCreate
 from app.services.audit_service import AuditService
 from app.services.embedding_service import EmbeddingService
-
+from app.repositories.hospital_repository import HospitalRepository
 
 logger = logging.getLogger(__name__)
 
@@ -27,11 +27,13 @@ class PatientNoteService:
         self,
         patient_repository: PatientRepository,
         note_repository: PatientNoteRepository,
+        hospital_repository: HospitalRepository,
         embedding_service: EmbeddingService,
         audit_service: AuditService,
     ) -> None:
         self.patient_repository = patient_repository
         self.note_repository = note_repository
+        self.hospital_repository = hospital_repository
         self.embedding_service = embedding_service
         self.audit_service = audit_service
 
@@ -40,6 +42,7 @@ class PatientNoteService:
         patient_id: UUID,
         note_data: PatientNoteCreate,
         hospital_id: UUID,
+        current_user: dict,
     ) -> PatientNote:
         """
         Create a patient note and generate its embedding.
@@ -73,15 +76,36 @@ class PatientNoteService:
                 text=note.note,
             )
 
-            self.audit_service.log(
-                action="PATIENT_NOTE_CREATED",
-                resource_type="PatientNote",
-                resource_id=note.id,
-                details=(
-                    f"Patient note created "
-                    f"for patient {patient_id}."
-                ),
+            hospital = self.hospital_repository.get_by_id(
+                hospital_id
             )
+
+            hospital_name = (
+                hospital.name
+                if hospital is not None
+                else "Unknown Hospital"
+            )
+
+            try:
+                self.audit_service.log(
+                    action="PATIENT_NOTE_CREATED",
+                    resource_type="PatientNote",
+                    performed_by_id=UUID(current_user["sub"]),
+                    performed_by_username=current_user["email"],
+                    performed_by_role=current_user["role"],
+                    hospital_id=hospital_id,
+                    hospital_name=hospital_name,
+                    resource_id=note.id,
+                    details=(
+                        f"Patient note created "
+                        f"for patient {patient_id}."
+                    ),
+                )
+
+            except Exception:
+                logger.exception(
+                    "Failed to write patient note audit log."
+                )
 
             return note
 

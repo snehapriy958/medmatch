@@ -3,9 +3,9 @@ import logging
 
 from app.models.patient import Patient
 from app.repositories.patient_repository import PatientRepository
+from app.repositories.hospital_repository import HospitalRepository
 from app.schemas.patient import PatientCreate
 from app.services.audit_service import AuditService
-
 
 logger = logging.getLogger(__name__)
 
@@ -18,9 +18,11 @@ class PatientService:
     def __init__(
         self,
         repository: PatientRepository,
+        hospital_repository: HospitalRepository,
         audit_service: AuditService,
     ) -> None:
         self.repository = repository
+        self.hospital_repository = hospital_repository
         self.audit_service = audit_service
 
     def create_patient(
@@ -32,8 +34,7 @@ class PatientService:
         """
         Create a new patient inside the authenticated hospital.
         """
-        print(current_user)
-        
+
         patient = Patient(
             name=patient_data.name,
             age=patient_data.age,
@@ -43,38 +44,39 @@ class PatientService:
         )
 
         try:
-            self.repository.create_patient(
-                patient
-            )
+            self.repository.create_patient(patient)
 
             self.repository.commit()
 
-            self.repository.refresh(
-                patient
+            self.repository.refresh(patient)
+
+            hospital = self.hospital_repository.get_by_id(
+                hospital_id
             )
 
-            hospital_name = current_user.get("hospital_name", "")
-
-            if not hospital_name:
-                hospital_name = "Unknown Hospital"
-
-
-            self.audit_service.log(
-                action="PATIENT_CREATED",
-                resource_type="Patient",
-
-                performed_by_id=UUID(str(current_user["sub"])),
-                performed_by_username=current_user["email"],
-                performed_by_role=current_user["role"],
-
-                hospital_id=hospital_id,
-                hospital_name=hospital_name,
-
-                resource_id=patient.id,
-
-                details=f"Patient '{patient.name}' created.",
-
+            hospital_name = (
+                hospital.name
+                if hospital is not None
+                else "Unknown Hospital"
             )
+
+            try:
+                self.audit_service.log(
+                    action="PATIENT_CREATED",
+                    resource_type="Patient",
+                    performed_by_id=UUID(current_user["sub"]),
+                    performed_by_username=current_user["email"],
+                    performed_by_role=current_user["role"],
+                    hospital_id=hospital_id,
+                    hospital_name=hospital_name,
+                    resource_id=patient.id,
+                    details=f"Patient '{patient.name}' created.",
+                )
+
+            except Exception:
+                logger.exception(
+                    "Failed to write patient audit log."
+                )
 
             return patient
 
@@ -117,6 +119,7 @@ class PatientService:
         self,
         patient_id: UUID,
         hospital_id: UUID,
+        current_user: dict,
     ) -> bool:
         """
         Delete a patient belonging to the hospital.
@@ -131,21 +134,37 @@ class PatientService:
             return False
 
         try:
-            self.repository.delete_patient(
-                patient
-            )
+            self.repository.delete_patient(patient)
 
             self.repository.commit()
 
-            self.audit_service.log(
-                action="PATIENT_DELETED",
-                resource_type="Patient",
-                resource_id=patient.id,
-                details=(
-                    f"Patient '{patient.name}' "
-                    "deleted."
-                ),
+            hospital = self.hospital_repository.get_by_id(
+                hospital_id
             )
+
+            hospital_name = (
+                hospital.name
+                if hospital is not None
+                else "Unknown Hospital"
+            )
+
+            try:
+                self.audit_service.log(
+                    action="PATIENT_DELETED",
+                    resource_type="Patient",
+                    performed_by_id=UUID(current_user["sub"]),
+                    performed_by_username=current_user["email"],
+                    performed_by_role=current_user["role"],
+                    hospital_id=hospital_id,
+                    hospital_name=hospital_name,
+                    resource_id=patient.id,
+                    details=f"Patient '{patient.name}' deleted.",
+                )
+
+            except Exception:
+                logger.exception(
+                    "Failed to write patient deletion audit log."
+                )
 
             return True
 

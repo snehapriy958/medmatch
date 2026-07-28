@@ -16,6 +16,7 @@ import com.medmatch.auth.entity.Hospital;
 import com.medmatch.auth.entity.User;
 import com.medmatch.auth.exception.DuplicateResourceException;
 import com.medmatch.auth.exception.ResourceNotFoundException;
+import com.medmatch.auth.metrics.MetricsService;
 import com.medmatch.auth.repository.UserRepository;
 import com.medmatch.auth.security.SecurityUtils;
 
@@ -28,19 +29,22 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final AuditLogService auditLogService;
     private final SecurityUtils securityUtils;
+    private final MetricsService metricsService;
 
     public UserService(
             UserRepository userRepository,
             HospitalService hospitalService,
             PasswordEncoder passwordEncoder,
             AuditLogService auditLogService,
-            SecurityUtils securityUtils
+            SecurityUtils securityUtils,
+            MetricsService metricsService
     ) {
         this.userRepository = userRepository;
         this.hospitalService = hospitalService;
         this.passwordEncoder = passwordEncoder;
         this.auditLogService = auditLogService;
         this.securityUtils = securityUtils;
+        this.metricsService = metricsService;
     }
 
     /**
@@ -77,6 +81,7 @@ public class UserService {
 
             User savedUser = userRepository.save(user);
 
+            metricsService.registration();
             logUserAudit(
                     AuditAction.CREATE_USER,
                     savedUser,

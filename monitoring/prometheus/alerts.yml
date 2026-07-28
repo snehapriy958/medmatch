@@ -1,0 +1,50 @@
+groups:
+
+  - name: medmatch-alerts
+
+    rules:
+
+      - alert: AIServiceDown
+        expr: up{job="ai-service"} == 0
+        for: 1m
+
+        labels:
+          severity: critical
+
+        annotations:
+          summary: "AI Service is down"
+          description: "The MedMatch AI Service has been unreachable for more than 1 minute."
+
+      - alert: AuthServiceDown
+        expr: up{job="auth-service"} == 0
+        for: 1m
+
+        labels:
+          severity: critical
+
+        annotations:
+          summary: "Auth Service is down"
+          description: "The Authentication Service has been unreachable."
+
+      - alert: HighLatency
+        expr: rate(medmatch_ai_match_duration_seconds_sum[5m]) /
+              rate(medmatch_ai_match_duration_seconds_count[5m]) > 5
+        for: 2m
+
+        labels:
+          severity: warning
+
+        annotations:
+          summary: "High Match Latency"
+          description: "Average AI match latency exceeds 5 seconds."
+
+      - alert: HighFailureRate
+        expr: rate(medmatch_ai_match_failure_total[5m]) > 0
+        for: 2m
+
+        labels:
+          severity: warning
+
+        annotations:
+          summary: "AI Match Failures"
+          description: "Failures detected in AI matching."

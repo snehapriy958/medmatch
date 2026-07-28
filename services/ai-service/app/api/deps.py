@@ -34,7 +34,7 @@ from app.repositories.trial_criteria_repository import (
     TrialCriteriaRepository,
 )
 from app.repositories.trial_repository import TrialRepository
-
+from app.repositories.hospital_repository import HospitalRepository
 from app.services.audit_service import AuditService
 from app.services.embedding_service import EmbeddingService
 from app.services.llm_service import LLMService
@@ -276,11 +276,19 @@ def get_audit_service(
 
     return AuditService(repository)
 
+def get_hospital_repository(
+    db: Annotated[Session, Depends(get_db)],
+) -> HospitalRepository:
+    return HospitalRepository(db)
 
 def get_matching_service(
     repository: Annotated[
         MatchingRepository,
         Depends(get_matching_repository),
+    ],
+    hospital_repository: Annotated[
+        HospitalRepository,
+        Depends(get_hospital_repository),
     ],
     embedding_service: Annotated[
         EmbeddingService,
@@ -298,6 +306,7 @@ def get_matching_service(
 
     return MatchingService(
         repository=repository,
+        hospital_repository=hospital_repository,
         embedding_service=embedding_service,
         llm_service=llm_service,
         audit_service=audit_service,
@@ -356,6 +365,10 @@ def get_patient_service(
         PatientRepository,
         Depends(get_patient_repository),
     ],
+    hospital_repository: Annotated[
+        HospitalRepository,
+        Depends(get_hospital_repository),
+    ],
     audit_service: Annotated[
         AuditService,
         Depends(get_audit_service),
@@ -364,6 +377,7 @@ def get_patient_service(
 
     return PatientService(
         repository=repository,
+        hospital_repository=hospital_repository,
         audit_service=audit_service,
     )
 
@@ -376,6 +390,10 @@ def get_patient_note_service(
     note_repository: Annotated[
         PatientNoteRepository,
         Depends(get_patient_note_repository),
+    ],
+    hospital_repository: Annotated[
+        HospitalRepository,
+        Depends(get_hospital_repository),
     ],
     embedding_service: Annotated[
         EmbeddingService,
@@ -390,6 +408,7 @@ def get_patient_note_service(
     return PatientNoteService(
         patient_repository=patient_repository,
         note_repository=note_repository,
+        hospital_repository=hospital_repository,
         embedding_service=embedding_service,
         audit_service=audit_service,
     )

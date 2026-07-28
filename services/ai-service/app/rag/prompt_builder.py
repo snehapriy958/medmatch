@@ -16,14 +16,32 @@ class PromptBuilder:
         against the retrieved clinical trial criteria.
         """
 
-        criteria_text = "\n\n".join(
-            (
-                f"Trial ID: {criterion.get('trial_id', 'Unknown')}\n"
-                f"Criteria Type: {criterion.get('criteria_type', 'Unknown')}\n"
-                f"Description: {criterion.get('description', '')}"
-            )
-            for criterion in retrieved_criteria
-        )
+        if not retrieved_criteria:
+            criteria_text = "No relevant trial criteria were retrieved."
+        else:
+            sections = []
+
+            for index, criterion in enumerate(
+                retrieved_criteria,
+                start=1,
+            ):
+                sections.append(
+                    (
+                        f"==============================\n"
+                        f"Retrieved Criterion #{index}\n"
+                        f"==============================\n"
+                        f"Trial ID: {criterion.get('trial_id', 'Unknown')}\n"
+                        f"Title: {criterion.get('title', 'Unknown')}\n"
+                        f"Condition: {criterion.get('condition', 'Unknown')}\n"
+                        f"Phase: {criterion.get('phase', 'Unknown')}\n"
+                        f"Status: {criterion.get('status', 'Unknown')}\n"
+                        f"Summary: {criterion.get('brief_summary', 'Not Available')}\n\n"
+                        f"Criterion Type: {criterion.get('criteria_type', 'Unknown')}\n"
+                        f"Criterion: {criterion.get('description', '')}\n"
+                    )
+                )
+
+            criteria_text = "\n".join(sections)
 
         return TRIAL_MATCHING_PROMPT.format(
             patient=patient_note.strip(),

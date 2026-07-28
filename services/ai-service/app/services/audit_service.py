@@ -40,11 +40,13 @@ class AuditService:
             )
 
             created = self.repository.create(audit_log)
+            self.repository.commit()
 
             return AuditLogResponse.model_validate(created)
 
         except Exception:
-
             logger.exception("Failed to write audit log.")
+
+            self.repository.rollback()
 
             return None

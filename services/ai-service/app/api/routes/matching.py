@@ -2,7 +2,7 @@ from typing import Annotated, Any
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, Request
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 from app.api.deps import (
     get_current_hospital_id,
@@ -19,7 +19,16 @@ from app.services.matching_service import MatchingService
 
 class MatchingRequest(BaseModel):
     patient_note: str = Field(
+        min_length=20,
+        max_length=10000,
         description="Clinical note used for semantic trial matching.",
+        examples=[
+            (
+                "54-year-old male with Stage II colon cancer. "
+                "Completed surgery. ECOG 0. "
+                "No liver disease. Creatinine normal."
+            )
+        ],
     )
 
     limit: int = Field(
@@ -27,6 +36,11 @@ class MatchingRequest(BaseModel):
         ge=1,
         le=100,
         description="Maximum number of criteria to retrieve.",
+        examples=[10],
+    )
+
+    model_config = ConfigDict(
+        extra="forbid",
     )
 
 
@@ -39,6 +53,11 @@ router = APIRouter(
 @router.post(
     "/search",
     response_model=MatchingResponse,
+    summary="Semantic Trial Search",
+    description=(
+        "Retrieve the most relevant clinical trial "
+        "criteria using vector similarity search."
+    ),
 )
 @limiter.limit("30/minute")
 def search_matching_trials(
@@ -71,12 +90,17 @@ def search_matching_trials(
 @router.post(
     "/evaluate",
     response_model=EligibilityResponse,
+    summary="Evaluate Clinical Trial Eligibility",
+    description=(
+        "Evaluate patient eligibility using semantic "
+        "retrieval followed by Gemini reasoning."
+    ),
 )
 @limiter.limit("20/minute")
 def evaluate_patient_eligibility(
     request: Request,
     body: MatchingRequest,
-    _: Annotated[
+    current_user: Annotated[
         dict[str, Any],
         Depends(require_admin_or_doctor()),
     ],
@@ -97,5 +121,6 @@ def evaluate_patient_eligibility(
     return service.evaluate_eligibility(
         patient_note=body.patient_note,
         hospital_id=hospital_id,
+        current_user=current_user,
         limit=body.limit,
     )

@@ -33,8 +33,16 @@ class MatchingRepository:
             SELECT
                 tc.id,
                 tc.trial_id,
+
+                t.title,
+                t.condition,
+                t.phase,
+                t.status,
+                t.brief_summary,
+
                 tc.criteria_type,
                 tc.description,
+
                 ce.embedding <=> CAST(:embedding AS vector) AS distance
 
             FROM criteria_embeddings ce
@@ -48,7 +56,7 @@ class MatchingRepository:
             WHERE t.hospital_id = :hospital_id
 
             ORDER BY distance
-            
+
             LIMIT :limit
             """
         )
@@ -74,7 +82,8 @@ class MatchingRepository:
         limit: int = 10,
     ) -> list[dict]:
         """
-        Retrieve the most relevant criteria and group them by trial.
+        Group retrieved criteria by trial while preserving
+        trial metadata.
         """
 
         criteria = self.find_similar_criteria(
@@ -83,15 +92,23 @@ class MatchingRepository:
             limit=limit,
         )
 
-        grouped_trials: dict[UUID, list[dict]] = {}
+        grouped_trials: dict[UUID, dict] = {}
 
         for criterion in criteria:
             trial_id = criterion["trial_id"]
 
             if trial_id not in grouped_trials:
-                grouped_trials[trial_id] = []
+                grouped_trials[trial_id] = {
+                    "trial_id": trial_id,
+                    "title": criterion["title"],
+                    "condition": criterion["condition"],
+                    "phase": criterion["phase"],
+                    "status": criterion["status"],
+                    "brief_summary": criterion["brief_summary"],
+                    "criteria": [],
+                }
 
-            grouped_trials[trial_id].append(
+            grouped_trials[trial_id]["criteria"].append(
                 {
                     "criteria_type": criterion["criteria_type"],
                     "description": criterion["description"],
@@ -99,10 +116,4 @@ class MatchingRepository:
                 }
             )
 
-        return [
-            {
-                "trial_id": trial_id,
-                "criteria": trial_criteria,
-            }
-            for trial_id, trial_criteria in grouped_trials.items()
-        ]
+        return list(grouped_trials.values())

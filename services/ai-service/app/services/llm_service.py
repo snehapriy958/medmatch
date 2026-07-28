@@ -1,7 +1,9 @@
 import json
 import logging
+from typing import TypeVar
 
 from google.genai.types import GenerateContentConfig
+from pydantic import BaseModel
 from tenacity import (
     before_log,
     before_sleep_log,
@@ -10,6 +12,8 @@ from tenacity import (
     stop_after_attempt,
     wait_exponential,
 )
+
+T = TypeVar("T", bound=BaseModel)
 
 from app.config.llm import get_llm
 from app.config.settings import settings
@@ -51,15 +55,15 @@ class LLMService:
         ),
         reraise=True,
     )
+
     def _generate_json(
         self,
         prompt: str,
-    ) -> dict:
+        response_model: type[T],
+    ) -> T:
         """
-        Generate a structured JSON response from Gemini.
-
-        Automatically retries transient communication failures
-        using exponential backoff.
+        Generate a structured JSON response from Gemini and
+        validate it against the supplied Pydantic model.
         """
 
         try:
@@ -91,7 +95,7 @@ class LLMService:
             )
 
         try:
-            return json.loads(response.text)
+            data = json.loads(response.text)
 
         except json.JSONDecodeError as exc:
             logger.error(
@@ -102,6 +106,8 @@ class LLMService:
             raise InvalidLLMResponseError(
                 "LLM returned invalid JSON."
             ) from exc
+
+        return response_model.model_validate(data)
 
     def extract_trial_information(
         self,
@@ -115,12 +121,9 @@ class LLMService:
             text=text,
         )
 
-        data = self._generate_json(
+        return self._generate_json(
             prompt=prompt,
-        )
-
-        return TrialExtraction.model_validate(
-            data,
+            response_model=TrialExtraction,
         )
 
     def evaluate_eligibility(
@@ -131,10 +134,7 @@ class LLMService:
         Evaluate patient eligibility using the supplied prompt.
         """
 
-        data = self._generate_json(
+        return self._generate_json(
             prompt=prompt,
-        )
-
-        return EligibilityResponse.model_validate(
-            data,
+            response_model=EligibilityResponse,
         )

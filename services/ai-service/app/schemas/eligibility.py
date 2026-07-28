@@ -28,22 +28,65 @@ class EligibilityResponse(BaseModel):
         description="Confidence score for the eligibility decision.",
     )
 
+    summary: str = Field(
+        default="",
+        max_length=1000,
+        description="Short clinical summary of the eligibility assessment.",
+    )
+
+    matched_inclusion: list[str] = Field(
+        default_factory=list,
+        max_length=50,
+        description="Inclusion criteria satisfied by the patient.",
+    )
+
+    failed_inclusion: list[str] = Field(
+        default_factory=list,
+        max_length=50,
+        description="Required inclusion criteria that were not satisfied.",
+    )
+
+    satisfied_exclusion: list[str] = Field(
+        default_factory=list,
+        max_length=50,
+        description="Exclusion criteria confirmed to be absent.",
+    )
+
+    triggered_exclusion: list[str] = Field(
+        default_factory=list,
+        max_length=50,
+        description="Exclusion criteria present in the patient.",
+    )
+
+    missing_information: list[str] = Field(
+        default_factory=list,
+        max_length=50,
+        description="Information required before a final decision can be made.",
+    )
+
+    recommendation: str = Field(
+        default="",
+        max_length=1500,
+        description="Recommended next clinical steps.",
+    )
+
+    # Keep these for backward compatibility
     matched_criteria: list[str] = Field(
         default_factory=list,
         max_length=50,
-        description="Eligibility criteria satisfied by the patient.",
+        description="Legacy matched criteria.",
     )
 
     failed_criteria: list[str] = Field(
         default_factory=list,
         max_length=50,
-        description="Eligibility criteria not satisfied or lacking sufficient evidence.",
+        description="Legacy failed criteria.",
     )
 
     reasoning: str = Field(
         min_length=1,
         max_length=3000,
-        description="Concise explanation supporting the eligibility decision.",
+        description="Detailed clinical reasoning.",
     )
 
     model_config = ConfigDict(

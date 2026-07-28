@@ -63,6 +63,7 @@ class TrialService:
         try:
             self.repository.create_trial(trial)
             self.repository.commit()
+
             self.repository.refresh(trial)
 
             try:
@@ -80,7 +81,7 @@ class TrialService:
 
             return trial
 
-        except Exception as exc:
+        except Exception:
             self.repository.rollback()
 
             logger.exception(
