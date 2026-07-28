@@ -238,25 +238,60 @@ jobs:
           AUTH_PORT=8081
           AI_PORT=8000
           FRONTEND_PORT=80
+
+          PROMETHEUS_PORT=9090
+          GRAFANA_PORT=3000
+
+          GRAFANA_ADMIN_USER=admin
+          GRAFANA_ADMIN_PASSWORD=admin
+
           SPRING_PROFILES_ACTIVE=prod
           EOF
 
       - name: Validate Docker Compose
         run: docker compose config
+      
+      - name: Generate RSA Keys for Docker
+        run: |
+          mkdir -p services/auth-service/src/main/resources/keys
+
+          openssl genrsa \
+            -out services/auth-service/src/main/resources/keys/private_key.pem \
+            2048
+
+          openssl rsa \
+            -in services/auth-service/src/main/resources/keys/private_key.pem \
+            -pubout \
+            -out services/auth-service/src/main/resources/keys/public_key.pem
 
       - name: Build Docker Images
         run: docker compose build
 
       - name: Start Docker Stack
-        run: 
+        run: docker compose up -d
       
       - name: Show Container Logs
         if: always()
         run: |
-          docker compose logs auth-service
+          docker ps -a
 
-      - name: Wait for Services
-        run: sleep 60
+      - name: Inspect Auth Container
+        if: always()
+        run: |
+          docker inspect medmatch-auth
+
+      - name: Show Container Logs
+        if: always()
+        run: |
+          docker compose logs
+
+      - name: Wait for Auth Service
+        run: |
+          timeout 180 bash -c 'until curl -fs http://localhost:8081/health; do sleep 5; done'
+
+      - name: Wait for AI Service
+        run: |
+          timeout 180 bash -c 'until curl -fs http://localhost:8000/api/health; do sleep 5; done'
 
       - name: Check Auth Service
         run: curl --fail http://localhost:8081/health
@@ -266,9 +301,15 @@ jobs:
 
       - name: Verify Containers
         run: |
+
+          docker ps -a
+
+          docker inspect medmatch-auth --format='{{json .State.Health}}'
+          docker inspect medmatch-ai --format='{{json .State.Health}}'
+
           AI_STATUS=$(docker inspect medmatch-ai --format='{{.State.Health.Status}}')
           AUTH_STATUS=$(docker inspect medmatch-auth --format='{{.State.Health.Status}}')
-
+          
           echo "AI Status: $AI_STATUS"
           echo "Auth Status: $AUTH_STATUS"
 
