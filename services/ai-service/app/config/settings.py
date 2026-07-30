@@ -57,6 +57,22 @@ class Settings(BaseSettings):
 
     ENABLE_CACHE: bool = True
 
+    # ==========================================================
+    # Rate Limiting
+    # ==========================================================
+    
+    # Production default.
+    # Increase via environment variables during load testing.
+    SEARCH_RATE_LIMIT: str = Field(
+        default="30/minute",
+        description="API rate limit for semantic search."
+    )
+
+    EVALUATE_RATE_LIMIT: str = Field(
+        default="20/minute",
+        description="API rate limit for eligibility evaluation."
+    )
+
 
     # ==========================================================
     # Database

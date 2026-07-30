@@ -56,3 +56,37 @@ LLM_REQUESTS = Counter(
     "medmatch_ai_llm_requests_total",
     "LLM requests"
 )
+
+# ==========================================================
+# Cache Metrics
+# ==========================================================
+
+EMBEDDING_CACHE_HITS = Counter(
+    "medmatch_ai_embedding_cache_hits_total",
+    "Embedding cache hits"
+)
+
+EMBEDDING_CACHE_MISSES = Counter(
+    "medmatch_ai_embedding_cache_misses_total",
+    "Embedding cache misses"
+)
+
+RETRIEVAL_CACHE_HITS = Counter(
+    "medmatch_ai_retrieval_cache_hits_total",
+    "Retrieval cache hits"
+)
+
+RETRIEVAL_CACHE_MISSES = Counter(
+    "medmatch_ai_retrieval_cache_misses_total",
+    "Retrieval cache misses"
+)
+
+LLM_CACHE_HITS = Counter(
+    "medmatch_ai_llm_cache_hits_total",
+    "LLM cache hits"
+)
+
+LLM_CACHE_MISSES = Counter(
+    "medmatch_ai_llm_cache_misses_total",
+    "LLM cache misses"
+)

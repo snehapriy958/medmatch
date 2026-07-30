@@ -4,6 +4,10 @@ import logging
 from app.cache.cache_keys import CacheKeys
 from app.cache.cache_service import CacheService
 from app.config.settings import settings
+from app.metrics.metrics import (
+    EMBEDDING_CACHE_HITS,
+    EMBEDDING_CACHE_MISSES,
+)
 from app.embeddings.model import EmbeddingModel
 from app.models.criteria_embedding import CriteriaEmbedding
 from app.models.patient_note_embedding import PatientNoteEmbedding
@@ -53,11 +57,15 @@ class EmbeddingService:
         cached_embedding = self.cache.get(cache_key)
 
         if cached_embedding is not None:
+            EMBEDDING_CACHE_HITS.inc()
+
             logger.info(
                 "Embedding cache HIT: %s",
                 cache_key,
             )
             return cached_embedding
+
+        EMBEDDING_CACHE_MISSES.inc()
 
         logger.info(
             "Embedding cache MISS: %s",

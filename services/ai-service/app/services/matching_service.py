@@ -12,6 +12,10 @@ from app.metrics.metrics import (
     MATCH_SUCCESS,
     EMBEDDING_REQUESTS,
     LLM_REQUESTS,
+    RETRIEVAL_CACHE_HITS,
+    RETRIEVAL_CACHE_MISSES,
+    LLM_CACHE_HITS,
+    LLM_CACHE_MISSES,
 )
 from app.rag.prompt_builder import PromptBuilder
 from app.repositories.matching_repository import MatchingRepository
@@ -106,11 +110,14 @@ class MatchingService:
         cached_results = self.cache.get(cache_key)
 
         if cached_results is not None:
+            RETRIEVAL_CACHE_HITS.inc()
             logger.info(
                 "Retrieval cache HIT (hospital=%s)",
                 hospital_id,
             )
             return cached_results
+
+        RETRIEVAL_CACHE_MISSES.inc()
 
         logger.info(
             "Retrieval cache MISS (hospital=%s)",
@@ -227,6 +234,7 @@ class MatchingService:
             cached_result = self.cache.get(cache_key)
 
             if cached_result is not None:
+                LLM_CACHE_HITS.inc()
                 logger.info(
                     "LLM cache HIT (hospital=%s)",
                     hospital_id,
@@ -245,6 +253,8 @@ class MatchingService:
 
                 MATCH_SUCCESS.inc()
                 return response
+
+            LLM_CACHE_MISSES.inc()
 
             logger.info(
                 "LLM cache MISS (hospital=%s)",

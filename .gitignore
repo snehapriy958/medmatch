@@ -100,3 +100,21 @@ htmlcov/
 *.zip
 *.tar
 *.gz
+
+tests/load/k6/.env.local
+
+# =========================
+# k6 Load Testing
+# =========================
+tests/load/k6/results/
+
+# =========================
+# Monitoring
+# =========================
+prometheus-data/
+grafana-data/
+
+# =========================
+# VS Code
+# =========================
+.history/

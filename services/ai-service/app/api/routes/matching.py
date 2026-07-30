@@ -59,7 +59,7 @@ router = APIRouter(
         "criteria using vector similarity search."
     ),
 )
-@limiter.limit("30/minute")
+@limiter.limit(settings.SEARCH_RATE_LIMIT)
 def search_matching_trials(
     request: Request,
     body: MatchingRequest,
@@ -96,7 +96,7 @@ def search_matching_trials(
         "retrieval followed by Gemini reasoning."
     ),
 )
-@limiter.limit("20/minute")
+@limiter.limit(settings.EVALUATE_RATE_LIMIT)
 def evaluate_patient_eligibility(
     request: Request,
     body: MatchingRequest,
