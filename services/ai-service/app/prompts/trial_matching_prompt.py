@@ -146,7 +146,7 @@ Do NOT:
 
 Every field below MUST be present, even if empty.
 
-{
+{{
   "eligibility": "Eligible | Not Eligible | Possibly Eligible",
   "confidence": 0.0,
   "summary": "Maximum two concise sentences summarizing the overall eligibility decision and the most important inclusion and exclusion findings.",
@@ -157,5 +157,5 @@ Every field below MUST be present, even if empty.
   "missing_information": [],
   "recommendation": "Provide one actionable recommendation such as: Eligible for enrollment, Obtain ECOG Performance Status, Verify renal function before enrollment, Obtain missing laboratory values, or Exclude from trial.",
   "reasoning": ""
-}
+}}
 """.strip()

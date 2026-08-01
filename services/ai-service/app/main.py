@@ -2,7 +2,7 @@ from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 import logging
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -99,7 +99,6 @@ app.add_middleware(
     allowed_hosts=settings.TRUSTED_HOSTS,
 )
 
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.ALLOWED_ORIGINS,
@@ -108,21 +107,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
 app.state.limiter = limiter
 
-
-app.add_middleware(
-    RequestIDMiddleware
-)
-
-app.add_middleware(
-    RequestLoggingMiddleware
-)
-
-app.add_middleware(
-    SlowAPIMiddleware
-)
+app.add_middleware(RequestIDMiddleware)
+app.add_middleware(RequestLoggingMiddleware)
+app.add_middleware(SlowAPIMiddleware)
 
 
 app.add_exception_handler(

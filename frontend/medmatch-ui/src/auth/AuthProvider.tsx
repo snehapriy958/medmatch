@@ -77,23 +77,28 @@ export function AuthProvider({
     restoreSession();
   }, [restoreSession]);
 
-  const login = useCallback(
-    async (request: LoginRequest) => {
-      const response = await authService.login(request);
+  const login = useCallback(async (request: LoginRequest) => {
+    const response = await authService.login(request);
 
-      setAccessToken(response.accessToken);
+    console.log("1. Response", response);
 
-      const payload = decodeToken(response.accessToken);
+    setAccessToken(response.accessToken);
 
-      setUser({
-        id: payload.sub,
-        email: payload.email,
-        role: payload.role,
-        hospitalId: payload.hospital_id,
-      });
-    },
-    []
-  );
+    console.log("2. Token saved");
+
+    const payload = decodeToken(response.accessToken);
+
+    console.log("3. Payload", payload);
+
+    setUser({
+      id: payload.sub,
+      email: payload.email,
+      role: payload.role,
+      hospitalId: payload.hospital_id,
+    });
+
+    console.log("4. User set");
+  }, []);
 
   const logout = useCallback(() => {
     removeAccessToken();

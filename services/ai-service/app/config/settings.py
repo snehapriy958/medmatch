@@ -31,10 +31,10 @@ class Settings(BaseSettings):
         default_factory=lambda: [
             "localhost",
             "127.0.0.1",
+            "medmatch.local"
             "ai-service",
-            "medmatch-ai",
+            "auth-service"
             "frontend",
-            "nginx",
         ]
     )
 

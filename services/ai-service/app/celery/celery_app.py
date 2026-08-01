@@ -15,8 +15,10 @@ celery_app.conf.update(
     accept_content=["json"],
     timezone="UTC",
     enable_utc=True,
-)
 
+    worker_concurrency=settings.CELERY_CONCURRENCY,
+    task_time_limit=settings.CELERY_TASK_TIME_LIMIT,
+)
 
 celery_app.conf.imports = (
     "app.celery.tasks",

@@ -9,20 +9,39 @@ RUN apt-get update && \
 
 WORKDIR /app
 
+# COPY pom.xml .
+# COPY mvnw .
+# COPY .mvn .mvn
+
+# RUN chmod +x mvnw
+
+# RUN ./mvnw \
+#     --batch-mode \
+#     dependency:go-offline \
+#     --no-transfer-progress
+
+# COPY src ./src
+
+# RUN ./mvnw \
+#     --batch-mode \
+#     clean package \
+#     -DskipTests \
+#     --no-transfer-progress
+
 COPY pom.xml .
-COPY mvnw .
-COPY .mvn .mvn
-
-RUN chmod +x mvnw
-
-RUN ./mvnw \
-    --batch-mode \
-    dependency:go-offline \
-    --no-transfer-progress
-
+# COPY mvnw .
+# COPY .mvn .mvn
 COPY src ./src
 
-RUN ./mvnw \
+# RUN chmod +x mvnw
+
+# RUN ./mvnw \
+#     --batch-mode \
+#     clean package \
+#     -DskipTests \
+#     --no-transfer-progress
+
+RUN mvn \
     --batch-mode \
     clean package \
     -DskipTests \

@@ -138,24 +138,52 @@ public class GlobalExceptionHandler {
     /**
      * Any unexpected exception.
      */
+//     @ExceptionHandler(Exception.class)
+//     public ResponseEntity<ErrorResponse> handleException(
+//             Exception ex,
+//             HttpServletRequest request
+//     ) {
+
+//         log.error("Unexpected exception occurred while processing request: {}",
+//                 request.getRequestURI(), ex);
+
+//         ErrorResponse response = new ErrorResponse(
+//                 LocalDateTime.now(),
+//                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
+//                 HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
+//                 "An unexpected error occurred.",
+//                 request.getRequestURI()
+//         );
+
+//         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                 .body(response);
+//     }
+     /**
+         * Any unexpected exception.
+         */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleException(
             Exception ex,
             HttpServletRequest request
     ) {
 
-        log.error("Unexpected exception occurred while processing request: {}",
-                request.getRequestURI(), ex);
+    ex.printStackTrace();
 
-        ErrorResponse response = new ErrorResponse(
-                LocalDateTime.now(),
-                HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
-                "An unexpected error occurred.",
-                request.getRequestURI()
-        );
+    log.error(
+            "Unexpected exception occurred while processing request: {}",
+            request.getRequestURI(),
+            ex
+    );
 
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(response);
+    ErrorResponse response = new ErrorResponse(
+            LocalDateTime.now(),
+            HttpStatus.INTERNAL_SERVER_ERROR.value(),
+            HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
+            ex.getClass().getName() + ": " + ex.getMessage(),
+            request.getRequestURI()
+    );
+
+    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .body(response);
     }
 }

@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: celery-worker
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: celery-worker
+
+  template:
+    metadata:
+      labels:
+        app: celery-worker
+
+    spec:
+      containers:
+        - name: celery-worker
+
+          image: medmatch-celery-worker:latest
+          imagePullPolicy: IfNotPresent
+
+          command:
+            - celery
+            - -A
+            - app.celery.celery_app
+            - worker
+            - --loglevel=info
+            - --concurrency=1
+
+          envFrom:
+            - configMapRef:
+                name: medmatch-config
+
+            - secretRef:
+                name: medmatch-secret
+
+          # Shared upload storage with AI service
+          volumeMounts:
+            - name: uploads
+              mountPath: /app/uploads
+
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "1Gi"
+
+            limits:
+              cpu: "1000m"
+              memory: "2Gi"
+      # Persistent storage for uploaded trial PDFs
+      volumes:
+        - name: uploads
+          persistentVolumeClaim:
+            claimName: uploads-pvc

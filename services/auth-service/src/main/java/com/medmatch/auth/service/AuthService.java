@@ -39,6 +39,7 @@ public class AuthService {
         this.auditLogService = auditLogService;
         this.metricsService = metricsService;
     }
+       
 
     public LoginResponse login(LoginRequest request) {
 
@@ -46,12 +47,9 @@ public class AuthService {
 
         try {
 
-                System.out.println("--------------------------------");
-                System.out.println("Username received: " + request.getUsername());
-
                 User user = userRepository.findByUsername(request.getUsername())
                         .orElseThrow(() -> {
-                                System.out.println("User not found.");
+                           
                                 metricsService.loginFailure();
                                 return new BusinessValidationException(INVALID_CREDENTIALS);
                         });
@@ -62,7 +60,7 @@ public class AuthService {
                 );
 
                 if (!matches) {
-                        System.out.println("Login Failed");
+
                         metricsService.loginFailure();
                         throw new BusinessValidationException(INVALID_CREDENTIALS);
                 }
@@ -92,5 +90,5 @@ public class AuthService {
                 metricsService.stopLoginTimer(timer);
 
         }
-    }
+   }
 }

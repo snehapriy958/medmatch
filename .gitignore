@@ -118,3 +118,9 @@ grafana-data/
 # VS Code
 # =========================
 .history/
+
+.python-version
+*.egg-info/
+.eggs/
+.AppleDouble
+Desktop.ini

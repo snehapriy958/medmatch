@@ -15,7 +15,6 @@ data:
   APP_NAME: "MedMatch AI Service"
   APP_VERSION: "1.0.0"
   ENVIRONMENT: "production"
-
   DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/medmatch"
 
   REDIS_URL: "redis://redis:6379/0"
