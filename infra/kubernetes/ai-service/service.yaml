@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ai-service
+  namespace: medmatch
+  labels:
+    app: medmatch
+    component: ai-service
+    environment: production
+spec:
+  # Internal-only ClusterIP. Reached by auth-service (backend -> AI per the
+  # networking spec) and by the worker for background AI processing. Not
+  # routed to directly from ingress.yaml — external clients only ever talk
+  # to the backend, which then calls this internally.
+  type: ClusterIP
+  selector:
+    app: medmatch
+    component: ai-service
+  ports:
+    - name: http
+      port: 8000
+      targetPort: 8000

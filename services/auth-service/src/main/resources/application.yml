@@ -1,0 +1,52 @@
+server:
+  port: 8081
+
+
+spring:
+  application:
+    name: auth-service
+
+
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5434/medmatch}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:postgres}
+
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    open-in-view: false
+
+
+  flyway:
+    enabled: true
+
+
+jwt:
+  private-key: classpath:keys/private.pem
+  public-key: classpath:keys/public.pem
+  expiration: 3600000
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - prometheus
+          - info
+
+
+  endpoint:
+    health:
+      show-details: when_authorized
+
+
+logging:
+  level:
+    root: INFO
+    org.springframework.security: INFO
+    org.springframework.web: INFO

@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: medmatch-config
+  namespace: medmatch
+  labels:
+    app: medmatch
+    component: config
+    environment: production
+data:
+  # Application profile / environment
+  APPLICATION_PROFILE: "production"
+
+  # PostgreSQL connection (non-sensitive parts only — password lives in secrets.yaml)
+  DATABASE_HOST: "postgres-service"
+  DATABASE_PORT: "5432"
+  DATABASE_NAME: "medmatch"
+
+  # Redis connection (broker + cache — no auth token here, that's a secret)
+  REDIS_HOST: "redis-service"
+  REDIS_PORT: "6379"
+
+  # Internal service-to-service URLs (Kubernetes DNS, ClusterIP services)
+  AI_SERVICE_URL: "http://ai-service:8000"
+
+  # Celery broker/result backend (Redis-backed, per ADR-004)
+  CELERY_BROKER_URL: "redis://redis-service:6379/0"
+  CELERY_RESULT_BACKEND: "redis://redis-service:6379/1"
+
+  # Service ports (used by probes/deployments referencing configmap)
+  AUTH_SERVICE_PORT: "8081"
+  AI_SERVICE_PORT: "8000"
+  FRONTEND_PORT: "5173"

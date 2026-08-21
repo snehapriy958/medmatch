@@ -1,0 +1,207 @@
+services:
+
+  # ============================================================
+  # PostgreSQL + pgvector
+  # ============================================================
+
+  postgres:
+    image: pgvector/pgvector:pg17
+
+    container_name: medmatch-postgres
+
+    environment:
+      POSTGRES_DB: medmatch
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
+    ports:
+      - "5434:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "pg_isready -U postgres -d medmatch"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+    restart: unless-stopped
+
+
+  # ============================================================
+  # Redis
+  # ============================================================
+
+  redis:
+    image: redis:8-alpine
+
+    container_name: medmatch-redis
+
+    ports:
+      - "6379:6379"
+
+    volumes:
+      - redis_data:/data
+
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "redis-cli",
+          "ping"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+    restart: unless-stopped
+
+
+  # ============================================================
+  # Spring Boot Auth Service
+  # ============================================================
+
+  auth-service:
+    build:
+      context: .
+      dockerfile: infra/docker/auth-service.Dockerfile
+
+    container_name: medmatch-auth
+
+    ports:
+      - "8081:8081"
+
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/medmatch
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+
+    volumes:
+      - ./services/auth-service/src/main/resources/keys:/app/keys:ro
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+    restart: unless-stopped
+
+
+  # ============================================================
+  # FastAPI AI Service
+  # ============================================================
+
+  ai-service:
+    build:
+      context: .
+      dockerfile: infra/docker/ai-service.Dockerfile
+
+    container_name: medmatch-ai
+
+    ports:
+      - "8000:8000"
+
+    environment:
+
+      APPLICATION_PROFILE: production
+
+      DATABASE_URL: postgresql://postgres:${DATABASE_PASSWORD:-postgres}@postgres:5432/medmatch
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD:-postgres}
+
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/1
+
+      HF_HOME: /tmp/huggingface
+      TRANSFORMERS_CACHE: /tmp/huggingface
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+      redis:
+        condition: service_healthy
+
+    restart: unless-stopped
+
+
+  # ============================================================
+  # Celery Worker
+  # ============================================================
+
+  celery-worker:
+    build:
+      context: .
+      dockerfile: infra/docker/worker.Dockerfile
+
+    container_name: medmatch-worker
+
+    environment:
+
+      APPLICATION_PROFILE: production
+
+      DATABASE_URL: postgresql://postgres:${DATABASE_PASSWORD:-postgres}@postgres:5432/medmatch
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD:-postgres}
+
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/1
+
+      HF_HOME: /tmp/huggingface
+      TRANSFORMERS_CACHE: /tmp/huggingface
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+      redis:
+        condition: service_healthy
+
+    restart: unless-stopped
+
+
+  # ============================================================
+  # React + Vite Frontend
+  # ============================================================
+
+  frontend:
+    build:
+      context: .
+      dockerfile: infra/docker/frontend.Dockerfile
+      args:
+        VITE_AUTH_API_URL: /api/auth
+        VITE_AI_API_URL: /api/ai
+
+    container_name: medmatch-frontend
+
+    ports:
+      - "5173:5173"
+
+    depends_on:
+      - auth-service
+      - ai-service
+
+    restart: unless-stopped
+
+
+# ==============================================================
+# Persistent volumes
+# ==============================================================
+
+volumes:
+
+  postgres_data:
+
+  redis_data:

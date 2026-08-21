@@ -1,0 +1,295 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: worker
+  namespace: medmatch
+
+  labels:
+    app: medmatch
+    component: worker
+    environment: production
+
+
+spec:
+  revisionHistoryLimit: 3
+
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: medmatch
+      component: worker
+
+
+  strategy:
+    type: Recreate
+
+
+  template:
+
+    metadata:
+      labels:
+        app: medmatch
+        component: worker
+        environment: production
+
+
+    spec:
+
+      terminationGracePeriodSeconds: 90
+
+      serviceAccountName: worker-sa
+
+      initContainers:
+        - name: init-uploads
+          image: busybox
+          securityContext:
+            runAsUser: 0
+          command:
+          - sh
+          - -c
+          - |
+            mkdir -p /app/uploads
+            chmod 777 /app/uploads
+          volumeMounts:
+          - name: uploads
+            mountPath: /app/uploads
+
+      containers:
+
+        - name: medmatch-worker
+
+          image: medmatch/ai-service:v24
+
+          imagePullPolicy: Never
+
+
+          command:
+
+            - celery
+
+            - -A
+
+            - app.celery.celery_app
+
+            - worker
+
+            - --loglevel=info
+
+            - --concurrency=1
+            
+            - --pool=solo
+
+
+
+          envFrom:
+
+            - configMapRef:
+                name: medmatch-config
+
+
+
+          env:
+
+
+            # Database URL required by app.settings
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: medmatch-secrets
+                  key: DATABASE_URL
+
+            - name: HF_HOME
+              value: /tmp/huggingface
+
+            - name: TRANSFORMERS_CACHE
+              value: /tmp/huggingface
+
+
+            - name: DATABASE_USERNAME
+
+              valueFrom:
+
+                secretKeyRef:
+
+                  name: medmatch-secrets
+
+                  key: DATABASE_USERNAME
+
+
+
+            - name: DATABASE_PASSWORD
+
+              valueFrom:
+
+                secretKeyRef:
+
+                  name: medmatch-secrets
+
+                  key: DATABASE_PASSWORD
+
+
+
+            # Gemini / LLM
+            - name: GOOGLE_API_KEY
+
+              valueFrom:
+
+                secretKeyRef:
+
+                  name: medmatch-secrets
+
+                  key: LLM_API_KEY
+
+
+
+            - name: LLM_API_KEY
+
+              valueFrom:
+
+                secretKeyRef:
+
+                  name: medmatch-secrets
+
+                  key: LLM_API_KEY
+
+
+
+            # JWT validation
+            - name: JWT_PUBLIC_KEY
+
+              valueFrom:
+
+                secretKeyRef:
+
+                  name: medmatch-secrets
+
+                  key: JWT_PUBLIC_KEY
+
+
+
+            # Redis
+            - name: REDIS_HOST
+
+              valueFrom:
+
+                configMapKeyRef:
+
+                  name: medmatch-config
+
+                  key: REDIS_HOST
+
+
+
+            - name: REDIS_PORT
+
+              valueFrom:
+
+                configMapKeyRef:
+
+                  name: medmatch-config
+
+                  key: REDIS_PORT
+
+
+          resources:
+
+            requests:
+
+              cpu: "100m"
+
+              memory: "512Mi"
+
+
+
+            limits:
+
+              cpu: "500m"
+
+              memory: "1Gi"
+
+          securityContext:
+
+
+            runAsNonRoot: true
+
+            runAsUser: 1000
+
+            allowPrivilegeEscalation: false
+
+            readOnlyRootFilesystem: false
+
+
+            capabilities:
+
+              drop:
+
+                - ALL
+
+
+
+          livenessProbe:
+            exec:
+              command:
+                - celery
+                - -A
+                - app.celery.celery_app
+                - inspect
+                - ping
+            initialDelaySeconds: 120
+            periodSeconds: 60
+            timeoutSeconds: 30
+            failureThreshold: 5
+
+
+
+          readinessProbe:
+
+            exec:
+
+              command:
+
+                - celery
+
+                - -A
+
+                - app.celery.celery_app
+
+                - inspect
+
+                - ping
+
+
+            initialDelaySeconds: 60
+
+            periodSeconds: 60
+
+            timeoutSeconds: 30
+
+            failureThreshold: 5
+
+
+
+          volumeMounts:
+
+            - name: uploads
+              mountPath: /app/uploads
+
+
+            - name: tmp
+
+              mountPath: /tmp
+
+
+
+      volumes:
+
+        - name: uploads
+          persistentVolumeClaim:
+            claimName: medmatch-uploads-pvc
+
+
+        - name: tmp
+
+          emptyDir: {}

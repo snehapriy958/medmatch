@@ -1,91 +1,176 @@
 # =========================
 # OS
 # =========================
+
 .DS_Store
 Thumbs.db
+
 
 # =========================
 # IDE
 # =========================
+
 .vscode/
 .idea/
 *.iml
 
+
 # =========================
 # Java / Maven
 # =========================
+
 target/
 *.class
 *.jar
 *.war
 *.ear
+
 .mvn/wrapper/maven-wrapper.jar
+
 
 # =========================
 # Spring Boot
 # =========================
+
 logs/
 *.log
 spring.log
 
+
 # =========================
 # Python
 # =========================
+
 __pycache__/
 *.py[cod]
 *.pyo
 *.pyd
+
 .venv/
 venv/
 env/
 
+.pytest_cache/
+.coverage
+htmlcov/
+
+*.egg-info/
+
+
 # =========================
 # Node / React
 # =========================
+
 node_modules/
 dist/
 build/
+
 coverage/
 .npm/
 .pnpm-store/
 
+
 # =========================
 # Environment
 # =========================
+
 .env
 .env.*
 !.env.example
 
+
 # =========================
-# Secrets
+# Secrets / Keys
 # =========================
+
 *.pem
 *.key
 *.jks
 *.p12
 *.crt
 
+# RSA keys
+private_key*
+public_key*
+
+
 # =========================
 # Docker
 # =========================
+
 docker-data/
+*.pid
+
 
 # =========================
 # Kubernetes
 # =========================
+
 *.kubeconfig
+
+# Local Kubernetes files
+.kube/
+
+
+# =========================
+# Database
+# =========================
+
+*.sql
+*.sql.backup
+
 
 # =========================
 # Test Reports
 # =========================
+
 reports/
 test-output/
 surefire-reports/
 
+
 # =========================
 # Temporary Files
 # =========================
+
 *.tmp
 *.temp
 *.swp
 *.bak
+
+
+# =========================
+# Local Uploads
+# =========================
+
+uploads/
+storage/
+
+
+# =========================
+# AI / ML Files
+# =========================
+
+*.bin
+*.pt
+*.pth
+*.onnx
+
+# Generated ML artifacts only
+*.bin
+*.pt
+*.pth
+*.onnx
+
+
+# =========================
+# Frontend Build Cache
+# =========================
+
+.vite/
+.cache/
+# Kubernetes secrets
+infra/kubernetes/secrets/
+
+# Local AI model - do not commit
+services/ai-service/models/

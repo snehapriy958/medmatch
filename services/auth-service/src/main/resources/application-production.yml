@@ -1,0 +1,42 @@
+server:
+  port: 8081
+
+
+spring:
+  application:
+    name: auth-service
+
+
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+
+
+  flyway:
+    enabled: true
+
+
+jwt:
+  private-key: file:/app/keys/private.pem
+  public-key: file:/app/keys/public.pem
+  expiration: ${JWT_EXPIRATION:3600000}
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - health
+          - prometheus
+
+  endpoint:
+    health:
+      show-details: always

@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-init
+  namespace: medmatch
+  labels:
+    app: medmatch
+    component: postgres
+    environment: production
+data:
+
+  01-init-pgvector.sql: |
+    -- Enable the pgvector extension required for embedding storage and
+    -- semantic similarity search (see database-architecture.md,
+    -- "Vector Storage Architecture" and ADR-002).
+    
+    CREATE EXTENSION IF NOT EXISTS vector;
+
+    -- Confirms the extension loaded successfully; visible in pod logs
+    -- during first-time initialization for easy verification.
+    SELECT extname, extversion FROM pg_extension WHERE extname = 'vector';

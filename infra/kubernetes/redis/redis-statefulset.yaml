@@ -1,0 +1,106 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: redis
+  namespace: medmatch
+  labels:
+    app: medmatch
+    component: redis
+    environment: production
+spec:
+  serviceName: redis-service
+  replicas: 1
+  selector:
+    matchLabels:
+      app: medmatch
+      component: redis
+  template:
+    metadata:
+      labels:
+        app: medmatch
+        component: redis
+        environment: production
+    spec:
+      serviceAccountName: redis-sa
+      securityContext:
+        fsGroup: 999
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: redis
+          image: redis:8-alpine
+          # NOTE: Started without --requirepass. Your docs (deployment-
+          # architecture.md, database-architecture.md) describe Redis as an
+          # internal-only cache/broker with no documented auth requirement,
+          # and it is never exposed outside the cluster (no Service of type
+          # LoadBalancer/NodePort, no Ingress rule routes to it). If you want
+          # defense-in-depth beyond namespace + NetworkPolicy isolation,
+          # uncomment the args block below and wire REDIS_PASSWORD (already
+          # in secrets.yaml) into both the server command and every client's
+          # connection string in the ConfigMap/Deployments.
+          # args:
+          #   - "--requirepass"
+          #   - "$(REDIS_PASSWORD)"
+          # env:
+          #   - name: REDIS_PASSWORD
+          #     valueFrom:
+          #       secretKeyRef:
+          #         name: medmatch-secrets
+          #         key: REDIS_PASSWORD
+          ports:
+            - containerPort: 6379
+              name: redis
+          command:
+            - redis-server
+            - --appendonly
+            - "yes"
+            - --save
+            - "60 1"
+          volumeMounts:
+            - name: redis-storage
+              mountPath: /data
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "1Gi"
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 999
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false
+            capabilities:
+              drop:
+                - ALL
+          livenessProbe:
+            exec:
+              command:
+                - redis-cli
+                - ping
+            initialDelaySeconds: 15
+            periodSeconds: 15
+            timeoutSeconds: 5
+            failureThreshold: 5
+          readinessProbe:
+            exec:
+              command:
+                - redis-cli
+                - ping
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+  volumeClaimTemplates:
+    - metadata:
+        name: redis-storage
+        labels:
+          app: medmatch
+          component: redis
+      spec:
+        storageClassName: medmatch-storage
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 5Gi

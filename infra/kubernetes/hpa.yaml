@@ -1,0 +1,67 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+
+metadata:
+  name: worker-hpa
+  namespace: medmatch
+
+  labels:
+    app: medmatch
+    component: worker
+    environment: production
+
+
+spec:
+
+  scaleTargetRef:
+
+    apiVersion: apps/v1
+
+    kind: Deployment
+
+    name: worker
+
+
+  minReplicas: 1
+
+  maxReplicas: 3
+
+
+  metrics:
+
+    - type: Resource
+
+      resource:
+
+        name: cpu
+
+        target:
+
+          type: Utilization
+
+          averageUtilization: 80
+
+
+    - type: Resource
+
+      resource:
+
+        name: memory
+
+        target:
+
+          type: Utilization
+
+          averageUtilization: 150
+
+
+  behavior:
+
+    scaleDown:
+
+      stabilizationWindowSeconds: 300
+
+
+    scaleUp:
+
+      stabilizationWindowSeconds: 60
