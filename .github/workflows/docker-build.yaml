@@ -1,0 +1,40 @@
+name: Docker Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  docker:
+    name: Build Docker Images
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: auth-service
+            file: infra/docker/auth-service.Dockerfile
+          - name: ai-service
+            file: infra/docker/ai-service.Dockerfile
+          - name: worker
+            file: infra/docker/worker.Dockerfile
+          - name: frontend
+            file: infra/docker/frontend.Dockerfile
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build ${{ matrix.name }}
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ${{ matrix.file }}
+          push: false
+          tags: medmatch/${{ matrix.name }}:ci

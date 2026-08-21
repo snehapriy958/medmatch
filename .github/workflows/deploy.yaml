@@ -1,0 +1,20 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deployment Gate
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deployment configuration validation
+        run: |
+          test -d infra/kubernetes
+          test -f docker-compose.yml
+          echo "MedMatch deployment configuration is present."
+          echo "Actual cluster deployment is intentionally manual until cluster credentials are configured."
