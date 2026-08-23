@@ -11,7 +11,7 @@ pydantic-settings
 redis
 celery
 
-sentence-transformers==2.7.0
+sentence-transformers==5.7.0
 numpy==1.26.4
 
 pymupdf
@@ -26,5 +26,5 @@ prometheus-fastapi-instrumentator
 slowapi
 google-genai
 
-transformers==4.41.2
-huggingface-hub==0.23.4
+transformers==5.5.0
+huggingface-hub==1.27.0
