@@ -1,48 +1,8 @@
-# from pathlib import Path
-# from typing import Any
-
-# import jwt
-
-# from app.config.settings import settings
-
-
-# BASE_DIR = Path(__file__).resolve().parents[2]
-
-# PUBLIC_KEY_PATH = (
-#     BASE_DIR
-#     / "keys"
-#     / "public_key.pem"
-# )
-
-# PUBLIC_KEY = PUBLIC_KEY_PATH.read_text(
-#     encoding="utf-8",
-# )
-
-
-# def verify_token(token: str) -> dict[str, Any]:
-#     """
-#     Verify an RS256 JWT issued by the Spring Boot Auth Service.
-#     """
-
-#     return jwt.decode(
-#         token,
-#         PUBLIC_KEY,
-#         algorithms=[settings.JWT_ALGORITHM],
-#         options={
-#             "require": [
-#                 "sub",
-#                 "exp",
-#                 "iat",
-#                 "hospital_id",
-#                 "role",
-#             ]
-#         },
-#     )
-
-
+import logging
+import os
 from pathlib import Path
 from typing import Any
-import logging
+
 import jwt
 
 from app.config.settings import settings
@@ -51,13 +11,18 @@ logger = logging.getLogger(__name__)
 
 BASE_DIR = Path(__file__).resolve().parents[2]
 
-PUBLIC_KEY_PATH = BASE_DIR / "keys" / "public_key.pem"
+# Local development: read the public key from keys/public_key.pem.
+# Kubernetes: JWT_PUBLIC_KEY is injected through the medmatch-secrets Secret.
+_env_public_key = os.getenv("JWT_PUBLIC_KEY")
 
-PUBLIC_KEY = PUBLIC_KEY_PATH.read_text(encoding="utf-8")
+if _env_public_key:
+    PUBLIC_KEY = _env_public_key
+else:
+    PUBLIC_KEY_PATH = BASE_DIR / "keys" / "public_key.pem"
+    PUBLIC_KEY = PUBLIC_KEY_PATH.read_text(encoding="utf-8")
 
 
 def verify_token(token: str) -> dict[str, Any]:
-
     try:
         return jwt.decode(
             token,
@@ -73,8 +38,6 @@ def verify_token(token: str) -> dict[str, Any]:
                 ]
             },
         )
-
-       
     except jwt.InvalidTokenError:
         logger.exception("JWT verification failed")
         raise
