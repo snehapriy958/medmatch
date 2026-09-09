@@ -47,9 +47,7 @@ public class AuthController {
      * Hospital isolation rules are handled inside service layer.
      */
     @PostMapping("/register")
-    @PreAuthorize(
-            "hasAnyRole('SYSTEM_ADMIN','HOSPITAL_ADMIN')"
-    )
+   
     public ResponseEntity<UserResponse> register(
             @Valid
             @RequestBody RegisterRequest request

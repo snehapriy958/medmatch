@@ -5,6 +5,7 @@ import com.medmatch.auth.repository.AuditLogRepository;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -16,8 +17,9 @@ public class AuditServiceImpl implements AuditService {
 
     private final AuditLogRepository auditLogRepository;
 
+
     @Override
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void createAuditLog(
             UUID userId,
             String action,

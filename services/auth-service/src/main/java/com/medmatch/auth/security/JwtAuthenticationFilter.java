@@ -31,14 +31,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private static final String BEARER_PREFIX = "Bearer ";
 
     private static final List<String> PUBLIC_PATHS = List.of(
-            "/auth/login",
-            "/api/auth/login",
-            "/health",
-            "/actuator",
-            "/swagger-ui",
-            "/swagger-ui.html",
-            "/v3/api-docs"
-    );
+        "/auth/login",
+        "/api/auth/login",
+        "/health",
+        "/actuator",
+        "/swagger-ui",
+        "/swagger-ui.html",
+        "/v3/api-docs"
+        );
 
     private final JwtService jwtService;
 

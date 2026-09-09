@@ -22,6 +22,7 @@ spring:
 
   flyway:
     enabled: true
+    locations: classpath:db/migration
 
 
 jwt:
@@ -50,3 +51,5 @@ logging:
     root: INFO
     org.springframework.security: INFO
     org.springframework.web: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.orm.jdbc.bind: TRACE
