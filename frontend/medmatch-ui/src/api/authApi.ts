@@ -1,12 +1,25 @@
 import { authApiClient } from "./axios";
-import type { LoginRequest, LoginResponse, CurrentUser } from "../types/auth";
+import type {
+  LoginRequest,
+  LoginResponse,
+  CurrentUser
+} from "../types/auth";
 
-export async function login(payload: LoginRequest): Promise<LoginResponse> {
-  const { data } = await authApiClient.post<LoginResponse>("/auth/login", payload);
+export async function login(
+  payload: LoginRequest
+): Promise<LoginResponse> {
+  const { data } = await authApiClient.post<LoginResponse>(
+    "/login",
+    payload
+  );
+
   return data;
 }
 
 export async function getCurrentUser(): Promise<CurrentUser> {
-  const { data } = await authApiClient.get<CurrentUser>("/users/me");
+  const { data } = await authApiClient.get<CurrentUser>(
+    "/users/me"
+  );
+
   return data;
 }

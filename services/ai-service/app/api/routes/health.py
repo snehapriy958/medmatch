@@ -22,111 +22,174 @@ router = APIRouter(
 )
 
 
+def _timestamp() -> str:
+    """
+    Return the current timestamp in UTC.
+    """
+
+    return datetime.now(UTC).isoformat()
+
+
+def _readiness_response(
+    checks: dict[str, str],
+    is_ready: bool,
+) -> dict[str, Any]:
+    """
+    Build a consistent readiness response.
+    """
+
+    return {
+        "status": "UP" if is_ready else "DOWN",
+        "service": settings.APP_NAME,
+        "checks": checks,
+        "timestamp": _timestamp(),
+    }
+
+
 @router.get("/")
 def root() -> dict[str, str]:
+    """
+    Basic service endpoint.
+    """
+
     return {
         "message": "MedMatch AI Service is running",
     }
 
 
 @router.get("/health")
-def health() -> dict:
+def health() -> dict[str, Any]:
     """
     General health endpoint.
-    Used by Docker and monitoring tools.
+
+    Indicates that the API application is responding.
     """
 
     return {
         "status": "UP",
         "service": settings.APP_NAME,
-        "timestamp": datetime.now(UTC).isoformat(),
+        "timestamp": _timestamp(),
     }
 
 
 @router.get("/health/live")
-def liveness() -> dict:
+def liveness() -> dict[str, Any]:
     """
-    Kubernetes/Docker liveness probe.
-    Checks whether the application process is alive.
+    Kubernetes liveness probe.
+
+    This endpoint intentionally performs no external dependency checks.
+    A successful response means that the API process is alive.
     """
 
     return {
         "status": "UP",
         "service": settings.APP_NAME,
-        "timestamp": datetime.now(UTC).isoformat(),
+        "timestamp": _timestamp(),
     }
 
 
 @router.get("/health/ready")
-def readiness() -> dict:
+def readiness() -> dict[str, Any]:
     """
     Kubernetes readiness probe.
 
-    Verifies:
+    Verifies that required dependencies are available:
+
     - PostgreSQL connectivity
-    - Upload directory
+    - Upload directory availability
     - Redis connectivity
-    - pgvector availability and vector operation
+    - pgvector extension availability
+
+    Returns HTTP 503 when the service is not ready so Kubernetes
+    can remove the pod from service traffic.
     """
 
     checks: dict[str, str] = {}
 
     #
-    # Database
+    # PostgreSQL
     #
     try:
         with engine.connect() as connection:
-            connection.execute(text("SELECT 1"))
+            connection.execute(
+                text("SELECT 1")
+            )
 
         checks["database"] = "UP"
 
     except Exception:
         checks["database"] = "DOWN"
 
-        return {
-            "status": "DOWN",
-            "service": settings.APP_NAME,
-            "checks": checks,
-            "timestamp": datetime.now(UTC).isoformat(),
-        }
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail=_readiness_response(
+                checks=checks,
+                is_ready=False,
+            ),
+        )
 
     #
     # Upload directory
     #
-    upload_dir = Path(settings.UPLOAD_DIR)
+    try:
+        upload_dir = Path(settings.UPLOAD_DIR)
 
-    if upload_dir.exists() and upload_dir.is_dir():
+        upload_dir.mkdir(
+            parents=True,
+            exist_ok=True,
+        )
+
+        if not upload_dir.is_dir():
+            raise RuntimeError(
+                "Upload path is not a directory."
+            )
+
+        test_file = (
+            upload_dir
+            / ".readiness_check.tmp"
+        )
+
+        test_file.write_text(
+            "MedMatch readiness check",
+            encoding="utf-8",
+        )
+
+        test_file.unlink()
+
         checks["uploads"] = "UP"
 
-    else:
+    except Exception:
         checks["uploads"] = "DOWN"
 
-        return {
-            "status": "DOWN",
-            "service": settings.APP_NAME,
-            "checks": checks,
-            "timestamp": datetime.now(UTC).isoformat(),
-        }
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail=_readiness_response(
+                checks=checks,
+                is_ready=False,
+            ),
+        )
 
     #
     # Redis
     #
     try:
         RedisClient.ping()
+
         checks["redis"] = "UP"
 
     except Exception:
         checks["redis"] = "DOWN"
 
-        return {
-            "status": "DOWN",
-            "service": settings.APP_NAME,
-            "checks": checks,
-            "timestamp": datetime.now(UTC).isoformat(),
-        }
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail=_readiness_response(
+                checks=checks,
+                is_ready=False,
+            ),
+        )
 
     #
-    # Vector search / pgvector
+    # pgvector
     #
     try:
         with engine.connect() as connection:
@@ -149,10 +212,8 @@ def readiness() -> dict:
             connection.execute(
                 text(
                     """
-                    SELECT
-                        embedding <=> embedding
-                    FROM criteria_embeddings
-                    LIMIT 1
+                    SELECT '[0.1,0.2,0.3]'::vector
+                    <=> '[0.1,0.2,0.3]'::vector
                     """
                 )
             )
@@ -162,33 +223,31 @@ def readiness() -> dict:
     except Exception:
         checks["vector_search"] = "DOWN"
 
-        return {
-            "status": "DOWN",
-            "service": settings.APP_NAME,
-            "checks": checks,
-            "timestamp": datetime.now(UTC).isoformat(),
-        }
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail=_readiness_response(
+                checks=checks,
+                is_ready=False,
+            ),
+        )
 
-    #
-    # All readiness checks passed
-    #
-    return {
-        "status": "UP",
-        "service": settings.APP_NAME,
-        "checks": checks,
-        "timestamp": datetime.now(UTC).isoformat(),
-    }
+    return _readiness_response(
+        checks=checks,
+        is_ready=True,
+    )
 
 
 @router.get("/db-check")
 def db_check() -> dict[str, str]:
     """
-    Simple database connectivity check.
+    Simple PostgreSQL connectivity check.
     """
 
     try:
         with engine.connect() as connection:
-            connection.execute(text("SELECT 1"))
+            connection.execute(
+                text("SELECT 1")
+            )
 
         return {
             "database": "connected",
@@ -203,10 +262,13 @@ def db_check() -> dict[str, str]:
 
 @router.get("/profile")
 def get_profile(
-    current_user: dict[str, Any] = Depends(get_current_user),
-) -> dict:
+    current_user: dict[str, Any] = Depends(
+        get_current_user
+    ),
+) -> dict[str, Any]:
     """
     Protected endpoint.
+
     Returns authenticated user's JWT claims.
     """
 

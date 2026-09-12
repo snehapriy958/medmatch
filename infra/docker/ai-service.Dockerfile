@@ -14,8 +14,8 @@ ENV PATH="/opt/venv/bin:$PATH"
 ENV HF_HOME="/opt/huggingface"
 ENV TRANSFORMERS_CACHE="/opt/huggingface"
 
-RUN pip install --no-cache-dir --upgrade pip \
-    && pip install --no-cache-dir -r requirements.txt
+RUN pip install --upgrade pip \
+    && pip install --retries 10 --timeout 120 -r requirements.txt
 RUN python -c "from sentence_transformers import SentenceTransformer; SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')"
 
 # ---- Stage 2: Runtime ----
@@ -34,7 +34,11 @@ ENV TRANSFORMERS_CACHE="/opt/huggingface"
 
 WORKDIR /app
 
+RUN mkdir -p /app/uploads \
+    && chown -R fastapi:fastapi /app/uploads
+
 COPY --chown=fastapi:fastapi services/ai-service/app ./app
+COPY --chown=fastapi:fastapi services/ai-service/models ./models
 
 USER fastapi
 

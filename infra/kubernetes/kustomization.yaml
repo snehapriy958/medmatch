@@ -11,6 +11,7 @@ resources:
 
   - rbac/service-account.yaml
   - storage/storage-class.yaml
+  - storage/uploads-pvc.yaml
 
   - postgres/postgres-init.yaml
   - postgres/postgres-statefulset.yaml

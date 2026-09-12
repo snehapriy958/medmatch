@@ -18,7 +18,7 @@ _env_public_key = os.getenv("JWT_PUBLIC_KEY")
 if _env_public_key:
     PUBLIC_KEY = _env_public_key
 else:
-    PUBLIC_KEY_PATH = BASE_DIR / "keys" / "public_key.pem"
+    PUBLIC_KEY_PATH = BASE_DIR / "keys" / "public.pem"
     PUBLIC_KEY = PUBLIC_KEY_PATH.read_text(encoding="utf-8")
 
 

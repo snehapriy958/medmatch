@@ -76,6 +76,8 @@ class PatientNoteService:
                 text=note.note,
             )
 
+            self.note_repository.commit()
+
             hospital = self.hospital_repository.get_by_id(
                 hospital_id
             )

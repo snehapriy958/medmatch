@@ -35,8 +35,8 @@ spec:
 
         - name: medmatch-ai
 
-          image: medmatch/ai-service:v12
-          imagePullPolicy: Never
+          image: ghcr.io/snehapriy958/medmatch-ai-service:latest
+          imagePullPolicy: Always
 
           ports:
             - containerPort: 8000

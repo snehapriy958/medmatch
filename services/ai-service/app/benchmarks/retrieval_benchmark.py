@@ -4,7 +4,9 @@ from app.config.settings import settings
 from app.db.session import SessionLocal
 from app.repositories.matching_repository import MatchingRepository
 from app.services.embedding_service import EmbeddingService
-
+from app.repositories.trial_embedding_repository import (
+    TrialEmbeddingRepository,
+)
 
 TEST_QUERIES: list[dict[str, str]] = [
     {
@@ -59,6 +61,7 @@ def main() -> None:
         embedding_service = EmbeddingService(
             criteria_repository=None,
             patient_note_repository=None,
+            trial_repository=None,
         )
 
         for index, test in enumerate(TEST_QUERIES, start=1):

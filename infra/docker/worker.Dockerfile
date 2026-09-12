@@ -46,23 +46,19 @@ RUN groupadd --system --gid 1000 celery \
 
 COPY --from=build /opt/venv /opt/venv
 COPY --from=build /opt/huggingface /opt/huggingface
+
 ENV PATH="/opt/venv/bin:$PATH"
 ENV HF_HOME="/opt/huggingface"
 ENV TRANSFORMERS_CACHE="/opt/huggingface"
 
 WORKDIR /app
 
+RUN mkdir -p /app/uploads \
+    && chown -R celery:celery /app/uploads
+
 COPY --chown=celery:celery services/ai-service/app ./app
+COPY --chown=celery:celery services/ai-service/models ./models
 
 USER celery
 
-# No EXPOSE — a Celery worker doesn't accept inbound connections, it only
-# pulls from the Redis broker, matching the "worker: no port" requirement.
-
-# DATABASE_URL, DATABASE_USERNAME, DATABASE_PASSWORD, CELERY_BROKER_URL,
-# CELERY_RESULT_BACKEND, LLM_API_KEY all arrive via Kubernetes envFrom/env
-# (worker/deployment.yaml) — none are baked in here.
-#
-# This default CMD is overridden by Kubernetes' explicit `command:` in
-# worker/deployment.yaml; kept here only so the image is runnable standalone.
 CMD ["celery", "-A", "app.celery.celery_app", "worker", "--loglevel=info", "--concurrency=4"]

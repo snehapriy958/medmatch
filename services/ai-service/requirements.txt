@@ -1,3 +1,5 @@
+--extra-index-url https://download.pytorch.org/whl/cpu
+
 fastapi
 uvicorn[standard]
 
@@ -11,8 +13,9 @@ pydantic-settings
 redis
 celery
 
+torch==2.8.0+cpu
 sentence-transformers==5.7.0
-numpy==1.26.4
+numpy>=2.1.0,<3.0
 
 pymupdf
 python-multipart
@@ -28,3 +31,7 @@ google-genai
 
 transformers==5.5.0
 huggingface-hub==1.27.0
+
+# Testing
+pytest
+pytest-mock

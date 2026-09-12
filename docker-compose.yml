@@ -43,7 +43,7 @@ services:
     container_name: medmatch-redis
 
     ports:
-      - "6379:6379"
+      - "6380:6379"
 
     volumes:
       - redis_data:/data
@@ -67,6 +67,15 @@ services:
   # ============================================================
 
   auth-service:
+  # keep your existing configuration here
+
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8081/actuator/health | grep -q 'UP'"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
     build:
       context: .
       dockerfile: infra/docker/auth-service.Dockerfile
@@ -115,6 +124,8 @@ services:
       DATABASE_USERNAME: postgres
       DATABASE_PASSWORD: ${DATABASE_PASSWORD:-postgres}
 
+      GOOGLE_API_KEY: ${GOOGLE_API_KEY}
+
       REDIS_HOST: redis
       REDIS_PORT: "6379"
 
@@ -124,6 +135,10 @@ services:
       HF_HOME: /tmp/huggingface
       TRANSFORMERS_CACHE: /tmp/huggingface
 
+    volumes:
+      - ./services/auth-service/src/main/resources/keys:/app/keys:ro
+      - uploads_data:/app/uploads
+
     depends_on:
       postgres:
         condition: service_healthy
@@ -132,7 +147,6 @@ services:
         condition: service_healthy
 
     restart: unless-stopped
-
 
   # ============================================================
   # Celery Worker
@@ -149,6 +163,8 @@ services:
 
       APPLICATION_PROFILE: production
 
+      GOOGLE_API_KEY: ${GOOGLE_API_KEY}
+
       DATABASE_URL: postgresql://postgres:${DATABASE_PASSWORD:-postgres}@postgres:5432/medmatch
       DATABASE_USERNAME: postgres
       DATABASE_PASSWORD: ${DATABASE_PASSWORD:-postgres}
@@ -162,6 +178,9 @@ services:
       HF_HOME: /tmp/huggingface
       TRANSFORMERS_CACHE: /tmp/huggingface
 
+    volumes:
+      - uploads_data:/app/uploads
+
     depends_on:
       postgres:
         condition: service_healthy
@@ -171,12 +190,16 @@ services:
 
     restart: unless-stopped
 
-
   # ============================================================
   # React + Vite Frontend
   # ============================================================
 
   frontend:
+    depends_on:
+      auth-service:
+        condition: service_healthy
+      ai-service:
+        condition: service_started
     build:
       context: .
       dockerfile: infra/docker/frontend.Dockerfile
@@ -189,10 +212,6 @@ services:
     ports:
       - "5173:5173"
 
-    depends_on:
-      - auth-service
-      - ai-service
-
     restart: unless-stopped
 
 
@@ -203,5 +222,9 @@ services:
 volumes:
 
   postgres_data:
+    external: true
+    name: medmatch_postgres_data
 
   redis_data:
+
+  uploads_data:

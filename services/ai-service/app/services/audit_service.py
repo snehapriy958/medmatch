@@ -9,7 +9,10 @@ logger = logging.getLogger(__name__)
 
 class AuditService:
 
-    def __init__(self, repository: AuditLogRepository):
+    def __init__(
+        self,
+        repository: AuditLogRepository,
+    ):
         self.repository = repository
 
     def log(
@@ -26,7 +29,6 @@ class AuditService:
     ) -> AuditLogResponse | None:
 
         try:
-
             audit_log = AuditLogCreate(
                 performed_by_id=performed_by_id,
                 performed_by_username=performed_by_username,
@@ -39,14 +41,17 @@ class AuditService:
                 details=details,
             )
 
-            created = self.repository.create(audit_log)
-            self.repository.commit()
+            created = self.repository.create(
+                audit_log
+            )
 
-            return AuditLogResponse.model_validate(created)
+            return AuditLogResponse.model_validate(
+                created
+            )
 
         except Exception:
-            logger.exception("Failed to write audit log.")
+            logger.exception(
+                "Failed to create audit log."
+            )
 
-            self.repository.rollback()
-
-            return None
+            raise
