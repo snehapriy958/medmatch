@@ -160,6 +160,12 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     public List<UserResponse> getUsersByHospital(UUID hospitalId) {
 
+        // NOTE: previously unguarded — this endpoint's @PreAuthorize
+        // allows SYSTEM_ADMIN and HOSPITAL_ADMIN, but nothing stopped a
+        // HOSPITAL_ADMIN from passing a different hospital's id and
+        // listing its entire staff roster. Same tenant-boundary check
+        // getUserById/deleteUser already apply.
+        assertHospitalAccess(hospitalId);
 
         return userRepository.findByHospitalId(hospitalId)
                 .stream()
@@ -353,6 +359,45 @@ public class UserServiceImpl implements UserService {
 
 
 
+
+
+    private void assertHospitalAccess(UUID hospitalId) {
+
+        Authentication authentication =
+                SecurityContextHolder
+                        .getContext()
+                        .getAuthentication();
+
+        boolean isSystemAdmin =
+                authentication.getAuthorities()
+                        .stream()
+                        .anyMatch(
+                                authority ->
+                                        authority.getAuthority()
+                                                .equals("ROLE_SYSTEM_ADMIN")
+                        );
+
+        if (isSystemAdmin) {
+            return;
+        }
+
+        User currentUser =
+                userRepository.findByEmail(
+                        authentication.getName()
+                )
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Current user not found"
+                        )
+                );
+
+        if (!currentUser.getHospital().getId().equals(hospitalId)) {
+
+            throw new AccessDeniedException(
+                    "Cannot access another hospital's users"
+            );
+        }
+    }
 
 
     private UserResponse toUserResponse(User user) {
