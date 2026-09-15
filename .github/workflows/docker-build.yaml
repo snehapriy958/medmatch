@@ -2,9 +2,9 @@ name: Docker Build
 
 on:
   push:
-    branches: [main]
+    branches: [main, phase-0-2-transfer]
   pull_request:
-    branches: [main]
+    branches: [main, phase-0-2-transfer]
 
 permissions:
   contents: read
