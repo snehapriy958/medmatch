@@ -1,0 +1,65 @@
+apiVersion: batch/v1
+kind: Job
+
+metadata:
+  name: auth-migrate
+  namespace: medmatch
+
+  labels:
+    app: medmatch
+    component: auth-migrate
+    environment: production
+
+spec:
+  # Migration Jobs are re-created (not reused) on every deploy, since
+  # the image tag / migration file set can change between releases.
+  backoffLimit: 3
+  ttlSecondsAfterFinished: 3600
+
+  template:
+    metadata:
+      labels:
+        app: medmatch
+        component: auth-migrate
+
+    spec:
+      restartPolicy: Never
+
+      containers:
+        - name: auth-migrate
+          image: flyway/flyway:10-alpine
+
+          args:
+            - -url=jdbc:postgresql://postgres-service.medmatch.svc.cluster.local:5432/medmatch
+            - -locations=filesystem:/flyway/sql
+            - -connectRetries=10
+            - migrate
+
+          env:
+            - name: FLYWAY_USER
+              valueFrom:
+                secretKeyRef:
+                  name: medmatch-secrets
+                  key: DATABASE_USERNAME
+
+            - name: FLYWAY_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: medmatch-secrets
+                  key: DATABASE_PASSWORD
+
+          volumeMounts:
+            - name: flyway-sql
+              mountPath: /flyway/sql
+              readOnly: true
+
+      volumes:
+        - name: flyway-sql
+          configMap:
+            # NOTE: this ConfigMap does not exist yet and must be
+            # generated from services/auth-service/src/main/resources/db/migration/*.sql
+            # (e.g. via `kubectl create configmap auth-migration-sql
+            # --from-file=...` or a kustomize configMapGenerator) before
+            # this Job can run. Not created in this phase - flagged as
+            # a follow-up, not implemented here.
+            name: auth-migration-sql

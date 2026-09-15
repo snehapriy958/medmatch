@@ -40,6 +40,15 @@ RUN mkdir -p /app/uploads \
 COPY --chown=fastapi:fastapi services/ai-service/app ./app
 COPY --chown=fastapi:fastapi services/ai-service/models ./models
 
+# alembic.ini and alembic/ are required for the ai-migrate Job
+# (`alembic upgrade head`) to run inside this same image - without
+# these, the alembic package is installed but has no config/versions
+# to find. Not needed by the running ai-service app itself, but
+# copying them here means this one image serves both purposes rather
+# than needing a second, migration-only image to maintain.
+COPY --chown=fastapi:fastapi services/ai-service/alembic.ini ./alembic.ini
+COPY --chown=fastapi:fastapi services/ai-service/alembic ./alembic
+
 USER fastapi
 
 EXPOSE 8000

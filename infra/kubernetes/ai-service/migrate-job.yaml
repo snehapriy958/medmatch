@@ -1,0 +1,60 @@
+apiVersion: batch/v1
+kind: Job
+
+metadata:
+  name: ai-migrate
+  namespace: medmatch
+
+  labels:
+    app: medmatch
+    component: ai-migrate
+    environment: production
+
+spec:
+  backoffLimit: 3
+  ttlSecondsAfterFinished: 3600
+
+  template:
+    metadata:
+      labels:
+        app: medmatch
+        component: ai-migrate
+
+    spec:
+      restartPolicy: Never
+
+      # Runs after auth-migrate's Job has completed, since patients/
+      # trials carry a FK into hospitals, which only auth-migrate
+      # creates. Kubernetes has no native "wait for another Job"
+      # primitive, so this ordering must be enforced by the deploy
+      # pipeline (e.g. `kubectl wait --for=condition=complete
+      # job/auth-migrate` before applying this Job) rather than in
+      # the manifest itself - flagged here, not solved by YAML alone.
+      containers:
+        - name: ai-migrate
+          # Matches the exact image reference in ai-service/deployment.yaml.
+          image: ghcr.io/snehapriy958/medmatch-ai-service:phase2-migrations
+          imagePullPolicy: Always
+
+          command: ["alembic", "upgrade", "head"]
+
+          env:
+            # DATABASE_URL is a single pre-composed connection string
+            # stored directly under this key in medmatch-secrets -
+            # matches ai-service/deployment.yaml's own DATABASE_URL
+            # env var exactly (not composed here from separate
+            # username/password keys, which is not how the existing
+            # Secret is structured).
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: medmatch-secrets
+                  key: DATABASE_URL
+
+            # NOTE: the Secret key is LLM_API_KEY, not GOOGLE_API_KEY -
+            # matches ai-service/deployment.yaml's own mapping exactly.
+            - name: GOOGLE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: medmatch-secrets
+                  key: LLM_API_KEY

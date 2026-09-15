@@ -1,0 +1,38 @@
+# PRE-EXISTING GAP, NOT PART OF DATABASE-MIGRATION WORK.
+#
+# kustomization.yaml has referenced storage/storage-class.yaml and
+# storage/uploads-pvc.yaml since before this phase began, but neither
+# file existed - kustomize build failed here before it ever reached
+# anything related to migrations. Created only to unblock validation
+# of the actual migration-wiring work (Jobs, ConfigMap, Secret).
+#
+# ============================================================
+# NOT PRODUCTION-CLOUD READY - LOCAL/DEV CLUSTERS ONLY AS-IS.
+# ============================================================
+# `provisioner: rancher.io/local-path` is the provisioner bundled with
+# Rancher Desktop, k3s, and (as an addon) kind - it works out of the
+# box ONLY on those local/dev cluster types. It does NOT exist on a
+# real cloud cluster (EKS, GKE, AKS, or a vanilla self-managed
+# cluster) and PVC creation will fail there until this is changed to
+# the correct CSI provisioner for that cluster, for example:
+#   - AWS EKS:   ebs.csi.aws.com
+#   - GCP GKE:   pd.csi.storage.gke.io
+#   - Azure AKS: disk.csi.azure.com
+# This was deliberately left as a placeholder rather than guessing a
+# specific cloud provisioner, since the real value depends entirely on
+# where this is actually deployed - not something derivable from this
+# repository alone. Treat this file as a REQUIRED edit before any
+# cloud deployment, not an optional one.
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+
+metadata:
+  name: medmatch-storage
+  labels:
+    app: medmatch
+    component: storage
+    environment: production
+
+provisioner: rancher.io/local-path  # LOCAL/DEV ONLY - see warning above, must change for cloud
+reclaimPolicy: Retain
+volumeBindingMode: WaitForFirstConsumer

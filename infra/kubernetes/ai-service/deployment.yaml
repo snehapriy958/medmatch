@@ -35,7 +35,7 @@ spec:
 
         - name: medmatch-ai
 
-          image: ghcr.io/snehapriy958/medmatch-ai-service:latest
+          image: ghcr.io/snehapriy958/medmatch-ai-service:phase2-migrations
           imagePullPolicy: Always
 
           ports:

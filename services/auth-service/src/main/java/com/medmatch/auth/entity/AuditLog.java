@@ -17,6 +17,28 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+// NOTE: audit_logs is a shared table, physically owned (migrated) by
+// auth-service via Flyway, but also written directly by the AI service
+// (see services/ai-service/app/models/audit_log.py and
+// app/repositories/audit_log_repository.py). The physical table has
+// 12 columns; this entity intentionally maps only the 8 that
+// auth-service itself uses.
+//
+// The 4 columns below are NOT mapped here and are always NULL on rows
+// written by auth-service. They are nullable, ai-service-only columns,
+// populated exclusively by the AI service from JWT claims at write time:
+//   - performed_by_username (varchar(255))
+//   - performed_by_role     (varchar(50))
+//   - hospital_id           (uuid)
+//   - hospital_name         (varchar(255))
+//
+// This is a deliberate minimal-compatibility choice, not an oversight.
+// Hibernate's ddl-auto=validate only checks columns this entity maps,
+// so leaving these unmapped is safe as long as `action` and
+// `resource_type` declare the same lengths as the physical column
+// (see V4__create_audit_logs_table.sql). Full Java-side parity
+// (mapping these fields and extending AuditService.createAuditLog)
+// is a possible future change, not implemented in this phase.
 @Entity
 @Table(name = "audit_logs")
 @Getter
@@ -39,10 +61,10 @@ public class AuditLog {
     @Column(name = "performed_by_id")
     private UUID performedById;
 
-    @Column(name = "action", nullable = false)
+    @Column(name = "action", nullable = false, length = 100)
     private String action;
 
-    @Column(name = "resource_type")
+    @Column(name = "resource_type", length = 100)
     private String resourceType;
 
     @Column(name = "resource_id")
