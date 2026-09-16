@@ -84,8 +84,8 @@ spec:
 
         - name: medmatch-ui
 
-          image: medmatch/frontend:latest
-          imagePullPolicy: Never
+          image: ghcr.io/snehapriy958/medmatch-frontend:latest
+          imagePullPolicy: Always
 
 
           ports:

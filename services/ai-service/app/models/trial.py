@@ -2,7 +2,14 @@ import uuid
 from datetime import datetime
 from typing import TYPE_CHECKING
 
-from sqlalchemy import DateTime, ForeignKey, String, Text, func
+from sqlalchemy import (
+    DateTime,
+    ForeignKey,
+    String,
+    Text,
+    UniqueConstraint,
+    func,
+)
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -11,10 +18,20 @@ from app.db.base import Base
 if TYPE_CHECKING:
     from app.models.hospital import Hospital
     from app.models.trial_criteria import TrialCriteria
-
+    from app.models.trial_embedding import TrialEmbedding
 
 class Trial(Base):
     __tablename__ = "trials"
+
+    __table_args__ = (
+        UniqueConstraint(
+            "hospital_id",
+            "title",
+            "condition",
+            "phase",
+            name="uq_trials_hospital_title_condition_phase",
+        ),
+    )
 
     id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True),
@@ -81,5 +98,12 @@ class Trial(Base):
     criteria: Mapped[list["TrialCriteria"]] = relationship(
         back_populates="trial",
         cascade="all, delete-orphan",
+        lazy="selectin",
+    )
+
+    embedding: Mapped["TrialEmbedding | None"] = relationship(
+        back_populates="trial",
+        cascade="all, delete-orphan",
+        uselist=False,
         lazy="selectin",
     )

@@ -60,9 +60,9 @@ spec:
 
         - name: medmatch-worker
 
-          image: medmatch/ai-service:v24
+          image: ghcr.io/snehapriy958/medmatch-worker:latest
 
-          imagePullPolicy: Never
+          imagePullPolicy: Always
 
 
           command:

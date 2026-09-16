@@ -1,0 +1,23 @@
+# PRE-EXISTING GAP, NOT PART OF DATABASE-MIGRATION WORK - see
+# storage-class.yaml's header comment for context.
+#
+# Size (5Gi) is a reasonable placeholder for uploaded trial PDFs, not
+# a value derived from any documented capacity plan in this repo -
+# adjust based on real usage.
+apiVersion: v1
+kind: PersistentVolumeClaim
+
+metadata:
+  name: medmatch-uploads-pvc
+  labels:
+    app: medmatch
+    component: ai-service
+    environment: production
+
+spec:
+  storageClassName: medmatch-storage
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi

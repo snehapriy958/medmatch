@@ -43,7 +43,7 @@ services:
     container_name: medmatch-redis
 
     ports:
-      - "6379:6379"
+      - "6380:6379"
 
     volumes:
       - redis_data:/data
@@ -66,7 +66,79 @@ services:
   # Spring Boot Auth Service
   # ============================================================
 
+  # ============================================================
+  # Auth-service schema migration (Flyway) - one-shot job.
+  #
+  # Runs V1-V4 in services/auth-service/src/main/resources/db/migration
+  # against the shared `medmatch` database, then exits. auth-service
+  # itself never uses `condition: service_completed_successfully` as
+  # a dependency target - it depends on THIS one-shot job instead, so
+  # the long-running app container is never mistaken for a completed
+  # migration step.
+  # ============================================================
+
+  auth-migrate:
+    image: flyway/flyway:10-alpine
+
+    container_name: medmatch-auth-migrate
+
+    command: >
+      -url=jdbc:postgresql://postgres:5432/medmatch
+      -user=postgres
+      -password=${DATABASE_PASSWORD:-postgres}
+      -locations=filesystem:/flyway/sql
+      -connectRetries=10
+      migrate
+
+    volumes:
+      - ./services/auth-service/src/main/resources/db/migration:/flyway/sql:ro
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+    restart: "no"
+
+  # ============================================================
+  # AI-service schema migration (Alembic) - one-shot job.
+  #
+  # Runs 0001-0007 in services/ai-service/alembic/versions against
+  # the same shared database. Depends on auth-migrate completing
+  # first, since patients/trials have FKs into hospitals, which only
+  # auth-migrate creates.
+  # ============================================================
+
+  ai-migrate:
+    build:
+      context: .
+      dockerfile: infra/docker/ai-service.Dockerfile
+
+    container_name: medmatch-ai-migrate
+
+    command: ["alembic", "upgrade", "head"]
+
+    environment:
+      DATABASE_URL: postgresql://postgres:${DATABASE_PASSWORD:-postgres}@postgres:5432/medmatch
+      GOOGLE_API_KEY: ${GOOGLE_API_KEY}
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+      auth-migrate:
+        condition: service_completed_successfully
+
+    restart: "no"
+
   auth-service:
+  # keep your existing configuration here
+
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8081/actuator/health | grep -q 'UP'"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
     build:
       context: .
       dockerfile: infra/docker/auth-service.Dockerfile
@@ -89,6 +161,8 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+      auth-migrate:
+        condition: service_completed_successfully
 
     restart: unless-stopped
 
@@ -115,6 +189,8 @@ services:
       DATABASE_USERNAME: postgres
       DATABASE_PASSWORD: ${DATABASE_PASSWORD:-postgres}
 
+      GOOGLE_API_KEY: ${GOOGLE_API_KEY}
+
       REDIS_HOST: redis
       REDIS_PORT: "6379"
 
@@ -124,6 +200,10 @@ services:
       HF_HOME: /tmp/huggingface
       TRANSFORMERS_CACHE: /tmp/huggingface
 
+    volumes:
+      - ./services/auth-service/src/main/resources/keys:/app/keys:ro
+      - uploads_data:/app/uploads
+
     depends_on:
       postgres:
         condition: service_healthy
@@ -131,8 +211,10 @@ services:
       redis:
         condition: service_healthy
 
-    restart: unless-stopped
+      ai-migrate:
+        condition: service_completed_successfully
 
+    restart: unless-stopped
 
   # ============================================================
   # Celery Worker
@@ -149,6 +231,8 @@ services:
 
       APPLICATION_PROFILE: production
 
+      GOOGLE_API_KEY: ${GOOGLE_API_KEY}
+
       DATABASE_URL: postgresql://postgres:${DATABASE_PASSWORD:-postgres}@postgres:5432/medmatch
       DATABASE_USERNAME: postgres
       DATABASE_PASSWORD: ${DATABASE_PASSWORD:-postgres}
@@ -162,6 +246,9 @@ services:
       HF_HOME: /tmp/huggingface
       TRANSFORMERS_CACHE: /tmp/huggingface
 
+    volumes:
+      - uploads_data:/app/uploads
+
     depends_on:
       postgres:
         condition: service_healthy
@@ -169,14 +256,21 @@ services:
       redis:
         condition: service_healthy
 
-    restart: unless-stopped
+      ai-migrate:
+        condition: service_completed_successfully
 
+    restart: unless-stopped
 
   # ============================================================
   # React + Vite Frontend
   # ============================================================
 
   frontend:
+    depends_on:
+      auth-service:
+        condition: service_healthy
+      ai-service:
+        condition: service_started
     build:
       context: .
       dockerfile: infra/docker/frontend.Dockerfile
@@ -189,10 +283,6 @@ services:
     ports:
       - "5173:5173"
 
-    depends_on:
-      - auth-service
-      - ai-service
-
     restart: unless-stopped
 
 
@@ -203,5 +293,9 @@ services:
 volumes:
 
   postgres_data:
+    external: true
+    name: medmatch_postgres_data
 
   redis_data:
+
+  uploads_data:

@@ -3,6 +3,7 @@ from .audit_log import AuditLog
 from .trial import Trial
 from .trial_criteria import TrialCriteria
 from .criteria_embedding import CriteriaEmbedding
+from .trial_embedding import TrialEmbedding
 from .hospital import Hospital
 from .patient import Patient
 from .patient_note import PatientNote
@@ -13,6 +14,7 @@ __all__ = [
 
     "Trial",
     "TrialCriteria",
+    "TrialEmbedding",
     "CriteriaEmbedding",
     "Hospital",
     "Patient",

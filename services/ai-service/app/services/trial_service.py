@@ -1,8 +1,6 @@
 import logging
 from uuid import UUID
 
-from fastapi import HTTPException, status
-
 from app.models.trial import Trial
 from app.models.trial_criteria import TrialCriteria
 from app.repositories.trial_criteria_repository import (
@@ -18,6 +16,7 @@ from app.services.embedding_service import EmbeddingService
 from app.services.llm_service import LLMService
 from app.services.pdf_service import PDFService
 from app.services.text_cleaner import TextCleaner
+from app.exceptions.api_exceptions import BadRequestException
 
 logger = logging.getLogger(__name__)
 
@@ -45,6 +44,44 @@ class TrialService:
         self.embedding_service = embedding_service
         self.audit_service = audit_service
 
+    def _build_trial_embedding_text(
+        self,
+        trial: Trial,
+        inclusion_criteria: list[str] | None = None,
+        exclusion_criteria: list[str] | None = None,
+    ) -> str:
+        """
+        Build a canonical text representation of a clinical trial.
+
+        This text is embedded for first-stage semantic trial retrieval.
+        """
+
+        text_parts = [
+            f"Title: {trial.title}",
+            f"Condition: {trial.condition or ''}",
+            f"Summary: {trial.brief_summary or ''}",
+            f"Phase: {trial.phase or ''}",
+            f"Status: {trial.status or ''}",
+        ]
+
+        if inclusion_criteria:
+            text_parts.append(
+                "Inclusion criteria: "
+                + " ".join(inclusion_criteria)
+            )
+
+        if exclusion_criteria:
+            text_parts.append(
+                "Exclusion criteria: "
+                + " ".join(exclusion_criteria)
+            )
+
+        return "\n".join(
+            part
+            for part in text_parts
+            if part.strip()
+        )
+
     def create_trial(
         self,
         trial_data: TrialCreate,
@@ -55,30 +92,45 @@ class TrialService:
         """
 
         try:
-            existing_trial = self.repository.find_existing_trial(
-                hospital_id=hospital_id,
-                title=trial_data.title,
-                condition=trial_data.condition,
-                phase=trial_data.phase,
+            print("\n========== TRIAL TRANSACTION DEBUG ==========")
+
+            print(
+                "Trial repository session:",
+                id(self.repository.db),
+            )
+
+            print(
+                "Trial embedding repository session:",
+                id(self.embedding_service.trial_repository.db),
+            )
+
+            print(
+                "Criteria embedding repository session:",
+                id(self.embedding_service.criteria_repository.db),
+            )
+
+            print(
+                "Audit repository session:",
+                id(self.audit_service.repository.db),
+            )
+
+            existing_trial = (
+                self.repository.find_existing_trial(
+                    hospital_id=hospital_id,
+                    title=trial_data.title,
+                    condition=trial_data.condition,
+                    phase=trial_data.phase,
+                )
             )
 
             if existing_trial is not None:
-                logger.info(
-                    "Trial already exists. Skipping duplicate PDF import. "
-                    "trial_id=%s hospital_id=%s title='%s'",
-                    existing_trial.id,
-                    hospital_id,
-                    existing_trial.title,
-                )
-
-                return {
-                    "trial_id": str(existing_trial.id),
-                    "message": "Trial already exists. Duplicate import skipped.",
-                }
+                return existing_trial
 
             trial = Trial(
                 title=trial_data.title,
-                brief_summary=trial_data.brief_summary or "",
+                brief_summary=(
+                    trial_data.brief_summary or ""
+                ),
                 condition=trial_data.condition,
                 phase=trial_data.phase,
                 status=trial_data.status,
@@ -86,22 +138,61 @@ class TrialService:
             )
 
             self.repository.create_trial(trial)
+
+            print(
+                "After add - trial session:",
+                id(self.repository.db),
+            )
+
+            self.repository.flush()
+
+            print(
+                "After flush - trial ID:",
+                trial.id,
+            )
+
+            trial_embedding_text = (
+                self._build_trial_embedding_text(
+                    trial=trial,
+                )
+            )
+
+            self.embedding_service.create_or_update_trial_embedding(
+                trial_id=trial.id,
+                text=trial_embedding_text,
+            )
+
+            self.audit_service.log(
+                action="CREATE_TRIAL",
+                resource_type="Trial",
+                resource_id=trial.id,
+                hospital_id=hospital_id,
+                details=(
+                    f"Trial '{trial.title}' created."
+                ),
+            )
+
+            print(
+                "Before commit - trial session:",
+                id(self.repository.db),
+            )
+
             self.repository.commit()
+
+            print(
+                "COMMIT COMPLETED"
+            )
 
             self.repository.refresh(trial)
 
-            try:
-                self.audit_service.log(
-                    action="CREATE_TRIAL",
-                    resource_type="Trial",
-                    resource_id=trial.id,
-                    details=f"Trial '{trial.title}' created.",
-                )
-            except Exception:
-                logger.exception(
-                    "Failed to write audit log for trial %s.",
-                    trial.id,
-                )
+            print(
+                "After refresh - trial ID:",
+                trial.id,
+            )
+
+            print(
+                "============================================\n"
+            )
 
             return trial
 
@@ -161,22 +252,34 @@ class TrialService:
                 update_data,
             )
 
+            self.repository.flush()
+
+            trial_embedding_text = (
+                self._build_trial_embedding_text(
+                    trial=trial,
+                )
+            )
+
+            self.embedding_service.create_or_update_trial_embedding(
+                trial_id=trial.id,
+                text=trial_embedding_text,
+            )
+
+            self.audit_service.log(
+                action="UPDATE_TRIAL",
+                resource_type="Trial",
+                resource_id=trial.id,
+                hospital_id=hospital_id,
+                details=(
+                    f"Trial '{trial.title}' updated."
+                ),
+            )
+
             self.repository.commit()
 
-            self.repository.refresh(trial)
-
-            try:
-                self.audit_service.log(
-                    action="UPDATE_TRIAL",
-                    resource_type="Trial",
-                    resource_id=trial.id,
-                    details=f"Trial '{trial.title}' updated.",
-                )
-            except Exception:
-                logger.exception(
-                    "Failed to write audit log for updated trial %s.",
-                    trial.id,
-                )
+            self.repository.refresh(
+                trial
+            )
 
             return trial
 
@@ -216,26 +319,30 @@ class TrialService:
         if trial is None:
             return False
 
-        try:
-            self.repository.delete_trial(trial)
-            self.repository.commit()
+        trial_title = trial.title
 
-            try:
-                self.audit_service.log(
-                    action="DELETE_TRIAL",
-                    resource_type="Trial",
-                    resource_id=trial.id,
-                    details=f"Trial '{trial.title}' deleted.",
-                )
-            except Exception:
-                logger.exception(
-                    "Failed to write audit log for deleted trial %s.",
-                    trial.id,
-                )
+        try:
+            self.repository.delete_trial(
+                trial
+            )
+
+            self.repository.flush()
+
+            self.audit_service.log(
+                action="DELETE_TRIAL",
+                resource_type="Trial",
+                resource_id=trial_id,
+                hospital_id=hospital_id,
+                details=(
+                    f"Trial '{trial_title}' deleted."
+                ),
+            )
+
+            self.repository.commit()
 
             return True
 
-        except Exception :
+        except Exception:
             self.repository.rollback()
 
             logger.exception(
@@ -266,9 +373,8 @@ class TrialService:
             raw_text = self.pdf_service.extract_text(file_path)
 
         except ValueError as exc:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail=str(exc),
+            raise BadRequestException(
+                str(exc)
             ) from exc
 
         clean_text = self.text_cleaner.clean(raw_text)
@@ -281,79 +387,53 @@ class TrialService:
         # DUPLICATE CHECK
         # ------------------------------------------------------------
 
-        try:
-            existing_trial = self.repository.find_existing_trial(
-                hospital_id=hospital_id,
-                title=extraction.title,
-                condition=extraction.condition,
-                phase=extraction.phase,
-            )
-
-            if existing_trial is not None:
-                logger.info(
-                    "Trial already exists. Skipping duplicate PDF import. "
-                    "trial_id=%s hospital_id=%s title='%s'",
-                    existing_trial.id,
-                    hospital_id,
-                    existing_trial.title,
-                )
-
-                return {
-                    "trial_id": str(existing_trial.id),
-                    "message": (
-                        "Trial already exists. "
-                        "Duplicate import skipped."
-                    ),
-                }
-
-        except Exception:
-            self.repository.rollback()
-
-            logger.exception(
-                "Failed while checking for existing trial '%s'.",
-                extraction.title,
-            )
-
-            raise
-
-        # ------------------------------------------------------------
-        # CREATE TRIAL
-        # ------------------------------------------------------------
-
-        trial = Trial(
+        existing_trial = self.repository.find_existing_trial(
+            hospital_id=hospital_id,
             title=extraction.title,
-            brief_summary="",
             condition=extraction.condition,
             phase=extraction.phase,
-            status=extraction.recruitment_status,
-            hospital_id=hospital_id,
         )
 
+        if existing_trial is not None:
+            logger.info(
+                "Trial already exists. Skipping duplicate PDF import. "
+                "trial_id=%s hospital_id=%s title='%s'",
+                existing_trial.id,
+                hospital_id,
+                existing_trial.title,
+            )
+
+            return {
+                "trial_id": str(existing_trial.id),
+                "message": (
+                    "Trial already exists. "
+                    "Duplicate import skipped."
+                ),
+            }
+
+        # ------------------------------------------------------------
+        # CREATE TRIAL + CRITERIA + EMBEDDINGS
+        #
+        # One database transaction owns the entire PDF import.
+        # ------------------------------------------------------------
+
         try:
+            trial = Trial(
+                title=extraction.title,
+                brief_summary="",
+                condition=extraction.condition,
+                phase=extraction.phase,
+                status=extraction.recruitment_status,
+                hospital_id=hospital_id,
+            )
+
+            # --------------------------------------------------------
+            # CREATE TRIAL
+            # --------------------------------------------------------
+
             self.repository.create_trial(trial)
-            self.repository.commit()
-            self.repository.refresh(trial)
 
-            # --------------------------------------------------------
-            # AUDIT LOG
-            # --------------------------------------------------------
-
-            try:
-                self.audit_service.log(
-                    action="CREATE_TRIAL",
-                    resource_type="Trial",
-                    resource_id=trial.id,
-                    details=(
-                        f"Trial '{trial.title}' "
-                        "created from PDF import."
-                    ),
-                )
-
-            except Exception:
-                logger.exception(
-                    "Failed to write audit log for imported trial %s.",
-                    trial.id,
-                )
+            self.repository.flush()
 
             # --------------------------------------------------------
             # CREATE CRITERIA
@@ -362,45 +442,112 @@ class TrialService:
             created_criteria: list[TrialCriteria] = []
 
             for inclusion_text in extraction.inclusion_criteria:
+
                 entity = TrialCriteria(
                     trial_id=trial.id,
                     criteria_type="INCLUSION",
                     description=inclusion_text,
                 )
 
-                self.criteria_repository.create(entity)
-                created_criteria.append(entity)
+                self.criteria_repository.create(
+                    entity
+                )
+
+                created_criteria.append(
+                    entity
+                )
 
             for exclusion_text in extraction.exclusion_criteria:
+
                 entity = TrialCriteria(
                     trial_id=trial.id,
                     criteria_type="EXCLUSION",
                     description=exclusion_text,
                 )
 
-                self.criteria_repository.create(entity)
-                created_criteria.append(entity)
-
-            self.criteria_repository.commit()
-
-            # --------------------------------------------------------
-            # REFRESH CRITERIA
-            # --------------------------------------------------------
-
-            for created_criterion in created_criteria:
-                self.criteria_repository.refresh(
-                    created_criterion
+                self.criteria_repository.create(
+                    entity
                 )
 
+                created_criteria.append(
+                    entity
+                )
+
+            # Flush criteria so database-generated IDs exist
+            self.criteria_repository.flush()
+
             # --------------------------------------------------------
-            # CREATE EMBEDDINGS
+            # CREATE CRITERIA EMBEDDINGS
             # --------------------------------------------------------
 
             for created_criterion in created_criteria:
+
                 self.embedding_service.create_trial_embedding(
                     criteria_id=created_criterion.id,
                     text=created_criterion.description,
                 )
+
+
+            # --------------------------------------------------------
+            # CREATE TRIAL-LEVEL EMBEDDING
+            #
+            # This embedding represents the clinical identity of the
+            # entire trial and is used during first-stage candidate
+            # trial retrieval.
+            # --------------------------------------------------------
+
+            inclusion_criteria = [
+                criterion.description
+                for criterion in created_criteria
+                if criterion.criteria_type == "INCLUSION"
+            ]
+
+            exclusion_criteria = [
+                criterion.description
+                for criterion in created_criteria
+                if criterion.criteria_type == "EXCLUSION"
+            ]
+
+            trial_embedding_text = (
+                self._build_trial_embedding_text(
+                    trial=trial,
+                    inclusion_criteria=inclusion_criteria,
+                    exclusion_criteria=exclusion_criteria,
+                )
+            )
+
+            self.embedding_service.create_or_update_trial_embedding(
+                trial_id=trial.id,
+                text=trial_embedding_text,
+            )
+
+
+            # --------------------------------------------------------
+            # CREATE AUDIT LOG
+            #
+            # The audit log is added to the same database session and
+            # transaction as the trial, criteria, and embeddings.
+            # --------------------------------------------------------
+
+            self.audit_service.log(
+                action="CREATE_TRIAL",
+                resource_type="Trial",
+                resource_id=trial.id,
+                hospital_id=hospital_id,
+                details=(
+                    f"Trial '{trial.title}' "
+                    "created from PDF import."
+                ),
+            )
+
+            # --------------------------------------------------------
+            # COMMIT ENTIRE IMPORT
+            #
+            # Trial + criteria + embeddings + audit log are committed
+            # atomically.
+            # --------------------------------------------------------
+
+            self.repository.commit()
 
             logger.info(
                 "Trial PDF processed successfully. "
@@ -415,6 +562,7 @@ class TrialService:
             }
 
         except Exception:
+
             self.repository.rollback()
 
             logger.exception(

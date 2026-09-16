@@ -1,0 +1,113 @@
+# =============================================================================
+# Repository-root Kustomization - the single, authoritative entry
+# point for the whole MedMatch Kubernetes stack.
+#
+# Build/apply from here, always:
+#
+#   kustomize build .
+#   kubectl apply -k .
+#
+# WHY EVERYTHING LIVES IN ONE FLAT FILE, NOT infra/kubernetes AS A
+# NESTED BASE:
+#
+# This originally worked as: infra/kubernetes/kustomization.yaml
+# defined every application resource, and this root file included it
+# as a single nested base (`resources: - infra/kubernetes`) plus a
+# configMapGenerator for the Flyway SQL files (needed here because
+# those files live under services/, outside infra/kubernetes/'s own
+# tree - Kustomize's load restrictor rejects a generator reaching
+# outside the directory containing the kustomization.yaml that
+# declares it).
+#
+# That structure was tested directly with `kustomize build .` and
+# produced a REAL bug, not a theoretical one: the generated ConfigMap
+# got its expected hash suffix (e.g. auth-migration-sql-fmt7dgf848),
+# but auth-migrate-job.yaml's volume reference
+# (`configMap: name: auth-migration-sql`) was never rewritten to
+# match it - confirmed by inspecting the actual build output.
+# Isolated reproduction (in a scratch directory, stripped down to the
+# minimum) showed the cause precisely: as soon as ANY resource in a
+# kustomization is pulled in via a nested base (a `resources:` entry
+# pointing to a directory with its own kustomization.yaml), Kustomize
+# stops correctly rewriting hash-suffixed name references for the
+# OTHER resources in that same kustomization too - even resources
+# with no relationship to that base at all. Removing the nested base
+# and listing every resource file directly, flat, in one
+# kustomization fixed it immediately, verified the same way.
+#
+# So: every resource that infra/kubernetes/ used to define is listed
+# directly below, and infra/kubernetes/kustomization.yaml itself is
+# no longer a valid/usable entry point (see the comment left in that
+# file) - not deleted, so its resource YAML files themselves stay in
+# place and nothing else about the repository layout changes.
+# =============================================================================
+
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: medmatch
+
+resources:
+  - infra/kubernetes/namespace.yaml
+
+  - infra/kubernetes/config/configmap.yaml
+  - infra/kubernetes/secrets/secrets.yaml
+
+  - infra/kubernetes/rbac/service-account.yaml
+  - infra/kubernetes/storage/storage-class.yaml
+  - infra/kubernetes/storage/uploads-pvc.yaml
+
+  - infra/kubernetes/postgres/postgres-init.yaml
+  - infra/kubernetes/postgres/postgres-statefulset.yaml
+  - infra/kubernetes/postgres/postgres-service.yaml
+
+  - infra/kubernetes/redis/redis-statefulset.yaml
+  - infra/kubernetes/redis/redis-service.yaml
+
+  # One-shot migration Jobs. Must complete before the corresponding
+  # application Deployments are applied - see infra/scripts/deploy.sh
+  # for the actual ordering (Kubernetes/Kustomize have no
+  # manifest-level equivalent of Compose's
+  # `condition: service_completed_successfully` for two independent
+  # Jobs).
+  - infra/kubernetes/auth-service/migrate-job.yaml
+  - infra/kubernetes/ai-service/migrate-job.yaml
+
+  - infra/kubernetes/auth-service/deployment.yaml
+  - infra/kubernetes/auth-service/service.yaml
+
+  - infra/kubernetes/ai-service/deployment.yaml
+  - infra/kubernetes/ai-service/service.yaml
+
+  - infra/kubernetes/worker/deployment.yaml
+
+  - infra/kubernetes/frontend/deployment.yaml
+  - infra/kubernetes/frontend/service.yaml
+
+  - infra/kubernetes/network/network-policy.yaml
+
+  - infra/kubernetes/ingress.yaml
+  - infra/kubernetes/hpa.yaml
+
+  - infra/kubernetes/monitoring/servicemonitor.yaml
+
+# Generates the ConfigMap that auth-migrate-job.yaml mounts as
+# /flyway/sql. Named `auth-migration-sql` to exactly match that Job's
+# `volumes: - configMap: name: auth-migration-sql` reference. Works
+# correctly (verified) because the Job and this generator are declared
+# in this same, single, flat kustomization - see the note above.
+#
+# Reads the SQL files directly from their one real location under
+# services/ - does not copy or duplicate their contents anywhere.
+configMapGenerator:
+  - name: auth-migration-sql
+    files:
+      - services/auth-service/src/main/resources/db/migration/V1__create_roles_table.sql
+      - services/auth-service/src/main/resources/db/migration/V2__create_hospitals_table.sql
+      - services/auth-service/src/main/resources/db/migration/V3__create_users_table.sql
+      - services/auth-service/src/main/resources/db/migration/V4__create_audit_logs_table.sql
+
+labels:
+  - pairs:
+      app: medmatch
+      environment: production

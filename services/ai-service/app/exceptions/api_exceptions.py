@@ -17,35 +17,111 @@ class APIException(Exception):
 
 
 class BadRequestException(APIException):
-    def __init__(self, message: str = "Bad request.") -> None:
-        super().__init__(message, HTTPStatus.BAD_REQUEST)
+    """
+    Raised when a request cannot be processed because the
+    supplied input is invalid for the requested operation.
+    """
+
+    def __init__(
+        self,
+        message: str = "Bad request.",
+    ) -> None:
+        super().__init__(
+            message,
+            HTTPStatus.BAD_REQUEST,
+        )
 
 
 class UnauthorizedException(APIException):
-    def __init__(self, message: str = "Authentication required.") -> None:
-        super().__init__(message, HTTPStatus.UNAUTHORIZED)
+    """
+    Raised when authentication is required.
+    """
+
+    def __init__(
+        self,
+        message: str = "Authentication required.",
+    ) -> None:
+        super().__init__(
+            message,
+            HTTPStatus.UNAUTHORIZED,
+        )
 
 
 class ForbiddenException(APIException):
-    def __init__(self, message: str = "Access denied.") -> None:
-        super().__init__(message, HTTPStatus.FORBIDDEN)
+    """
+    Raised when an authenticated user does not have permission
+    to perform the requested operation.
+    """
+
+    def __init__(
+        self,
+        message: str = "Access denied.",
+    ) -> None:
+        super().__init__(
+            message,
+            HTTPStatus.FORBIDDEN,
+        )
 
 
 class NotFoundException(APIException):
-    def __init__(self, message: str = "Resource not found.") -> None:
-        super().__init__(message, HTTPStatus.NOT_FOUND)
+    """
+    Raised when a requested resource does not exist.
+    """
+
+    def __init__(
+        self,
+        message: str = "Resource not found.",
+    ) -> None:
+        super().__init__(
+            message,
+            HTTPStatus.NOT_FOUND,
+        )
 
 
 class ConflictException(APIException):
-    def __init__(self, message: str = "Resource already exists.") -> None:
-        super().__init__(message, HTTPStatus.CONFLICT)
+    """
+    Raised when a requested operation conflicts with the
+    current resource state.
+    """
+
+    def __init__(
+        self,
+        message: str = "Resource already exists.",
+    ) -> None:
+        super().__init__(
+            message,
+            HTTPStatus.CONFLICT,
+        )
 
 
 class DatabaseException(APIException):
-    def __init__(self, message: str = "Database operation failed.") -> None:
-        super().__init__(message, HTTPStatus.INTERNAL_SERVER_ERROR)
+    """
+    Raised when a database operation cannot be completed.
+    """
+
+    def __init__(
+        self,
+        message: str = "Database operation failed.",
+    ) -> None:
+        super().__init__(
+            message,
+            HTTPStatus.INTERNAL_SERVER_ERROR,
+        )
 
 
 class ExternalServiceException(APIException):
-    def __init__(self, message: str = "External service unavailable.") -> None:
-        super().__init__(message, HTTPStatus.BAD_GATEWAY)
+    """
+    Raised when a required external dependency is temporarily
+    unavailable or cannot successfully process a request.
+
+    Examples include LLM providers and other upstream services.
+    """
+
+    def __init__(
+        self,
+        message: str = "External service unavailable.",
+    ) -> None:
+        super().__init__(
+            message,
+            HTTPStatus.SERVICE_UNAVAILABLE,
+        )

@@ -1,7 +1,9 @@
 from typing import TYPE_CHECKING
 import uuid
+from datetime import datetime
+
+from sqlalchemy import Boolean, DateTime, String, func
 from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
@@ -23,7 +25,6 @@ class Hospital(Base):
     code: Mapped[str] = mapped_column(
         String(50),
         unique=True,
-        index=True,
         nullable=False,
     )
 
@@ -36,6 +37,25 @@ class Hospital(Base):
     address: Mapped[str | None] = mapped_column(
         String(500),
         nullable=True,
+    )
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=False),
+        server_default=func.now(),
+        nullable=False,
+    )
+
+    active: Mapped[bool] = mapped_column(
+        Boolean,
+        server_default="true",
+        nullable=False,
+    )
+
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=False),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=False,
     )
 
     trials: Mapped[list["Trial"]] = relationship(

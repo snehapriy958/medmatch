@@ -67,7 +67,6 @@ async def lifespan(
         )
         raise
 
-
 app = FastAPI(
     title=settings.API_TITLE,
     description=settings.API_DESCRIPTION,
@@ -85,19 +84,19 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-@app.get("/ping")
-def ping():
+@app.get(
+    "/health",
+    include_in_schema=False,
+)
+def health() -> dict[str, str]:
     return {
-        "pong": True,
-        "cors_test": "NEW_VERSION"
+        "status": "healthy",
     }
-print("=" * 60)
-print(settings.ALLOWED_ORIGINS)
-print("=" * 60)
-# app.add_middleware(
-#     TrustedHostMiddleware,
-#     allowed_hosts=settings.TRUSTED_HOSTS,
-# )
+
+app.add_middleware(
+    TrustedHostMiddleware,
+    allowed_hosts=settings.TRUSTED_HOSTS,
+)
 
 app.add_middleware(
     CORSMiddleware,

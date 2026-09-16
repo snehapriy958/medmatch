@@ -105,6 +105,12 @@ export default function Patients() {
   const [formError, setFormError] =
     useState<string | null>(null);
 
+  // Non-blocking warning shown when the patient record saved
+  // successfully but the accompanying clinical note could not be
+  // saved (two separate API calls under the hood).
+  const [noteWarning, setNoteWarning] =
+    useState<string | null>(null);
+
   // ------------------------------------------------------------
   // Patient detail state
   // ------------------------------------------------------------
@@ -214,7 +220,15 @@ export default function Patients() {
   ) {
     setFormSubmitting(true);
     setFormError(null);
+    setNoteWarning(null);
 
+    // NOTE: `clinical_notes` and `is_oncology` are UI-only fields.
+    // The backend PatientCreate schema does not accept them, so they
+    // are intentionally left out of `cleaned` and never sent as part
+    // of the patient payload. Clinical notes are instead persisted
+    // via the separate /patients/{id}/notes endpoint below, since a
+    // note requires a patient id that doesn't exist until creation
+    // succeeds.
     try {
       const cleaned: PatientCreate = {
         mrn: values.mrn,
@@ -241,6 +255,23 @@ export default function Patients() {
         ...prev,
       ]);
 
+      const noteText = values.clinical_notes?.trim();
+
+      if (noteText && noteText.length >= 10) {
+        try {
+          await addPatientNote(created.id, {
+            note: noteText,
+          });
+        } catch (noteErr) {
+          setNoteWarning(
+            `Patient was created, but the clinical note could not be saved: ${extractErrorMessage(
+              noteErr,
+              "Unknown error."
+            )} You can add it from the patient's detail view.`
+          );
+        }
+      }
+
       setFormOpen(false);
     } catch (err) {
       setFormError(
@@ -263,7 +294,10 @@ export default function Patients() {
 
     setFormSubmitting(true);
     setFormError(null);
+    setNoteWarning(null);
 
+    // Same UI-only-field note as handleCreateSubmit: `clinical_notes`
+    // and `is_oncology` are never sent as part of PatientUpdate.
     try {
       const cleaned: PatientUpdate = {
         first_name: values.first_name,
@@ -301,6 +335,29 @@ export default function Patients() {
           ? updated
           : current
       );
+
+      const noteText = values.clinical_notes?.trim();
+
+      if (noteText && noteText.length >= 10) {
+        try {
+          const createdNote = await addPatientNote(
+            updated.id,
+            { note: noteText }
+          );
+
+          setNotes((prev) => [
+            createdNote,
+            ...prev,
+          ]);
+        } catch (noteErr) {
+          setNoteWarning(
+            `Patient was updated, but the clinical note could not be saved: ${extractErrorMessage(
+              noteErr,
+              "Unknown error."
+            )} You can add it from the patient's detail view.`
+          );
+        }
+      }
 
       setFormOpen(false);
     } catch (err) {
@@ -559,6 +616,23 @@ export default function Patients() {
           Add Patient
         </button>
       </div>
+
+      {noteWarning && (
+        <div className="flex items-start justify-between gap-3 rounded-2xl border border-border bg-surface p-4 text-sm text-status-down shadow-sm">
+          <div className="flex items-start gap-2">
+            <AlertCircle size={16} className="mt-0.5 shrink-0" />
+            <span>{noteWarning}</span>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setNoteWarning(null)}
+            className="shrink-0 text-xs font-medium text-text-muted hover:text-text"
+          >
+            Dismiss
+          </button>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <StatCard

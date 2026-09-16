@@ -61,9 +61,9 @@ spec:
         - name: medmatch-auth
 
 
-          image: medmatch/auth-service:v13
+          image: ghcr.io/snehapriy958/medmatch-auth-service:latest
 
-          imagePullPolicy: Never
+          imagePullPolicy: Always
 
 
 

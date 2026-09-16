@@ -1,5 +1,5 @@
 from collections.abc import Callable
-from typing import Annotated
+from typing import Annotated, Any
 
 import jwt
 from fastapi import Depends, HTTPException, status
@@ -35,6 +35,9 @@ from app.repositories.patient_note_repository import (
 from app.repositories.patient_repository import PatientRepository
 from app.repositories.trial_criteria_repository import (
     TrialCriteriaRepository,
+)
+from app.repositories.trial_embedding_repository import (
+    TrialEmbeddingRepository,
 )
 from app.repositories.trial_repository import TrialRepository
 from app.repositories.hospital_repository import HospitalRepository
@@ -81,16 +84,23 @@ def get_current_user(
 
 def get_current_hospital_id(
     current_user: Annotated[
-        JWTClaims,
+        dict[str, Any],
         Depends(get_current_user),
     ],
 ) -> UUID:
-    """
-    Extract hospital ID from JWT.
-    """
 
     hospital_id = current_user.get(
         "hospital_id"
+    )
+
+    print(
+        "AI SERVICE JWT USER =",
+        current_user
+    )
+
+    print(
+        "AI SERVICE EXTRACTED HOSPITAL ID =",
+        hospital_id
     )
 
     if hospital_id is None:
@@ -102,12 +112,11 @@ def get_current_hospital_id(
     try:
         return UUID(str(hospital_id))
 
-    except (TypeError, ValueError) as exc:
+    except ValueError as exc:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid hospital ID in token",
         ) from exc
-
 
 # --------------------------------------------------------------------
 # Role-based Authorization
@@ -178,7 +187,6 @@ def require_admin_or_researcher() -> Callable[..., JWTClaims]:
     return require_roles(
         SYSTEM_ADMIN,
         HOSPITAL_ADMIN,
-        PHYSICIAN,
         RESEARCH_COORDINATOR,
     )
 
@@ -213,6 +221,10 @@ def get_criteria_embedding_repository(
 ) -> CriteriaEmbeddingRepository:
     return CriteriaEmbeddingRepository(db)
 
+def get_trial_embedding_repository(
+    db: Annotated[Session, Depends(get_db)],
+) -> TrialEmbeddingRepository:
+    return TrialEmbeddingRepository(db)
 
 def get_matching_repository(
     db: Annotated[Session, Depends(get_db)],
@@ -270,11 +282,16 @@ def get_embedding_service(
         PatientNoteEmbeddingRepository,
         Depends(get_patient_note_embedding_repository),
     ],
+    trial_repository: Annotated[
+        TrialEmbeddingRepository,
+        Depends(get_trial_embedding_repository),
+    ],
 ) -> EmbeddingService:
 
     return EmbeddingService(
         criteria_repository=criteria_repository,
         patient_note_repository=patient_note_repository,
+        trial_repository=trial_repository,
     )
 
 
@@ -301,6 +318,10 @@ def get_matching_service(
         HospitalRepository,
         Depends(get_hospital_repository),
     ],
+    criteria_repository: Annotated[
+        TrialCriteriaRepository,
+        Depends(get_trial_criteria_repository),
+    ],
     embedding_service: Annotated[
         EmbeddingService,
         Depends(get_embedding_service),
@@ -318,6 +339,7 @@ def get_matching_service(
     return MatchingService(
         repository=repository,
         hospital_repository=hospital_repository,
+        trial_criteria_repository=criteria_repository,
         embedding_service=embedding_service,
         llm_service=llm_service,
         audit_service=audit_service,

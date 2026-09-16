@@ -119,6 +119,12 @@ docker-data/
 *.sql
 *.sql.backup
 
+# Exception: Flyway migration files must be committed - they are the
+# versioned source of truth for auth-service's schema, not disposable
+# scratch/dump SQL. Narrowly scoped to this one directory only; every
+# other *.sql file in the repo remains ignored.
+!services/auth-service/src/main/resources/db/migration/*.sql
+
 
 # =========================
 # Test Reports
@@ -142,9 +148,19 @@ surefire-reports/
 # =========================
 # Local Uploads
 # =========================
+#
+# Anchored to the repo root (leading slash) - the unanchored
+# `storage/` pattern previously matched at ANY depth, which silently
+# hid infra/kubernetes/storage/ (storage-class.yaml, uploads-pvc.yaml)
+# from git entirely, despite those files being referenced by
+# kustomization.yaml and used throughout this work - confirmed via
+# `git check-ignore -v` and `git status` both failing to show them.
+# No root-level storage/ or uploads/ directory currently exists in
+# this repo (confirmed), so this narrower scope changes nothing about
+# what was actually being excluded on purpose.
 
-uploads/
-storage/
+/uploads/
+/storage/
 
 
 # =========================
@@ -169,8 +185,16 @@ storage/
 
 .vite/
 .cache/
-# Kubernetes secrets
-infra/kubernetes/secrets/
+# Kubernetes secrets - ignore only the real, populated file. A
+# directory-level exclusion (trailing slash) was tried here first and
+# turned out to be a real bug: Git does not look inside an excluded
+# directory to evaluate per-file negation patterns at all, so a
+# `!infra/kubernetes/secrets/secrets.yaml.example` exception below it
+# was silently never applied - confirmed via `git check-ignore -v`
+# showing it still matched the directory rule, not the negation.
+# Excluding the specific real-secrets filename instead avoids this
+# entirely; no negation pattern is needed.
+infra/kubernetes/secrets/secrets.yaml
 
 # Local AI model - do not commit
 services/ai-service/models/

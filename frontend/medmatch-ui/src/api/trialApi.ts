@@ -1,4 +1,4 @@
-import { aiApiClient } from "./axios";
+import { apiClient } from "./axios";
 import type {
   TrialResponse,
   TrialCreate,
@@ -6,19 +6,25 @@ import type {
   TrialUploadResponse,
 } from "../types/trial";
 
-// GET /api/trials returns list[TrialResponse] directly — no wrapper object.
 export async function listTrials(): Promise<TrialResponse[]> {
-  const { data } = await aiApiClient.get<TrialResponse[]>("/api/trials");
+  const { data } = await apiClient.get<TrialResponse[]>("/trials");
   return data;
 }
 
 export async function getTrial(trialId: string): Promise<TrialResponse> {
-  const { data } = await aiApiClient.get<TrialResponse>(`/api/trials/${trialId}`);
+  const { data } = await apiClient.get<TrialResponse>(
+    `/trials/${trialId}`
+  );
   return data;
 }
 
-export async function createTrial(payload: TrialCreate): Promise<TrialResponse> {
-  const { data } = await aiApiClient.post<TrialResponse>("/api/trials", payload);
+export async function createTrial(
+  payload: TrialCreate
+): Promise<TrialResponse> {
+  const { data } = await apiClient.post<TrialResponse>(
+    "/trials",
+    payload
+  );
   return data;
 }
 
@@ -26,25 +32,27 @@ export async function updateTrial(
   trialId: string,
   payload: TrialUpdate
 ): Promise<TrialResponse> {
-  const { data } = await aiApiClient.put<TrialResponse>(`/api/trials/${trialId}`, payload);
+  const { data } = await apiClient.put<TrialResponse>(
+    `/trials/${trialId}`,
+    payload
+  );
   return data;
 }
 
 export async function deleteTrial(trialId: string): Promise<void> {
-  await aiApiClient.delete(`/api/trials/${trialId}`);
+  await apiClient.delete(`/trials/${trialId}`);
 }
 
-// multipart/form-data, field name "file", application/pdf only (backend
-// returns 415 otherwise). Deliberately NOT setting a Content-Type header here:
-// axios/the browser must generate the multipart boundary itself when the body
-// is a FormData instance — setting "multipart/form-data" manually strips the
-// boundary parameter and breaks the request.
-export async function uploadTrialPdf(file: File): Promise<TrialUploadResponse> {
+export async function uploadTrialPdf(
+  file: File
+): Promise<TrialUploadResponse> {
   const formData = new FormData();
   formData.append("file", file);
-  const { data } = await aiApiClient.post<TrialUploadResponse>(
-    "/api/trials/upload",
+
+  const { data } = await apiClient.post<TrialUploadResponse>(
+    "/trials/upload",
     formData
   );
+
   return data;
 }

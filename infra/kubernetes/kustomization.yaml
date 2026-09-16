@@ -1,43 +1,31 @@
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-
-namespace: medmatch
-
-resources:
-  - namespace.yaml
-
-  - config/configmap.yaml
-  - secrets/secrets.yaml
-
-  - rbac/service-account.yaml
-  - storage/storage-class.yaml
-
-  - postgres/postgres-init.yaml
-  - postgres/postgres-statefulset.yaml
-  - postgres/postgres-service.yaml
-
-  - redis/redis-statefulset.yaml
-  - redis/redis-service.yaml
-
-  - auth-service/deployment.yaml
-  - auth-service/service.yaml
-
-  - ai-service/deployment.yaml
-  - ai-service/service.yaml
-
-  - worker/deployment.yaml
-
-  - frontend/deployment.yaml
-  - frontend/service.yaml
-
-  - network/network-policy.yaml
-
-  - ingress.yaml
-  - hpa.yaml
-
-  - monitoring/servicemonitor.yaml
-
-labels:
-  - pairs:
-      app: medmatch
-      environment: production
+# THIS FILE IS NO LONGER A VALID KUSTOMIZATION ENTRY POINT.
+#
+# Build/apply the MedMatch stack from the repository root instead:
+#
+#   kustomize build .
+#   kubectl apply -k .
+#
+# (run from the repo root, not from infra/kubernetes/)
+#
+# Why: the root kustomization.yaml needs a configMapGenerator that
+# reads Flyway SQL files from services/auth-service/..., outside this
+# directory's tree - Kustomize's load restrictor forbids that unless
+# the generator is declared at or above a common ancestor of both
+# paths. Nesting this directory as a base under the root (the
+# original approach) was tried and empirically failed: it broke
+# Kustomize's hash-suffix name-reference rewriting for the
+# auth-migrate Job's ConfigMap volume mount, confirmed by actually
+# running the build and inspecting the output - not a theoretical
+# concern. The working fix was to list every resource this directory
+# used to define directly, flat, in the root kustomization.yaml
+# instead of nesting this directory as a base. See that file for the
+# full explanation and the complete resource list.
+#
+# This file intentionally has no `kind:`/`resources:` left, so
+# attempting `kustomize build infra/kubernetes` fails loudly instead
+# of silently producing a partial or stale result.
+#
+# The individual resource YAML files in this directory
+# (auth-service/, ai-service/, postgres/, etc.) are still the real,
+# in-use manifests - only this particular file stopped being a valid
+# build entry point.

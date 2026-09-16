@@ -32,14 +32,12 @@ public class CustomUserDetailsService implements UserDetailsService {
                 new SimpleGrantedAuthority("ROLE_" + user.getRole().getName().name())
         );
 
-        // Fully-qualified here rather than imported: this class's simple
-        // name collides with com.medmatch.auth.entity.User, already
-        // imported above.
-        return org.springframework.security.core.userdetails.User.builder()
-                .username(user.getEmail())
-                .password(user.getPassword())
-                .authorities(authorities)
-                .disabled(!Boolean.TRUE.equals(user.getEnabled()))
-                .build();
+        return new UserPrincipal(
+                user.getId(),
+                user.getEmail(),
+                user.getPassword(),
+                Boolean.TRUE.equals(user.getEnabled()),
+                authorities
+        );
     }
 }

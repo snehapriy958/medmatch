@@ -1,5 +1,7 @@
+import logging
 from typing import Annotated, Any
 from uuid import UUID
+from celery.result import AsyncResult
 
 from fastapi import (
     APIRouter,
@@ -10,6 +12,8 @@ from fastapi import (
     UploadFile,
     status,
 )
+
+logger = logging.getLogger(__name__)
 
 from app.api.deps import (
     get_current_hospital_id,
@@ -26,6 +30,7 @@ from app.schemas.trial import (
 )
 from app.services.pdf_service import PDFService
 from app.services.trial_service import TrialService
+
 
 router = APIRouter(
     prefix="/api/trials",
@@ -59,6 +64,11 @@ def create_trial(
     Create a new clinical trial.
     """
 
+    print(
+        "========== CREATE TRIAL ROUTE HIT ==========",
+        flush=True,
+    )
+
     return service.create_trial(
         trial_data=trial,
         hospital_id=hospital_id,
@@ -89,7 +99,46 @@ def list_trials(
     List all trials for the authenticated user's hospital.
     """
 
-    return service.list_trials(hospital_id)
+    return service.list_trials(
+        hospital_id
+    )
+
+
+@router.get(
+    "/upload/status/{task_id}",
+)
+@limiter.limit("60/minute")
+def get_trial_upload_status(
+    request: Request,
+    task_id: str,
+    _: Annotated[
+        dict[str, Any],
+        Depends(require_admin_or_researcher()),
+    ],
+) -> dict[str, Any]:
+    """
+    Retrieve the status of an asynchronous trial PDF upload.
+    """
+
+    task_result = AsyncResult(
+        task_id,
+        app=process_trial.app,
+    )
+
+    response: dict[str, Any] = {
+        "task_id": task_id,
+        "status": task_result.status,
+    }
+
+    if task_result.successful():
+        response["result"] = task_result.result
+
+    elif task_result.failed():
+        response["error"] = (
+            "Trial PDF processing failed."
+        )
+
+    return response
 
 
 @router.get(
@@ -125,12 +174,13 @@ def get_trial(
     if trial is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="Trial not found",
+            detail="Trial not found.",
         )
 
     return trial
 
-@router.put(
+
+@router.patch(
     "/{trial_id}",
     response_model=TrialResponse,
 )
@@ -165,11 +215,10 @@ def update_trial(
     if updated_trial is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="Trial not found",
+            detail="Trial not found.",
         )
 
     return updated_trial
-
 
 
 @router.delete(
@@ -205,13 +254,13 @@ def delete_trial(
     if not deleted:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="Trial not found",
+            detail="Trial not found.",
         )
 
 
 @router.post(
     "/upload",
-    status_code=status.HTTP_201_CREATED,
+    status_code=status.HTTP_202_ACCEPTED,
 )
 @limiter.limit("5/minute")
 def upload_trial_pdf(
@@ -231,24 +280,60 @@ def upload_trial_pdf(
     file: UploadFile = File(...),
 ) -> dict[str, str]:
     """
-    Upload a clinical trial PDF for asynchronous processing.
+    Upload a clinical trial PDF and queue asynchronous processing.
+
+    The endpoint validates and stores the PDF before submitting the
+    processing job to Celery.
     """
 
-    if file.content_type != "application/pdf":
-        raise HTTPException(
-            status_code=status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
-            detail="Only PDF files are allowed.",
+    try:
+        file_path = pdf_service.save_pdf(
+            file
         )
 
-    try:
-        file_path = pdf_service.save_pdf(file)
+    except ValueError as exc:
+        message = str(exc)
+
+        if "maximum allowed size" in message.lower():
+            raise HTTPException(
+                status_code=status.HTTP_413_REQUEST_ENTITY_TOO_LARGE,
+                detail=message,
+            ) from exc
+
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=message,
+        ) from exc
+
     finally:
         file.file.close()
 
-    task = process_trial.delay(
-        str(file_path),
-        hospital_id,
-    )
+    try:
+        task = process_trial.delay(
+            file_path=str(file_path),
+            hospital_id=str(hospital_id),
+        )
+
+    except Exception as exc:
+        try:
+            file_path.unlink(
+                missing_ok=True
+            )
+
+        except OSError:
+            logger.exception(
+                "Failed to delete uploaded PDF after "
+                "Celery task submission failure: %s",
+                file_path,
+            )
+
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail=(
+                "Unable to queue the trial for processing. "
+                "Please try again."
+            ),
+        ) from exc
 
     return {
         "task_id": task.id,

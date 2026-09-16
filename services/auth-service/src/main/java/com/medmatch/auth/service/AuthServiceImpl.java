@@ -99,57 +99,107 @@ public class AuthServiceImpl implements AuthService {
 
 
     @Override
-    @Transactional
-    public AuthResponse login(LoginRequest request) {
-
+        @Transactional
+        public AuthResponse login(LoginRequest request) {
 
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> {
+                .orElse(null);
+
+        // ---------------------------------------------------------
+        // USER NOT FOUND
+        // ---------------------------------------------------------
+        if (user == null) {
 
                 System.out.println(
                         "LOGIN FAILED: USER NOT FOUND = "
-                        + request.getEmail()
+                                + request.getEmail()
                 );
 
-                return new InvalidCredentialsException(
-                        "Invalid email or password"
+                auditService.createAuditLog(
+                        null,
+                        "LOGIN_FAILURE",
+                        "AUTH",
+                        null,
+                        "Failed login attempt: user not found for email "
+                                + request.getEmail()
                 );
-                });
-
-
-        System.out.println(
-        "LOGIN USER FOUND = "
-        + user.getEmail()
-        );
-
-
-        System.out.println(
-        "PASSWORD MATCH RESULT = "
-        + passwordEncoder.matches(
-                request.getPassword(),
-                user.getPassword()
-        )
-        );
-
-
-                if (!passwordEncoder.matches(
-                        request.getPassword(),
-                        user.getPassword()
-                )) {
 
                 throw new InvalidCredentialsException(
                         "Invalid email or password"
                 );
-                }
+        }
 
-                if (!user.getEnabled()) {
 
-        throw new InvalidCredentialsException(
+        System.out.println(
+                "LOGIN USER FOUND = "
+                        + user.getEmail()
+        );
+
+        System.out.println(
+                "LOGIN USER ID = "
+                        + user.getId()
+        );
+
+        System.out.println(
+                "LOGIN HOSPITAL ID FROM ENTITY = "
+                        + user.getHospital().getId()
+        );
+
+
+        boolean passwordMatches = passwordEncoder.matches(
+                request.getPassword(),
+                user.getPassword()
+        );
+
+        System.out.println(
+                "PASSWORD MATCH RESULT = "
+                        + passwordMatches
+        );
+
+
+        // ---------------------------------------------------------
+        // INVALID PASSWORD
+        // ---------------------------------------------------------
+        if (!passwordMatches) {
+
+                auditService.createAuditLog(
+                        user.getId(),
+                        "LOGIN_FAILURE",
+                        "USER",
+                        user.getId(),
+                        "Failed login attempt: invalid password for "
+                                + user.getEmail()
+                );
+
+                throw new InvalidCredentialsException(
+                        "Invalid email or password"
+                );
+        }
+
+
+        // ---------------------------------------------------------
+        // DISABLED ACCOUNT
+        // ---------------------------------------------------------
+        if (!user.getEnabled()) {
+
+                auditService.createAuditLog(
+                        user.getId(),
+                        "LOGIN_FAILURE",
+                        "USER",
+                        user.getId(),
+                        "Failed login attempt: account disabled for "
+                                + user.getEmail()
+                );
+
+                throw new InvalidCredentialsException(
                         "User account is disabled"
                 );
         }
 
 
+        // ---------------------------------------------------------
+        // SUCCESSFUL LOGIN
+        // ---------------------------------------------------------
         String token = jwtService.generateToken(user);
 
 
@@ -168,7 +218,7 @@ public class AuthServiceImpl implements AuthService {
                 .expiresIn(3600000L)
                 .user(toUserResponse(user))
                 .build();
-    }
+        }
 
 
 

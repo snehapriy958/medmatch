@@ -736,9 +736,17 @@ Return Eligible ONLY when:
 
 Return Possibly Eligible when:
 
-- No exclusion criteria are triggered.
-- At least one important eligibility criterion is satisfied.
-- One or more important eligibility requirements remain unknown.
+- No required inclusion criterion is explicitly failed.
+- No exclusion criterion is explicitly triggered.
+- One or more eligibility requirements remain unknown.
+
+This classification may be used even when no inclusion criterion
+has yet been explicitly satisfied, provided that the available
+patient information does not establish that the patient is
+Not Eligible.
+
+Do not return Eligible while any critical eligibility requirement
+remains unknown.
 
 ---
 
