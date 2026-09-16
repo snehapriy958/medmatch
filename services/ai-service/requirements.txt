@@ -29,7 +29,7 @@ prometheus-fastapi-instrumentator
 slowapi
 google-genai
 
-transformers==5.5.0
+transformers==5.10.0
 huggingface-hub==1.27.0
 
 # Testing
