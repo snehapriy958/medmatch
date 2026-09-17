@@ -17,6 +17,7 @@ from app.db.base import Base
 
 if TYPE_CHECKING:
     from app.models.hospital import Hospital
+    from app.models.match import Match
     from app.models.trial_criteria import TrialCriteria
     from app.models.trial_embedding import TrialEmbedding
 
@@ -105,5 +106,16 @@ class Trial(Base):
         back_populates="trial",
         cascade="all, delete-orphan",
         uselist=False,
+        lazy="selectin",
+    )
+
+    # No cascade here — Match.trial_id is RESTRICT, not CASCADE,
+    # since a Match becomes part of the clinical review/approval
+    # history and must not be silently destroyed by trial deletion.
+    # passive_deletes=True for the same reason as Patient.matches —
+    # see that file's comment for the empirically-verified rationale.
+    matches: Mapped[list["Match"]] = relationship(
+        back_populates="trial",
+        passive_deletes=True,
         lazy="selectin",
     )

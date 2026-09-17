@@ -9,6 +9,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.db.base import Base
 
 if TYPE_CHECKING:
+    from app.models.match import Match
     from app.models.patient import Patient
     from app.models.trial import Trial
 
@@ -65,5 +66,11 @@ class Hospital(Base):
 
     patients: Mapped[list["Patient"]] = relationship(
         back_populates="hospital",
+        lazy="selectin",
+    )
+
+    matches: Mapped[list["Match"]] = relationship(
+        back_populates="hospital",
+        passive_deletes=True,
         lazy="selectin",
     )

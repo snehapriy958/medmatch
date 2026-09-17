@@ -8,6 +8,7 @@ from .hospital import Hospital
 from .patient import Patient
 from .patient_note import PatientNote
 from .patient_note_embedding import PatientNoteEmbedding
+from .match import Match
 
 __all__ = [
     "AuditLog",
@@ -20,4 +21,5 @@ __all__ = [
     "Patient",
     "PatientNote",
     "PatientNoteEmbedding",
+    "Match",
 ]
