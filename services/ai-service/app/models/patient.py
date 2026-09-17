@@ -19,6 +19,7 @@ from app.db.base import Base
 
 if TYPE_CHECKING:
     from app.models.hospital import Hospital
+    from app.models.match import Match
     from app.models.patient_note import PatientNote
 
 
@@ -130,5 +131,21 @@ class Patient(Base):
     notes: Mapped[list["PatientNote"]] = relationship(
         back_populates="patient",
         cascade="all, delete-orphan",
+        lazy="selectin",
+    )
+
+    # No cascade here — Match.patient_id is RESTRICT, not CASCADE,
+    # since a Match becomes part of the clinical review/approval
+    # history and must not be silently destroyed by patient deletion.
+    # passive_deletes=True so the DB's RESTRICT constraint is the
+    # sole authority on patient deletion: without it, SQLAlchemy's
+    # unit-of-work would first try to UPDATE Match.patient_id to
+    # NULL (since patient_id is NOT NULL, this raises a confusing
+    # "NOT NULL constraint failed" from that UPDATE) before the
+    # DELETE ever reaches the DB's RESTRICT constraint. Verified
+    # empirically against both configurations before choosing this.
+    matches: Mapped[list["Match"]] = relationship(
+        back_populates="patient",
+        passive_deletes=True,
         lazy="selectin",
     )

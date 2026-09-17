@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Modal from "./Modal";
@@ -227,15 +227,45 @@ export default function PatientFormModal({
   // shaped forms (create vs edit), so watch/register are read from each
   // form separately and merged into plain values below rather than
   // holding a single "active form" reference typed as a union.
-  const createWatchedDiagnosis = createForm.watch("diagnosis");
-  const createWatchedCancerType = createForm.watch("cancer_type");
-  const createWatchedIsOncology = createForm.watch("is_oncology");
-  const createWatchedGender = createForm.watch("gender");
+  const createWatchedDiagnosis = useWatch({
+    control: createForm.control,
+    name: "diagnosis",
+  });
 
-  const editWatchedDiagnosis = editForm.watch("diagnosis");
-  const editWatchedCancerType = editForm.watch("cancer_type");
-  const editWatchedIsOncology = editForm.watch("is_oncology");
-  const editWatchedGender = editForm.watch("gender");
+  const createWatchedCancerType = useWatch({
+    control: createForm.control,
+    name: "cancer_type",
+  });
+
+  const createWatchedIsOncology = useWatch({
+    control: createForm.control,
+    name: "is_oncology",
+  });
+
+  const createWatchedGender = useWatch({
+    control: createForm.control,
+    name: "gender",
+  });
+
+  const editWatchedDiagnosis = useWatch({
+    control: editForm.control,
+    name: "diagnosis",
+  });
+
+  const editWatchedCancerType = useWatch({
+    control: editForm.control,
+    name: "cancer_type",
+  });
+
+  const editWatchedIsOncology = useWatch({
+    control: editForm.control,
+    name: "is_oncology",
+  });
+
+  const editWatchedGender = useWatch({
+    control: editForm.control,
+    name: "gender",
+  });
 
   const watchedDiagnosis =
     (isEdit ? editWatchedDiagnosis : createWatchedDiagnosis) ?? "";
