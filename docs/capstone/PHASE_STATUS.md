@@ -29,11 +29,37 @@ PHASE 8 — EVIDENCE GROUNDING & HALLUCINATION EVALUATION
 STATUS: COMPLETE and ACCEPTED
 
 PHASE 9 — CLINICAL DECISION SUPPORT ROBUSTNESS & SAFETY HARNESS (UNCERTAINTY & HUMAN REVIEW)
+STATUS: COMPLETE and ACCEPTED
+
+PHASE 10 — EXPLAINABILITY & EVIDENCE GRAPH FOUNDATION
 STATUS: IMPLEMENTATION COMPLETE — AWAITING USER ACCEPTANCE
 
 Next phase:
-PHASE 10 — EXPLAINABILITY & EVIDENCE GRAPH FOUNDATION (NOT STARTED)
+PHASE 11 — EXTERNAL BENCHMARK INGESTION & EMPIRICAL EVALUATION (NOT STARTED)
 ```
+
+---
+
+## Artifact Index for Phase 10 (Explainability & Evidence Graph Foundation)
+
+- [Phase 10 Explainability Audit](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase10_explainability_audit.md)
+- [Canonical Evidence Graph Schema](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/scripts/evidence_graph_schema.py)
+- [Canonical Evidence Graph Builder](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/scripts/evidence_graph_builder.py)
+- [Canonical Evidence Graph Validator](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/scripts/evidence_graph_validator.py)
+- [Evidence Graph Specification](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase10_evidence_graph_specification.md)
+- [Canonical Explanation Schema](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/scripts/explanation_schema.py)
+- [Deterministic Explanation Generator](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/scripts/explanation_generator.py)
+- [Deterministic Explanation Validator](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/scripts/explanation_validator.py)
+- [Explanation Model & Guardrails Specification](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase10_explanation_model.md)
+- [Phase 10 Error Taxonomy (X1–X14)](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase10_error_taxonomy.md)
+- [Explainability Metrics Engine](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/scripts/explainability_metrics.py)
+- [Explainability Metrics Specification](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase10_metrics_specification.md)
+- [Phase 10 Experiment Harness](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/scripts/explainability_experiment.py)
+- [Phase 10 Development Fixtures](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/data/fixtures/phase10/explainability_fixtures.json)
+- [Phase 10 Development Fixtures README](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/data/fixtures/phase10/README.md)
+- [Phase 10 Explainability Test Suite](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/tests/explainability/)
+- [Phase 10 Reproducibility Specification](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase10_reproducibility.md)
+- [Phase 10 Final Report](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase10_explainability_report.md)
 
 ---
 

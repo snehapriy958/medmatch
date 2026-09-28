@@ -1,0 +1,700 @@
+[
+  {
+    "fixture_id": "case-01-pass-criterion-direct-evidence",
+    "description": "PASS criterion with direct evidence",
+    "is_valid": true,
+    "expected_errors": [],
+    "graph_data": {
+      "graph_id": "GRAPH-01",
+      "trial_id": "NCT02484404",
+      "patient_id": "PT-101",
+      "nodes": {
+        "PAT-PT-101": {
+          "node_id": "PAT-PT-101",
+          "node_type": "PATIENT",
+          "label": "Patient PT-101",
+          "properties": {"patient_id": "PT-101"},
+          "metadata": {}
+        },
+        "DOC-NOTE-01": {
+          "node_id": "DOC-NOTE-01",
+          "node_type": "SOURCE_DOCUMENT",
+          "label": "Oncology Progress Note",
+          "properties": {"document_id": "NOTE-01", "document_type": "clinical_note"},
+          "metadata": {}
+        },
+        "FRAG-FRAG-01": {
+          "node_id": "FRAG-FRAG-01",
+          "node_type": "SOURCE_FRAGMENT",
+          "label": "Patient is a 62-year-old female diagnosed with NSCLC.",
+          "properties": {"text": "Patient is a 62-year-old female diagnosed with NSCLC."},
+          "provenance": {
+            "source_id": "FRAG-01",
+            "document_id": "NOTE-01",
+            "section": "History of Present Illness",
+            "start_char": 0,
+            "end_char": 51,
+            "page_number": 1
+          },
+          "metadata": {}
+        },
+        "FACT-FACT-01": {
+          "node_id": "FACT-FACT-01",
+          "node_type": "PATIENT_FACT",
+          "label": "age: 62",
+          "properties": {"concept": "age", "value": 62, "assertion": "PRESENT"},
+          "metadata": {}
+        },
+        "TRIAL-NCT02484404": {
+          "node_id": "TRIAL-NCT02484404",
+          "node_type": "TRIAL",
+          "label": "Trial NCT02484404",
+          "properties": {"trial_id": "NCT02484404"},
+          "metadata": {}
+        },
+        "CRIT-INC-01": {
+          "node_id": "CRIT-INC-01",
+          "node_type": "TRIAL_CRITERION",
+          "label": "[INCLUSION] Age >= 18 years",
+          "properties": {"criterion_id": "INC-01", "criterion_type": "inclusion", "criterion_text": "Age >= 18 years"},
+          "metadata": {}
+        },
+        "EVAL-EVAL-01": {
+          "node_id": "EVAL-EVAL-01",
+          "node_type": "CRITERION_EVALUATION",
+          "label": "Eval INC-01: PASS",
+          "properties": {"evaluation_id": "EVAL-01", "criterion_id": "INC-01", "status": "PASS", "reasoning": "Patient age 62 meets age >= 18 requirement."},
+          "metadata": {}
+        },
+        "DEC-DEC-01": {
+          "node_id": "DEC-DEC-01",
+          "node_type": "ELIGIBILITY_DECISION",
+          "label": "Decision: ELIGIBLE",
+          "properties": {"decision_id": "DEC-01", "status": "ELIGIBLE", "clinical_summary": "All criteria met."},
+          "metadata": {}
+        }
+      },
+      "edges": [
+        {"edge_id": "e01", "source_id": "PAT-PT-101", "target_id": "FACT-FACT-01", "edge_type": "HAS_FACT"},
+        {"edge_id": "e02", "source_id": "FACT-FACT-01", "target_id": "FRAG-FRAG-01", "edge_type": "DERIVED_FROM"},
+        {"edge_id": "e03", "source_id": "FRAG-FRAG-01", "target_id": "DOC-NOTE-01", "edge_type": "BELONGS_TO"},
+        {"edge_id": "e04", "source_id": "TRIAL-NCT02484404", "target_id": "CRIT-INC-01", "edge_type": "HAS_CRITERION"},
+        {"edge_id": "e05", "source_id": "CRIT-INC-01", "target_id": "EVAL-EVAL-01", "edge_type": "EVALUATED_BY"},
+        {"edge_id": "e06", "source_id": "FACT-FACT-01", "target_id": "EVAL-EVAL-01", "edge_type": "SUPPORTS"},
+        {"edge_id": "e07", "source_id": "EVAL-EVAL-01", "target_id": "DEC-DEC-01", "edge_type": "CONTRIBUTES_TO"}
+      ]
+    }
+  },
+  {
+    "fixture_id": "case-02-fail-criterion-direct-evidence",
+    "description": "FAIL criterion with direct evidence",
+    "is_valid": true,
+    "expected_errors": [],
+    "graph_data": {
+      "graph_id": "GRAPH-02",
+      "trial_id": "NCT02484404",
+      "patient_id": "PT-102",
+      "nodes": {
+        "PAT-PT-102": {"node_id": "PAT-PT-102", "node_type": "PATIENT", "label": "Patient PT-102", "properties": {"patient_id": "PT-102"}},
+        "DOC-NOTE-02": {"node_id": "DOC-NOTE-02", "node_type": "SOURCE_DOCUMENT", "label": "Consultation", "properties": {"document_id": "NOTE-02"}},
+        "FRAG-FRAG-02": {
+          "node_id": "FRAG-FRAG-02", "node_type": "SOURCE_FRAGMENT", "label": "ECOG performance status is 3.",
+          "properties": {"text": "ECOG performance status is 3."},
+          "provenance": {"source_id": "FRAG-02", "document_id": "NOTE-02", "start_char": 10, "end_char": 40}
+        },
+        "FACT-FACT-02": {"node_id": "FACT-FACT-02", "node_type": "PATIENT_FACT", "label": "ECOG: 3", "properties": {"concept": "ecog", "value": 3, "assertion": "PRESENT"}},
+        "TRIAL-NCT02484404": {"node_id": "TRIAL-NCT02484404", "node_type": "TRIAL", "label": "Trial NCT02484404", "properties": {"trial_id": "NCT02484404"}},
+        "CRIT-INC-02": {"node_id": "CRIT-INC-02", "node_type": "TRIAL_CRITERION", "label": "[INCLUSION] ECOG 0-1", "properties": {"criterion_id": "INC-02", "criterion_type": "inclusion", "criterion_text": "ECOG 0-1"}},
+        "EVAL-EVAL-02": {"node_id": "EVAL-EVAL-02", "node_type": "CRITERION_EVALUATION", "label": "Eval INC-02: FAIL", "properties": {"evaluation_id": "EVAL-02", "criterion_id": "INC-02", "status": "FAIL", "reasoning": "ECOG 3 exceeds maximum threshold of 1."}},
+        "DEC-DEC-02": {"node_id": "DEC-DEC-02", "node_type": "ELIGIBILITY_DECISION", "label": "Decision: INELIGIBLE", "properties": {"decision_id": "DEC-02", "status": "INELIGIBLE", "clinical_summary": "Disqualified by ECOG performance status."}}
+      },
+      "edges": [
+        {"edge_id": "e21", "source_id": "PAT-PT-102", "target_id": "FACT-FACT-02", "edge_type": "HAS_FACT"},
+        {"edge_id": "e22", "source_id": "FACT-FACT-02", "target_id": "FRAG-FRAG-02", "edge_type": "DERIVED_FROM"},
+        {"edge_id": "e23", "source_id": "FRAG-FRAG-02", "target_id": "DOC-NOTE-02", "edge_type": "BELONGS_TO"},
+        {"edge_id": "e24", "source_id": "TRIAL-NCT02484404", "target_id": "CRIT-INC-02", "edge_type": "HAS_CRITERION"},
+        {"edge_id": "e25", "source_id": "CRIT-INC-02", "target_id": "EVAL-EVAL-02", "edge_type": "EVALUATED_BY"},
+        {"edge_id": "e26", "source_id": "FACT-FACT-02", "target_id": "EVAL-EVAL-02", "edge_type": "CONTRADICTS"},
+        {"edge_id": "e27", "source_id": "EVAL-EVAL-02", "target_id": "DEC-DEC-02", "edge_type": "CONTRIBUTES_TO"}
+      ]
+    }
+  },
+  {
+    "fixture_id": "case-03-unknown-missing-information",
+    "description": "UNKNOWN due to missing information",
+    "is_valid": true,
+    "expected_errors": [],
+    "graph_data": {
+      "graph_id": "GRAPH-03",
+      "trial_id": "NCT02484404",
+      "patient_id": "PT-103",
+      "nodes": {
+        "PAT-PT-103": {"node_id": "PAT-PT-103", "node_type": "PATIENT", "label": "Patient PT-103", "properties": {"patient_id": "PT-103"}},
+        "TRIAL-NCT02484404": {"node_id": "TRIAL-NCT02484404", "node_type": "TRIAL", "label": "Trial NCT02484404", "properties": {"trial_id": "NCT02484404"}},
+        "CRIT-INC-03": {"node_id": "CRIT-INC-03", "node_type": "TRIAL_CRITERION", "label": "[INCLUSION] Documented HER2 overexpression", "properties": {"criterion_id": "INC-03", "criterion_type": "inclusion", "criterion_text": "Documented HER2 overexpression"}},
+        "EVAL-EVAL-03": {"node_id": "EVAL-EVAL-03", "node_type": "CRITERION_EVALUATION", "label": "Eval INC-03: UNKNOWN", "properties": {"evaluation_id": "EVAL-03", "criterion_id": "INC-03", "status": "UNKNOWN", "reasoning": "HER2 status not mentioned in patient chart."}},
+        "UNC-UNC-03": {"node_id": "UNC-UNC-03", "node_type": "UNCERTAINTY", "label": "Uncertainty: MISSING_PATIENT_FACT (HIGH)", "properties": {"uncertainty_id": "UNC-03", "uncertainty_type": "MISSING_PATIENT_FACT", "severity": "HIGH", "description": "HER2 status absent from medical records"}},
+        "DEC-DEC-03": {"node_id": "DEC-DEC-03", "node_type": "ELIGIBILITY_DECISION", "label": "Decision: NEEDS_REVIEW", "properties": {"decision_id": "DEC-03", "status": "NEEDS_REVIEW", "clinical_summary": "Unresolved HER2 status requires review."}}
+      },
+      "edges": [
+        {"edge_id": "e31", "source_id": "TRIAL-NCT02484404", "target_id": "CRIT-INC-03", "edge_type": "HAS_CRITERION"},
+        {"edge_id": "e32", "source_id": "CRIT-INC-03", "target_id": "EVAL-EVAL-03", "edge_type": "EVALUATED_BY"},
+        {"edge_id": "e33", "source_id": "EVAL-EVAL-03", "target_id": "UNC-UNC-03", "edge_type": "HAS_UNCERTAINTY"},
+        {"edge_id": "e34", "source_id": "EVAL-EVAL-03", "target_id": "DEC-DEC-03", "edge_type": "CONTRIBUTES_TO"}
+      ]
+    }
+  },
+  {
+    "fixture_id": "case-04-multiple-evidence-fragments",
+    "description": "Criterion supported by multiple evidence fragments",
+    "is_valid": true,
+    "expected_errors": [],
+    "graph_data": {
+      "graph_id": "GRAPH-04",
+      "trial_id": "NCT02484404",
+      "patient_id": "PT-104",
+      "nodes": {
+        "PAT-PT-104": {"node_id": "PAT-PT-104", "node_type": "PATIENT", "label": "Patient PT-104", "properties": {"patient_id": "PT-104"}},
+        "DOC-NOTE-04A": {"node_id": "DOC-NOTE-04A", "node_type": "SOURCE_DOCUMENT", "label": "Pathology Report", "properties": {"document_id": "NOTE-04A"}},
+        "DOC-NOTE-04B": {"node_id": "DOC-NOTE-04B", "node_type": "SOURCE_DOCUMENT", "label": "Oncology Note", "properties": {"document_id": "NOTE-04B"}},
+        "FRAG-FRAG-04A": {
+          "node_id": "FRAG-FRAG-04A", "node_type": "SOURCE_FRAGMENT", "label": "Invasive ductal carcinoma of left breast.",
+          "properties": {"text": "Invasive ductal carcinoma of left breast."},
+          "provenance": {"source_id": "FRAG-04A", "document_id": "NOTE-04A", "start_char": 20, "end_char": 61}
+        },
+        "FRAG-FRAG-04B": {
+          "node_id": "FRAG-FRAG-04B", "node_type": "SOURCE_FRAGMENT", "label": "Patient confirms breast cancer diagnosis.",
+          "properties": {"text": "Patient confirms breast cancer diagnosis."},
+          "provenance": {"source_id": "FRAG-04B", "document_id": "NOTE-04B", "start_char": 5, "end_char": 46}
+        },
+        "FACT-FACT-04": {"node_id": "FACT-FACT-04", "node_type": "PATIENT_FACT", "label": "diagnosis: breast_cancer", "properties": {"concept": "diagnosis", "value": "breast_cancer", "assertion": "PRESENT"}},
+        "TRIAL-NCT02484404": {"node_id": "TRIAL-NCT02484404", "node_type": "TRIAL", "label": "Trial NCT02484404", "properties": {"trial_id": "NCT02484404"}},
+        "CRIT-INC-04": {"node_id": "CRIT-INC-04", "node_type": "TRIAL_CRITERION", "label": "[INCLUSION] Histologically confirmed breast carcinoma", "properties": {"criterion_id": "INC-04", "criterion_type": "inclusion", "criterion_text": "Histologically confirmed breast carcinoma"}},
+        "EVAL-EVAL-04": {"node_id": "EVAL-EVAL-04", "node_type": "CRITERION_EVALUATION", "label": "Eval INC-04: PASS", "properties": {"evaluation_id": "EVAL-04", "criterion_id": "INC-04", "status": "PASS", "reasoning": "Confirmed across multiple notes."}},
+        "DEC-DEC-04": {"node_id": "DEC-DEC-04", "node_type": "ELIGIBILITY_DECISION", "label": "Decision: ELIGIBLE", "properties": {"decision_id": "DEC-04", "status": "ELIGIBLE", "clinical_summary": "All criteria met."}}
+      },
+      "edges": [
+        {"edge_id": "e41", "source_id": "PAT-PT-104", "target_id": "FACT-FACT-04", "edge_type": "HAS_FACT"},
+        {"edge_id": "e42", "source_id": "FACT-FACT-04", "target_id": "FRAG-FRAG-04A", "edge_type": "DERIVED_FROM"},
+        {"edge_id": "e43", "source_id": "FRAG-FRAG-04A", "target_id": "DOC-NOTE-04A", "edge_type": "BELONGS_TO"},
+        {"edge_id": "e44", "source_id": "FRAG-FRAG-04B", "target_id": "DOC-NOTE-04B", "edge_type": "BELONGS_TO"},
+        {"edge_id": "e45", "source_id": "TRIAL-NCT02484404", "target_id": "CRIT-INC-04", "edge_type": "HAS_CRITERION"},
+        {"edge_id": "e46", "source_id": "CRIT-INC-04", "target_id": "EVAL-EVAL-04", "edge_type": "EVALUATED_BY"},
+        {"edge_id": "e47", "source_id": "FACT-FACT-04", "target_id": "EVAL-EVAL-04", "edge_type": "SUPPORTS"},
+        {"edge_id": "e48", "source_id": "FRAG-FRAG-04B", "target_id": "EVAL-EVAL-04", "edge_type": "SUPPORTS"},
+        {"edge_id": "e49", "source_id": "EVAL-EVAL-04", "target_id": "DEC-DEC-04", "edge_type": "CONTRIBUTES_TO"}
+      ]
+    }
+  },
+  {
+    "fixture_id": "case-05-contradictory-evidence",
+    "description": "Criterion with contradictory evidence",
+    "is_valid": true,
+    "expected_errors": [],
+    "graph_data": {
+      "graph_id": "GRAPH-05",
+      "trial_id": "NCT02484404",
+      "patient_id": "PT-105",
+      "nodes": {
+        "PAT-PT-105": {"node_id": "PAT-PT-105", "node_type": "PATIENT", "label": "Patient PT-105", "properties": {"patient_id": "PT-105"}},
+        "DOC-NOTE-05A": {"node_id": "DOC-NOTE-05A", "node_type": "SOURCE_DOCUMENT", "label": "Clinic Note", "properties": {"document_id": "NOTE-05A"}},
+        "DOC-NOTE-05B": {"node_id": "DOC-NOTE-05B", "node_type": "SOURCE_DOCUMENT", "label": "Intake Note", "properties": {"document_id": "NOTE-05B"}},
+        "FRAG-FRAG-05A": {
+          "node_id": "FRAG-FRAG-05A", "node_type": "SOURCE_FRAGMENT", "label": "Patient denies any penicillin allergy.",
+          "properties": {"text": "Patient denies any penicillin allergy."},
+          "provenance": {"source_id": "FRAG-05A", "document_id": "NOTE-05A", "start_char": 0, "end_char": 38}
+        },
+        "FRAG-FRAG-05B": {
+          "node_id": "FRAG-FRAG-05B", "node_type": "SOURCE_FRAGMENT", "label": "Severe penicillin anaphylaxis recorded in 2021.",
+          "properties": {"text": "Severe penicillin anaphylaxis recorded in 2021."},
+          "provenance": {"source_id": "FRAG-05B", "document_id": "NOTE-05B", "start_char": 10, "end_char": 57}
+        },
+        "FACT-FACT-05A": {"node_id": "FACT-FACT-05A", "node_type": "PATIENT_FACT", "label": "penicillin_allergy: ABSENT", "properties": {"concept": "penicillin_allergy", "value": false, "assertion": "ABSENT"}},
+        "FACT-FACT-05B": {"node_id": "FACT-FACT-05B", "node_type": "PATIENT_FACT", "label": "penicillin_allergy: PRESENT", "properties": {"concept": "penicillin_allergy", "value": true, "assertion": "PRESENT"}},
+        "TRIAL-NCT02484404": {"node_id": "TRIAL-NCT02484404", "node_type": "TRIAL", "label": "Trial NCT02484404", "properties": {"trial_id": "NCT02484404"}},
+        "CRIT-EXC-05": {"node_id": "CRIT-EXC-05", "node_type": "TRIAL_CRITERION", "label": "[EXCLUSION] Known severe beta-lactam hypersensitivity", "properties": {"criterion_id": "EXC-05", "criterion_type": "exclusion", "criterion_text": "Known severe beta-lactam hypersensitivity"}},
+        "EVAL-EVAL-05": {"node_id": "EVAL-EVAL-05", "node_type": "CRITERION_EVALUATION", "label": "Eval EXC-05: UNKNOWN", "properties": {"evaluation_id": "EVAL-05", "criterion_id": "EXC-05", "status": "UNKNOWN", "reasoning": "Conflicting documentation on penicillin allergy."}},
+        "UNC-UNC-05": {"node_id": "UNC-UNC-05", "node_type": "UNCERTAINTY", "label": "Uncertainty: CONFLICTING_PATIENT_FACTS (CRITICAL)", "properties": {"uncertainty_id": "UNC-05", "uncertainty_type": "CONFLICTING_PATIENT_FACTS", "severity": "CRITICAL", "description": "Contradictory allergy records"}},
+        "DEC-DEC-05": {"node_id": "DEC-DEC-05", "node_type": "ELIGIBILITY_DECISION", "label": "Decision: NEEDS_REVIEW", "properties": {"decision_id": "DEC-05", "status": "NEEDS_REVIEW", "clinical_summary": "Allergy conflict requires review."}}
+      },
+      "edges": [
+        {"edge_id": "e51", "source_id": "PAT-PT-105", "target_id": "FACT-FACT-05A", "edge_type": "HAS_FACT"},
+        {"edge_id": "e52", "source_id": "PAT-PT-105", "target_id": "FACT-FACT-05B", "edge_type": "HAS_FACT"},
+        {"edge_id": "e53", "source_id": "FACT-FACT-05A", "target_id": "FRAG-FRAG-05A", "edge_type": "DERIVED_FROM"},
+        {"edge_id": "e54", "source_id": "FACT-FACT-05B", "target_id": "FRAG-FRAG-05B", "edge_type": "DERIVED_FROM"},
+        {"edge_id": "e55", "source_id": "FRAG-FRAG-05A", "target_id": "DOC-NOTE-05A", "edge_type": "BELONGS_TO"},
+        {"edge_id": "e56", "source_id": "FRAG-FRAG-05B", "target_id": "DOC-NOTE-05B", "edge_type": "BELONGS_TO"},
+        {"edge_id": "e57", "source_id": "TRIAL-NCT02484404", "target_id": "CRIT-EXC-05", "edge_type": "HAS_CRITERION"},
+        {"edge_id": "e58", "source_id": "CRIT-EXC-05", "target_id": "EVAL-EVAL-05", "edge_type": "EVALUATED_BY"},
+        {"edge_id": "e59", "source_id": "FACT-FACT-05A", "target_id": "EVAL-EVAL-05", "edge_type": "SUPPORTS"},
+        {"edge_id": "e60", "source_id": "FACT-FACT-05B", "target_id": "EVAL-EVAL-05", "edge_type": "CONTRADICTS"},
+        {"edge_id": "e61", "source_id": "EVAL-EVAL-05", "target_id": "UNC-UNC-05", "edge_type": "HAS_UNCERTAINTY"},
+        {"edge_id": "e62", "source_id": "EVAL-EVAL-05", "target_id": "DEC-DEC-05", "edge_type": "CONTRIBUTES_TO"}
+      ]
+    }
+  },
+  {
+    "fixture_id": "case-06-temporal-criterion-explicit-date",
+    "description": "Temporal criterion with explicit date evidence",
+    "is_valid": true,
+    "expected_errors": [],
+    "graph_data": {
+      "graph_id": "GRAPH-06",
+      "trial_id": "NCT02484404",
+      "patient_id": "PT-106",
+      "nodes": {
+        "PAT-PT-106": {"node_id": "PAT-PT-106", "node_type": "PATIENT", "label": "Patient PT-106", "properties": {"patient_id": "PT-106"}},
+        "DOC-NOTE-06": {"node_id": "DOC-NOTE-06", "node_type": "SOURCE_DOCUMENT", "label": "Infusion Record", "properties": {"document_id": "NOTE-06"}},
+        "FRAG-FRAG-06": {
+          "node_id": "FRAG-FRAG-06", "node_type": "SOURCE_FRAGMENT", "label": "Last cycle of systemic chemotherapy completed on 2026-06-15.",
+          "properties": {"text": "Last cycle of systemic chemotherapy completed on 2026-06-15."},
+          "provenance": {"source_id": "FRAG-06", "document_id": "NOTE-06", "start_char": 0, "end_char": 60}
+        },
+        "FACT-FACT-06": {"node_id": "FACT-FACT-06", "node_type": "PATIENT_FACT", "label": "chemo_completion: 2026-06-15", "properties": {"concept": "prior_chemotherapy", "value": "2026-06-15", "temporality": "2026-06-15", "assertion": "PRESENT"}},
+        "TRIAL-NCT02484404": {"node_id": "TRIAL-NCT02484404", "node_type": "TRIAL", "label": "Trial NCT02484404", "properties": {"trial_id": "NCT02484404"}},
+        "CRIT-EXC-06": {"node_id": "CRIT-EXC-06", "node_type": "TRIAL_CRITERION", "label": "[EXCLUSION] Systemic chemotherapy within 28 days prior to Day 1", "properties": {"criterion_id": "EXC-06", "criterion_type": "exclusion", "criterion_text": "Systemic chemotherapy within 28 days prior to Day 1"}},
+        "EVAL-EVAL-06": {"node_id": "EVAL-EVAL-06", "node_type": "CRITERION_EVALUATION", "label": "Eval EXC-06: PASS", "properties": {"evaluation_id": "EVAL-06", "criterion_id": "EXC-06", "status": "PASS", "reasoning": "Chemotherapy ended > 90 days ago, satisfying 28-day washout."}},
+        "DEC-DEC-06": {"node_id": "DEC-DEC-06", "node_type": "ELIGIBILITY_DECISION", "label": "Decision: ELIGIBLE", "properties": {"decision_id": "DEC-06", "status": "ELIGIBLE", "clinical_summary": "All criteria met."}}
+      },
+      "edges": [
+        {"edge_id": "e61", "source_id": "PAT-PT-106", "target_id": "FACT-FACT-06", "edge_type": "HAS_FACT"},
+        {"edge_id": "e62", "source_id": "FACT-FACT-06", "target_id": "FRAG-FRAG-06", "edge_type": "DERIVED_FROM"},
+        {"edge_id": "e63", "source_id": "FRAG-FRAG-06", "target_id": "DOC-NOTE-06", "edge_type": "BELONGS_TO"},
+        {"edge_id": "e64", "source_id": "TRIAL-NCT02484404", "target_id": "CRIT-EXC-06", "edge_type": "HAS_CRITERION"},
+        {"edge_id": "e65", "source_id": "CRIT-EXC-06", "target_id": "EVAL-EVAL-06", "edge_type": "EVALUATED_BY"},
+        {"edge_id": "e66", "source_id": "FACT-FACT-06", "target_id": "EVAL-EVAL-06", "edge_type": "SUPPORTS"},
+        {"edge_id": "e67", "source_id": "EVAL-EVAL-06", "target_id": "DEC-DEC-06", "edge_type": "CONTRIBUTES_TO"}
+      ]
+    }
+  },
+  {
+    "fixture_id": "case-07-numerical-criterion-source-evidence",
+    "description": "Numerical criterion with source evidence",
+    "is_valid": true,
+    "expected_errors": [],
+    "graph_data": {
+      "graph_id": "GRAPH-07",
+      "trial_id": "NCT02484404",
+      "patient_id": "PT-107",
+      "nodes": {
+        "PAT-PT-107": {"node_id": "PAT-PT-107", "node_type": "PATIENT", "label": "Patient PT-107", "properties": {"patient_id": "PT-107"}},
+        "DOC-NOTE-07": {"node_id": "DOC-NOTE-07", "node_type": "SOURCE_DOCUMENT", "label": "CBC Lab Report", "properties": {"document_id": "NOTE-07"}},
+        "FRAG-FRAG-07": {
+          "node_id": "FRAG-FRAG-07", "node_type": "SOURCE_FRAGMENT", "label": "Platelet Count: 145 x 10^9/L (Reference: 150-450).",
+          "properties": {"text": "Platelet Count: 145 x 10^9/L (Reference: 150-450)."},
+          "provenance": {"source_id": "FRAG-07", "document_id": "NOTE-07", "start_char": 15, "end_char": 64}
+        },
+        "FACT-FACT-07": {"node_id": "FACT-FACT-07", "node_type": "PATIENT_FACT", "label": "platelets: 145 x 10^9/L", "properties": {"concept": "platelets", "value": 145, "unit": "x 10^9/L", "assertion": "PRESENT"}},
+        "TRIAL-NCT02484404": {"node_id": "TRIAL-NCT02484404", "node_type": "TRIAL", "label": "Trial NCT02484404", "properties": {"trial_id": "NCT02484404"}},
+        "CRIT-INC-07": {"node_id": "CRIT-INC-07", "node_type": "TRIAL_CRITERION", "label": "[INCLUSION] Platelet count >= 100 x 10^9/L", "properties": {"criterion_id": "INC-07", "criterion_type": "inclusion", "criterion_text": "Platelet count >= 100 x 10^9/L"}},
+        "EVAL-EVAL-07": {"node_id": "EVAL-EVAL-07", "node_type": "CRITERION_EVALUATION", "label": "Eval INC-07: PASS", "properties": {"evaluation_id": "EVAL-07", "criterion_id": "INC-07", "status": "PASS", "reasoning": "Platelet count of 145 satisfies >= 100 threshold."}},
+        "DEC-DEC-07": {"node_id": "DEC-DEC-07", "node_type": "ELIGIBILITY_DECISION", "label": "Decision: ELIGIBLE", "properties": {"decision_id": "DEC-07", "status": "ELIGIBLE", "clinical_summary": "All criteria met."}}
+      },
+      "edges": [
+        {"edge_id": "e71", "source_id": "PAT-PT-107", "target_id": "FACT-FACT-07", "edge_type": "HAS_FACT"},
+        {"edge_id": "e72", "source_id": "FACT-FACT-07", "target_id": "FRAG-FRAG-07", "edge_type": "DERIVED_FROM"},
+        {"edge_id": "e73", "source_id": "FRAG-FRAG-07", "target_id": "DOC-NOTE-07", "edge_type": "BELONGS_TO"},
+        {"edge_id": "e74", "source_id": "TRIAL-NCT02484404", "target_id": "CRIT-INC-07", "edge_type": "HAS_CRITERION"},
+        {"edge_id": "e75", "source_id": "CRIT-INC-07", "target_id": "EVAL-EVAL-07", "edge_type": "EVALUATED_BY"},
+        {"edge_id": "e76", "source_id": "FACT-FACT-07", "target_id": "EVAL-EVAL-07", "edge_type": "SUPPORTS"},
+        {"edge_id": "e77", "source_id": "EVAL-EVAL-07", "target_id": "DEC-DEC-07", "edge_type": "CONTRIBUTES_TO"}
+      ]
+    }
+  },
+  {
+    "fixture_id": "case-08-retrieval-result-linked",
+    "description": "Retrieval result linked to criterion",
+    "is_valid": true,
+    "expected_errors": [],
+    "graph_data": {
+      "graph_id": "GRAPH-08",
+      "trial_id": "NCT02484404",
+      "patient_id": "PT-108",
+      "nodes": {
+        "PAT-PT-108": {"node_id": "PAT-PT-108", "node_type": "PATIENT", "label": "Patient PT-108", "properties": {"patient_id": "PT-108"}},
+        "TRIAL-NCT02484404": {"node_id": "TRIAL-NCT02484404", "node_type": "TRIAL", "label": "Trial NCT02484404", "properties": {"trial_id": "NCT02484404"}},
+        "CRIT-INC-08": {"node_id": "CRIT-INC-08", "node_type": "TRIAL_CRITERION", "label": "[INCLUSION] Measurable disease per RECIST 1.1", "properties": {"criterion_id": "INC-08", "criterion_type": "inclusion", "criterion_text": "Measurable disease per RECIST 1.1"}},
+        "RET-RET-08": {
+          "node_id": "RET-RET-08", "node_type": "RETRIEVAL_RESULT", "label": "Rank 1 (dense, score: 0.884)",
+          "properties": {"retrieval_id": "RET-08", "rank": 1, "score": 0.884, "method": "dense"},
+          "provenance": {"source_id": "RET-08", "retrieval_method": "dense", "retrieval_rank": 1, "retrieval_score": 0.884}
+        },
+        "FACT-FACT-08": {"node_id": "FACT-FACT-08", "node_type": "PATIENT_FACT", "label": "recist_lesion: 2.4cm", "properties": {"concept": "recist_lesion", "value": "2.4cm", "assertion": "PRESENT"}},
+        "EVAL-EVAL-08": {"node_id": "EVAL-EVAL-08", "node_type": "CRITERION_EVALUATION", "label": "Eval INC-08: PASS", "properties": {"evaluation_id": "EVAL-08", "criterion_id": "INC-08", "status": "PASS", "reasoning": "Target lesion confirmed."}},
+        "DEC-DEC-08": {"node_id": "DEC-DEC-08", "node_type": "ELIGIBILITY_DECISION", "label": "Decision: ELIGIBLE", "properties": {"decision_id": "DEC-08", "status": "ELIGIBLE", "clinical_summary": "All criteria met."}}
+      },
+      "edges": [
+        {"edge_id": "e81", "source_id": "TRIAL-NCT02484404", "target_id": "CRIT-INC-08", "edge_type": "HAS_CRITERION"},
+        {"edge_id": "e82", "source_id": "RET-RET-08", "target_id": "CRIT-INC-08", "edge_type": "RETRIEVED_CRITERION"},
+        {"edge_id": "e83", "source_id": "RET-RET-08", "target_id": "TRIAL-NCT02484404", "edge_type": "RETRIEVED_FROM"},
+        {"edge_id": "e84", "source_id": "PAT-PT-108", "target_id": "FACT-FACT-08", "edge_type": "HAS_FACT"},
+        {"edge_id": "e85", "source_id": "CRIT-INC-08", "target_id": "EVAL-EVAL-08", "edge_type": "EVALUATED_BY"},
+        {"edge_id": "e86", "source_id": "FACT-FACT-08", "target_id": "EVAL-EVAL-08", "edge_type": "SUPPORTS"},
+        {"edge_id": "e87", "source_id": "EVAL-EVAL-08", "target_id": "DEC-DEC-08", "edge_type": "CONTRIBUTES_TO"}
+      ]
+    }
+  },
+  {
+    "fixture_id": "case-09-trial-decision-linked-all-evals",
+    "description": "Trial decision linked to all criterion evaluations",
+    "is_valid": true,
+    "expected_errors": [],
+    "graph_data": {
+      "graph_id": "GRAPH-09",
+      "trial_id": "NCT02484404",
+      "patient_id": "PT-109",
+      "nodes": {
+        "PAT-PT-109": {"node_id": "PAT-PT-109", "node_type": "PATIENT", "label": "Patient PT-109", "properties": {"patient_id": "PT-109"}},
+        "FACT-FACT-09A": {"node_id": "FACT-FACT-09A", "node_type": "PATIENT_FACT", "label": "age: 45", "properties": {"concept": "age", "value": 45, "assertion": "PRESENT"}},
+        "FACT-FACT-09B": {"node_id": "FACT-FACT-09B", "node_type": "PATIENT_FACT", "label": "ecog: 0", "properties": {"concept": "ecog", "value": 0, "assertion": "PRESENT"}},
+        "TRIAL-NCT02484404": {"node_id": "TRIAL-NCT02484404", "node_type": "TRIAL", "label": "Trial NCT02484404", "properties": {"trial_id": "NCT02484404"}},
+        "CRIT-INC-09A": {"node_id": "CRIT-INC-09A", "node_type": "TRIAL_CRITERION", "label": "[INCLUSION] Age >= 18", "properties": {"criterion_id": "INC-09A", "criterion_type": "inclusion", "criterion_text": "Age >= 18"}},
+        "CRIT-INC-09B": {"node_id": "CRIT-INC-09B", "node_type": "TRIAL_CRITERION", "label": "[INCLUSION] ECOG 0-1", "properties": {"criterion_id": "INC-09B", "criterion_type": "inclusion", "criterion_text": "ECOG 0-1"}},
+        "EVAL-EVAL-09A": {"node_id": "EVAL-EVAL-09A", "node_type": "CRITERION_EVALUATION", "label": "Eval INC-09A: PASS", "properties": {"evaluation_id": "EVAL-09A", "criterion_id": "INC-09A", "status": "PASS", "reasoning": "Age 45 meets >= 18."}},
+        "EVAL-EVAL-09B": {"node_id": "EVAL-EVAL-09B", "node_type": "CRITERION_EVALUATION", "label": "Eval INC-09B: PASS", "properties": {"evaluation_id": "EVAL-09B", "criterion_id": "INC-09B", "status": "PASS", "reasoning": "ECOG 0 meets 0-1."}},
+        "DEC-DEC-09": {"node_id": "DEC-DEC-09", "node_type": "ELIGIBILITY_DECISION", "label": "Decision: ELIGIBLE", "properties": {"decision_id": "DEC-09", "status": "ELIGIBLE", "clinical_summary": "All 2 criteria evaluated PASS."}}
+      },
+      "edges": [
+        {"edge_id": "e91", "source_id": "PAT-PT-109", "target_id": "FACT-FACT-09A", "edge_type": "HAS_FACT"},
+        {"edge_id": "e92", "source_id": "PAT-PT-109", "target_id": "FACT-FACT-09B", "edge_type": "HAS_FACT"},
+        {"edge_id": "e93", "source_id": "TRIAL-NCT02484404", "target_id": "CRIT-INC-09A", "edge_type": "HAS_CRITERION"},
+        {"edge_id": "e94", "source_id": "TRIAL-NCT02484404", "target_id": "CRIT-INC-09B", "edge_type": "HAS_CRITERION"},
+        {"edge_id": "e95", "source_id": "CRIT-INC-09A", "target_id": "EVAL-EVAL-09A", "edge_type": "EVALUATED_BY"},
+        {"edge_id": "e96", "source_id": "CRIT-INC-09B", "target_id": "EVAL-EVAL-09B", "edge_type": "EVALUATED_BY"},
+        {"edge_id": "e97", "source_id": "FACT-FACT-09A", "target_id": "EVAL-EVAL-09A", "edge_type": "SUPPORTS"},
+        {"edge_id": "e98", "source_id": "FACT-FACT-09B", "target_id": "EVAL-EVAL-09B", "edge_type": "SUPPORTS"},
+        {"edge_id": "e99", "source_id": "EVAL-EVAL-09A", "target_id": "DEC-DEC-09", "edge_type": "CONTRIBUTES_TO"},
+        {"edge_id": "e100", "source_id": "EVAL-EVAL-09B", "target_id": "DEC-DEC-09", "edge_type": "CONTRIBUTES_TO"}
+      ]
+    }
+  },
+  {
+    "fixture_id": "case-10-uncertainty-linked-to-criterion",
+    "description": "Uncertainty linked to criterion",
+    "is_valid": true,
+    "expected_errors": [],
+    "graph_data": {
+      "graph_id": "GRAPH-10",
+      "trial_id": "NCT02484404",
+      "patient_id": "PT-110",
+      "nodes": {
+        "PAT-PT-110": {"node_id": "PAT-PT-110", "node_type": "PATIENT", "label": "Patient PT-110", "properties": {"patient_id": "PT-110"}},
+        "TRIAL-NCT02484404": {"node_id": "TRIAL-NCT02484404", "node_type": "TRIAL", "label": "Trial NCT02484404", "properties": {"trial_id": "NCT02484404"}},
+        "CRIT-INC-10": {"node_id": "CRIT-INC-10", "node_type": "TRIAL_CRITERION", "label": "[INCLUSION] Adequate organ function", "properties": {"criterion_id": "INC-10", "criterion_type": "inclusion", "criterion_text": "Adequate organ function"}},
+        "EVAL-EVAL-10": {"node_id": "EVAL-EVAL-10", "node_type": "CRITERION_EVALUATION", "label": "Eval INC-10: UNKNOWN", "properties": {"evaluation_id": "EVAL-10", "criterion_id": "INC-10", "status": "UNKNOWN", "reasoning": "Creatinine clearance not reported."}},
+        "UNC-UNC-10": {"node_id": "UNC-UNC-10", "node_type": "UNCERTAINTY", "label": "Uncertainty: MISSING_PATIENT_FACT (HIGH)", "properties": {"uncertainty_id": "UNC-10", "uncertainty_type": "MISSING_PATIENT_FACT", "severity": "HIGH", "description": "Renal function lab missing"}},
+        "DEC-DEC-10": {"node_id": "DEC-DEC-10", "node_type": "ELIGIBILITY_DECISION", "label": "Decision: NEEDS_REVIEW", "properties": {"decision_id": "DEC-10", "status": "NEEDS_REVIEW", "clinical_summary": "Missing lab requires verification."}}
+      },
+      "edges": [
+        {"edge_id": "e101", "source_id": "TRIAL-NCT02484404", "target_id": "CRIT-INC-10", "edge_type": "HAS_CRITERION"},
+        {"edge_id": "e102", "source_id": "CRIT-INC-10", "target_id": "EVAL-EVAL-10", "edge_type": "EVALUATED_BY"},
+        {"edge_id": "e103", "source_id": "EVAL-EVAL-10", "target_id": "UNC-UNC-10", "edge_type": "HAS_UNCERTAINTY"},
+        {"edge_id": "e104", "source_id": "EVAL-EVAL-10", "target_id": "DEC-DEC-10", "edge_type": "CONTRIBUTES_TO"}
+      ]
+    }
+  },
+  {
+    "fixture_id": "case-11-human-review-linked-uncertainty",
+    "description": "Human review linked to uncertainty",
+    "is_valid": true,
+    "expected_errors": [],
+    "graph_data": {
+      "graph_id": "GRAPH-11",
+      "trial_id": "NCT02484404",
+      "patient_id": "PT-111",
+      "nodes": {
+        "PAT-PT-111": {"node_id": "PAT-PT-111", "node_type": "PATIENT", "label": "Patient PT-111", "properties": {"patient_id": "PT-111"}},
+        "TRIAL-NCT02484404": {"node_id": "TRIAL-NCT02484404", "node_type": "TRIAL", "label": "Trial NCT02484404", "properties": {"trial_id": "NCT02484404"}},
+        "CRIT-INC-11": {"node_id": "CRIT-INC-11", "node_type": "TRIAL_CRITERION", "label": "[INCLUSION] Documented mutation status", "properties": {"criterion_id": "INC-11", "criterion_type": "inclusion", "criterion_text": "Documented mutation status"}},
+        "EVAL-EVAL-11": {"node_id": "EVAL-EVAL-11", "node_type": "CRITERION_EVALUATION", "label": "Eval INC-11: UNKNOWN", "properties": {"evaluation_id": "EVAL-11", "criterion_id": "INC-11", "status": "UNKNOWN", "reasoning": "Panel pending."}},
+        "UNC-UNC-11": {"node_id": "UNC-UNC-11", "node_type": "UNCERTAINTY", "label": "Uncertainty: INSUFFICIENT_EVIDENCE (HIGH)", "properties": {"uncertainty_id": "UNC-11", "uncertainty_type": "INSUFFICIENT_EVIDENCE", "severity": "HIGH", "description": "NGS report in transit"}},
+        "REV-REV-11": {"node_id": "REV-REV-11", "node_type": "REVIEW", "label": "Review (PENDING_REVIEW, Priority: PRIORITY)", "properties": {"review_id": "REV-11", "status": "PENDING_REVIEW", "priority": "PRIORITY"}},
+        "DEC-DEC-11": {"node_id": "DEC-DEC-11", "node_type": "ELIGIBILITY_DECISION", "label": "Decision: NEEDS_REVIEW", "properties": {"decision_id": "DEC-11", "status": "NEEDS_REVIEW", "clinical_summary": "Queued for clinician."}}
+      },
+      "edges": [
+        {"edge_id": "e111", "source_id": "TRIAL-NCT02484404", "target_id": "CRIT-INC-11", "edge_type": "HAS_CRITERION"},
+        {"edge_id": "e112", "source_id": "CRIT-INC-11", "target_id": "EVAL-EVAL-11", "edge_type": "EVALUATED_BY"},
+        {"edge_id": "e113", "source_id": "EVAL-EVAL-11", "target_id": "UNC-UNC-11", "edge_type": "HAS_UNCERTAINTY"},
+        {"edge_id": "e114", "source_id": "UNC-UNC-11", "target_id": "REV-REV-11", "edge_type": "TRIGGERS"},
+        {"edge_id": "e115", "source_id": "EVAL-EVAL-11", "target_id": "DEC-DEC-11", "edge_type": "CONTRIBUTES_TO"}
+      ]
+    }
+  },
+  {
+    "fixture_id": "case-12-reviewer-resolution-linked-evidence",
+    "description": "Reviewer resolution linked to evidence",
+    "is_valid": true,
+    "expected_errors": [],
+    "graph_data": {
+      "graph_id": "GRAPH-12",
+      "trial_id": "NCT02484404",
+      "patient_id": "PT-112",
+      "nodes": {
+        "PAT-PT-112": {"node_id": "PAT-PT-112", "node_type": "PATIENT", "label": "Patient PT-112", "properties": {"patient_id": "PT-112"}},
+        "DOC-DOC-12": {"node_id": "DOC-DOC-12", "node_type": "SOURCE_DOCUMENT", "label": "External Pathology", "properties": {"document_id": "DOC-12"}},
+        "FRAG-FRAG-12": {
+          "node_id": "FRAG-FRAG-12", "node_type": "SOURCE_FRAGMENT", "label": "Outside review confirms EGFR Exon 19 deletion.",
+          "properties": {"text": "Outside review confirms EGFR Exon 19 deletion."},
+          "provenance": {"source_id": "FRAG-12", "document_id": "DOC-12", "start_char": 0, "end_char": 47}
+        },
+        "TRIAL-NCT02484404": {"node_id": "TRIAL-NCT02484404", "node_type": "TRIAL", "label": "Trial NCT02484404", "properties": {"trial_id": "NCT02484404"}},
+        "CRIT-INC-12": {"node_id": "CRIT-INC-12", "node_type": "TRIAL_CRITERION", "label": "[INCLUSION] EGFR sensitizing mutation", "properties": {"criterion_id": "INC-12", "criterion_type": "inclusion", "criterion_text": "EGFR sensitizing mutation"}},
+        "EVAL-EVAL-12": {"node_id": "EVAL-EVAL-12", "node_type": "CRITERION_EVALUATION", "label": "Eval INC-12: UNKNOWN", "properties": {"evaluation_id": "EVAL-12", "criterion_id": "INC-12", "status": "UNKNOWN", "reasoning": "Internal chart lacked molecular report."}},
+        "UNC-UNC-12": {"node_id": "UNC-UNC-12", "node_type": "UNCERTAINTY", "label": "Uncertainty: MISSING_PATIENT_FACT (HIGH)", "properties": {"uncertainty_id": "UNC-12", "uncertainty_type": "MISSING_PATIENT_FACT", "severity": "HIGH", "description": "Molecular report missing"}},
+        "REV-REV-12": {"node_id": "REV-REV-12", "node_type": "REVIEW", "label": "Review (RESOLVED)", "properties": {"review_id": "REV-12", "status": "RESOLVED", "priority": "PRIORITY"}},
+        "RES-RES-12": {
+          "node_id": "RES-RES-12", "node_type": "REVIEW_RESOLUTION", "label": "Resolution: RESOLVE_PASS by REV-DR-SMITH",
+          "properties": {
+            "resolution_id": "RES-12",
+            "reviewer_id": "REV-DR-SMITH",
+            "decision": "RESOLVE_PASS",
+            "rationale": "Verified outside pathology showing Exon 19 del.",
+            "original_machine_output": {"status": "NEEDS_REVIEW", "evaluations": {"INC-12": "UNKNOWN"}}
+          }
+        },
+        "DEC-DEC-12": {"node_id": "DEC-DEC-12", "node_type": "ELIGIBILITY_DECISION", "label": "Decision: NEEDS_REVIEW", "properties": {"decision_id": "DEC-12", "status": "NEEDS_REVIEW", "clinical_summary": "Initial machine verdict was NEEDS_REVIEW."}}
+      },
+      "edges": [
+        {"edge_id": "e121", "source_id": "FRAG-FRAG-12", "target_id": "DOC-DOC-12", "edge_type": "BELONGS_TO"},
+        {"edge_id": "e122", "source_id": "TRIAL-NCT02484404", "target_id": "CRIT-INC-12", "edge_type": "HAS_CRITERION"},
+        {"edge_id": "e123", "source_id": "CRIT-INC-12", "target_id": "EVAL-EVAL-12", "edge_type": "EVALUATED_BY"},
+        {"edge_id": "e124", "source_id": "EVAL-EVAL-12", "target_id": "UNC-UNC-12", "edge_type": "HAS_UNCERTAINTY"},
+        {"edge_id": "e125", "source_id": "UNC-UNC-12", "target_id": "REV-REV-12", "edge_type": "TRIGGERS"},
+        {"edge_id": "e126", "source_id": "REV-REV-12", "target_id": "RES-RES-12", "edge_type": "RESOLVED_BY"},
+        {"edge_id": "e127", "source_id": "RES-RES-12", "target_id": "FRAG-FRAG-12", "edge_type": "SUPPORTED_BY"},
+        {"edge_id": "e128", "source_id": "EVAL-EVAL-12", "target_id": "DEC-DEC-12", "edge_type": "CONTRIBUTES_TO"}
+      ]
+    }
+  },
+  {
+    "fixture_id": "case-13-complete-end-to-end-graph",
+    "description": "Complete end-to-end graph",
+    "is_valid": true,
+    "expected_errors": [],
+    "graph_data": {
+      "graph_id": "GRAPH-13",
+      "trial_id": "NCT02484404",
+      "patient_id": "PT-113",
+      "nodes": {
+        "PAT-PT-113": {"node_id": "PAT-PT-113", "node_type": "PATIENT", "label": "Patient PT-113", "properties": {"patient_id": "PT-113"}},
+        "DOC-DOC-13": {"node_id": "DOC-DOC-13", "node_type": "SOURCE_DOCUMENT", "label": "Oncology Chart", "properties": {"document_id": "DOC-13"}},
+        "FRAG-FRAG-13": {
+          "node_id": "FRAG-FRAG-13", "node_type": "SOURCE_FRAGMENT", "label": "55 yo female with metastatic melanoma.",
+          "properties": {"text": "55 yo female with metastatic melanoma."},
+          "provenance": {"source_id": "FRAG-13", "document_id": "DOC-13", "start_char": 0, "end_char": 38}
+        },
+        "FACT-FACT-13": {"node_id": "FACT-FACT-13", "node_type": "PATIENT_FACT", "label": "diagnosis: melanoma", "properties": {"concept": "diagnosis", "value": "melanoma", "assertion": "PRESENT"}},
+        "TRIAL-NCT02484404": {"node_id": "TRIAL-NCT02484404", "node_type": "TRIAL", "label": "Trial NCT02484404", "properties": {"trial_id": "NCT02484404"}},
+        "RET-RET-13": {
+          "node_id": "RET-RET-13", "node_type": "RETRIEVAL_RESULT", "label": "Rank 1 (hybrid_rrf, score: 0.92)",
+          "properties": {"retrieval_id": "RET-13", "rank": 1, "score": 0.92, "method": "hybrid_rrf"},
+          "provenance": {"source_id": "RET-13", "retrieval_method": "hybrid_rrf", "retrieval_rank": 1, "retrieval_score": 0.92}
+        },
+        "CRIT-INC-13": {"node_id": "CRIT-INC-13", "node_type": "TRIAL_CRITERION", "label": "[INCLUSION] Cutaneous melanoma diagnosis", "properties": {"criterion_id": "INC-13", "criterion_type": "inclusion", "criterion_text": "Cutaneous melanoma diagnosis"}},
+        "EVAL-EVAL-13": {"node_id": "EVAL-EVAL-13", "node_type": "CRITERION_EVALUATION", "label": "Eval INC-13: PASS", "properties": {"evaluation_id": "EVAL-13", "criterion_id": "INC-13", "status": "PASS", "reasoning": "Confirmed melanoma."}},
+        "DEC-DEC-13": {"node_id": "DEC-DEC-13", "node_type": "ELIGIBILITY_DECISION", "label": "Decision: ELIGIBLE", "properties": {"decision_id": "DEC-13", "status": "ELIGIBLE", "clinical_summary": "All criteria met."}}
+      },
+      "edges": [
+        {"edge_id": "e131", "source_id": "PAT-PT-113", "target_id": "FACT-FACT-13", "edge_type": "HAS_FACT"},
+        {"edge_id": "e132", "source_id": "FACT-FACT-13", "target_id": "FRAG-FRAG-13", "edge_type": "DERIVED_FROM"},
+        {"edge_id": "e133", "source_id": "FRAG-FRAG-13", "target_id": "DOC-DOC-13", "edge_type": "BELONGS_TO"},
+        {"edge_id": "e134", "source_id": "TRIAL-NCT02484404", "target_id": "CRIT-INC-13", "edge_type": "HAS_CRITERION"},
+        {"edge_id": "e135", "source_id": "RET-RET-13", "target_id": "CRIT-INC-13", "edge_type": "RETRIEVED_CRITERION"},
+        {"edge_id": "e136", "source_id": "RET-RET-13", "target_id": "TRIAL-NCT02484404", "edge_type": "RETRIEVED_FROM"},
+        {"edge_id": "e137", "source_id": "CRIT-INC-13", "target_id": "EVAL-EVAL-13", "edge_type": "EVALUATED_BY"},
+        {"edge_id": "e138", "source_id": "FACT-FACT-13", "target_id": "EVAL-EVAL-13", "edge_type": "SUPPORTS"},
+        {"edge_id": "e139", "source_id": "EVAL-EVAL-13", "target_id": "DEC-DEC-13", "edge_type": "CONTRIBUTES_TO"}
+      ]
+    }
+  },
+  {
+    "fixture_id": "case-14-invalid-dangling-reference",
+    "description": "Invalid graph with dangling evidence reference",
+    "is_valid": false,
+    "expected_errors": ["X3_DANGLING_GRAPH_REFERENCE"],
+    "graph_data": {
+      "graph_id": "GRAPH-14",
+      "trial_id": "NCT02484404",
+      "patient_id": "PT-114",
+      "nodes": {
+        "PAT-PT-114": {"node_id": "PAT-PT-114", "node_type": "PATIENT", "label": "Patient PT-114", "properties": {"patient_id": "PT-114"}},
+        "TRIAL-NCT02484404": {"node_id": "TRIAL-NCT02484404", "node_type": "TRIAL", "label": "Trial NCT02484404", "properties": {"trial_id": "NCT02484404"}},
+        "CRIT-INC-14": {"node_id": "CRIT-INC-14", "node_type": "TRIAL_CRITERION", "label": "[INCLUSION] Age >= 18", "properties": {"criterion_id": "INC-14", "criterion_type": "inclusion", "criterion_text": "Age >= 18"}},
+        "EVAL-EVAL-14": {"node_id": "EVAL-EVAL-14", "node_type": "CRITERION_EVALUATION", "label": "Eval INC-14: PASS", "properties": {"evaluation_id": "EVAL-14", "criterion_id": "INC-14", "status": "PASS", "reasoning": "Valid."}},
+        "DEC-DEC-14": {"node_id": "DEC-DEC-14", "node_type": "ELIGIBILITY_DECISION", "label": "Decision: ELIGIBLE", "properties": {"decision_id": "DEC-14", "status": "ELIGIBLE", "clinical_summary": "Summary"}}
+      },
+      "edges": [
+        {"edge_id": "e141", "source_id": "TRIAL-NCT02484404", "target_id": "CRIT-INC-14", "edge_type": "HAS_CRITERION"},
+        {"edge_id": "e142", "source_id": "CRIT-INC-14", "target_id": "EVAL-EVAL-14", "edge_type": "EVALUATED_BY"},
+        {"edge_id": "e143", "source_id": "NON_EXISTENT_FACT_NODE", "target_id": "EVAL-EVAL-14", "edge_type": "SUPPORTS"},
+        {"edge_id": "e144", "source_id": "EVAL-EVAL-14", "target_id": "DEC-DEC-14", "edge_type": "CONTRIBUTES_TO"}
+      ]
+    }
+  },
+  {
+    "fixture_id": "case-15-invalid-fabricated-provenance",
+    "description": "Invalid graph with fabricated provenance",
+    "is_valid": false,
+    "expected_errors": ["X2_INVALID_PROVENANCE"],
+    "graph_data": {
+      "graph_id": "GRAPH-15",
+      "trial_id": "NCT02484404",
+      "patient_id": "PT-115",
+      "nodes": {
+        "PAT-PT-115": {"node_id": "PAT-PT-115", "node_type": "PATIENT", "label": "Patient PT-115", "properties": {"patient_id": "PT-115"}},
+        "DOC-DOC-15": {"node_id": "DOC-DOC-15", "node_type": "SOURCE_DOCUMENT", "label": "Doc 15", "properties": {"document_id": "DOC-15"}},
+        "FRAG-FRAG-15": {
+          "node_id": "FRAG-FRAG-15", "node_type": "SOURCE_FRAGMENT", "label": "Faulty provenance fragment.",
+          "properties": {"text": "Faulty provenance fragment."},
+          "provenance": {"source_id": "FRAG-15", "document_id": "DOC-15", "start_char": 250, "end_char": 100}
+        },
+        "FACT-FACT-15": {"node_id": "FACT-FACT-15", "node_type": "PATIENT_FACT", "label": "age: 50", "properties": {"concept": "age", "value": 50, "assertion": "PRESENT"}},
+        "TRIAL-NCT02484404": {"node_id": "TRIAL-NCT02484404", "node_type": "TRIAL", "label": "Trial NCT02484404", "properties": {"trial_id": "NCT02484404"}},
+        "CRIT-INC-15": {"node_id": "CRIT-INC-15", "node_type": "TRIAL_CRITERION", "label": "[INCLUSION] Age >= 18", "properties": {"criterion_id": "INC-15", "criterion_type": "inclusion", "criterion_text": "Age >= 18"}},
+        "EVAL-EVAL-15": {"node_id": "EVAL-EVAL-15", "node_type": "CRITERION_EVALUATION", "label": "Eval INC-15: PASS", "properties": {"evaluation_id": "EVAL-15", "criterion_id": "INC-15", "status": "PASS", "reasoning": "Age 50 >= 18."}},
+        "DEC-DEC-15": {"node_id": "DEC-DEC-15", "node_type": "ELIGIBILITY_DECISION", "label": "Decision: ELIGIBLE", "properties": {"decision_id": "DEC-15", "status": "ELIGIBLE", "clinical_summary": "All met."}}
+      },
+      "edges": [
+        {"edge_id": "e151", "source_id": "PAT-PT-115", "target_id": "FACT-FACT-15", "edge_type": "HAS_FACT"},
+        {"edge_id": "e152", "source_id": "FACT-FACT-15", "target_id": "FRAG-FRAG-15", "edge_type": "DERIVED_FROM"},
+        {"edge_id": "e153", "source_id": "FRAG-FRAG-15", "target_id": "DOC-DOC-15", "edge_type": "BELONGS_TO"},
+        {"edge_id": "e154", "source_id": "TRIAL-NCT02484404", "target_id": "CRIT-INC-15", "edge_type": "HAS_CRITERION"},
+        {"edge_id": "e155", "source_id": "CRIT-INC-15", "target_id": "EVAL-EVAL-15", "edge_type": "EVALUATED_BY"},
+        {"edge_id": "e156", "source_id": "FACT-FACT-15", "target_id": "EVAL-EVAL-15", "edge_type": "SUPPORTS"},
+        {"edge_id": "e157", "source_id": "EVAL-EVAL-15", "target_id": "DEC-DEC-15", "edge_type": "CONTRIBUTES_TO"}
+      ]
+    }
+  },
+  {
+    "fixture_id": "case-16-invalid-unsupported-explanation-claim",
+    "description": "Invalid explanation containing unsupported factual claim",
+    "is_valid": false,
+    "expected_errors": ["X9_UNSUPPORTED_EXPLANATION_CLAIM"],
+    "graph_data": {
+      "graph_id": "GRAPH-16",
+      "trial_id": "NCT02484404",
+      "patient_id": "PT-116",
+      "nodes": {
+        "PAT-PT-116": {"node_id": "PAT-PT-116", "node_type": "PATIENT", "label": "Patient PT-116", "properties": {"patient_id": "PT-116"}},
+        "FACT-FACT-16": {"node_id": "FACT-FACT-16", "node_type": "PATIENT_FACT", "label": "age: 30", "properties": {"concept": "age", "value": 30, "assertion": "PRESENT"}},
+        "TRIAL-NCT02484404": {"node_id": "TRIAL-NCT02484404", "node_type": "TRIAL", "label": "Trial NCT02484404", "properties": {"trial_id": "NCT02484404"}},
+        "CRIT-INC-16": {"node_id": "CRIT-INC-16", "node_type": "TRIAL_CRITERION", "label": "[INCLUSION] Age >= 18", "properties": {"criterion_id": "INC-16", "criterion_type": "inclusion", "criterion_text": "Age >= 18"}},
+        "EVAL-EVAL-16": {"node_id": "EVAL-EVAL-16", "node_type": "CRITERION_EVALUATION", "label": "Eval INC-16: PASS", "properties": {"evaluation_id": "EVAL-16", "criterion_id": "INC-16", "status": "PASS", "reasoning": "Valid."}},
+        "DEC-DEC-16": {"node_id": "DEC-DEC-16", "node_type": "ELIGIBILITY_DECISION", "label": "Decision: ELIGIBLE", "properties": {"decision_id": "DEC-16", "status": "ELIGIBLE", "clinical_summary": "Summary"}}
+      },
+      "edges": [
+        {"edge_id": "e161", "source_id": "PAT-PT-116", "target_id": "FACT-FACT-16", "edge_type": "HAS_FACT"},
+        {"edge_id": "e162", "source_id": "TRIAL-NCT02484404", "target_id": "CRIT-INC-16", "edge_type": "HAS_CRITERION"},
+        {"edge_id": "e163", "source_id": "CRIT-INC-16", "target_id": "EVAL-EVAL-16", "edge_type": "EVALUATED_BY"},
+        {"edge_id": "e164", "source_id": "FACT-FACT-16", "target_id": "EVAL-EVAL-16", "edge_type": "SUPPORTS"},
+        {"edge_id": "e165", "source_id": "EVAL-EVAL-16", "target_id": "DEC-DEC-16", "edge_type": "CONTRIBUTES_TO"}
+      ]
+    },
+    "explanation_data": {
+      "explanation_id": "EXP-16",
+      "explanation_type": "CRITERION_EXPLANATION",
+      "target_node_id": "EVAL-EVAL-16",
+      "decision_reference": "PASS",
+      "criterion_references": ["CRIT-INC-16"],
+      "claims": [
+        {
+          "claim_id": "CLM-16-1",
+          "claim_text": "Patient has previous history of brain metastasis.",
+          "claim_type": "FACT_ASSERTION",
+          "referenced_node_ids": ["NON_EXISTENT_METASTASIS_NODE"],
+          "is_supported_by_graph": false
+        }
+      ],
+      "explanation_text": "Unsupported claim about brain metastasis."
+    }
+  },
+  {
+    "fixture_id": "case-17-multiple-retrieval-methods",
+    "description": "Graph containing multiple retrieval methods",
+    "is_valid": true,
+    "expected_errors": [],
+    "graph_data": {
+      "graph_id": "GRAPH-17",
+      "trial_id": "NCT02484404",
+      "patient_id": "PT-117",
+      "nodes": {
+        "PAT-PT-117": {"node_id": "PAT-PT-117", "node_type": "PATIENT", "label": "Patient PT-117", "properties": {"patient_id": "PT-117"}},
+        "TRIAL-NCT02484404": {"node_id": "TRIAL-NCT02484404", "node_type": "TRIAL", "label": "Trial NCT02484404", "properties": {"trial_id": "NCT02484404"}},
+        "CRIT-INC-17A": {"node_id": "CRIT-INC-17A", "node_type": "TRIAL_CRITERION", "label": "[INCLUSION] Criterion A", "properties": {"criterion_id": "INC-17A", "criterion_type": "inclusion", "criterion_text": "Criterion A"}},
+        "CRIT-INC-17B": {"node_id": "CRIT-INC-17B", "node_type": "TRIAL_CRITERION", "label": "[INCLUSION] Criterion B", "properties": {"criterion_id": "INC-17B", "criterion_type": "inclusion", "criterion_text": "Criterion B"}},
+        "RET-RET-17A": {
+          "node_id": "RET-RET-17A", "node_type": "RETRIEVAL_RESULT", "label": "Rank 1 (dense, score: 0.91)",
+          "properties": {"retrieval_id": "RET-17A", "rank": 1, "score": 0.91, "method": "dense"},
+          "provenance": {"source_id": "RET-17A", "retrieval_method": "dense", "retrieval_rank": 1, "retrieval_score": 0.91}
+        },
+        "RET-RET-17B": {
+          "node_id": "RET-RET-17B", "node_type": "RETRIEVAL_RESULT", "label": "Rank 2 (lexical_bm25, score: 0.85)",
+          "properties": {"retrieval_id": "RET-17B", "rank": 2, "score": 0.85, "method": "lexical_bm25"},
+          "provenance": {"source_id": "RET-17B", "retrieval_method": "lexical_bm25", "retrieval_rank": 2, "retrieval_score": 0.85}
+        },
+        "FACT-FACT-17": {"node_id": "FACT-FACT-17", "node_type": "PATIENT_FACT", "label": "fact: verified", "properties": {"concept": "fact", "value": "verified", "assertion": "PRESENT"}},
+        "EVAL-EVAL-17A": {"node_id": "EVAL-EVAL-17A", "node_type": "CRITERION_EVALUATION", "label": "Eval 17A: PASS", "properties": {"evaluation_id": "EVAL-17A", "criterion_id": "INC-17A", "status": "PASS", "reasoning": "Valid."}},
+        "EVAL-EVAL-17B": {"node_id": "EVAL-EVAL-17B", "node_type": "CRITERION_EVALUATION", "label": "Eval 17B: PASS", "properties": {"evaluation_id": "EVAL-17B", "criterion_id": "INC-17B", "status": "PASS", "reasoning": "Valid."}},
+        "DEC-DEC-17": {"node_id": "DEC-DEC-17", "node_type": "ELIGIBILITY_DECISION", "label": "Decision: ELIGIBLE", "properties": {"decision_id": "DEC-17", "status": "ELIGIBLE", "clinical_summary": "All met."}}
+      },
+      "edges": [
+        {"edge_id": "e171", "source_id": "TRIAL-NCT02484404", "target_id": "CRIT-INC-17A", "edge_type": "HAS_CRITERION"},
+        {"edge_id": "e172", "source_id": "TRIAL-NCT02484404", "target_id": "CRIT-INC-17B", "edge_type": "HAS_CRITERION"},
+        {"edge_id": "e173", "source_id": "RET-RET-17A", "target_id": "CRIT-INC-17A", "edge_type": "RETRIEVED_CRITERION"},
+        {"edge_id": "e174", "source_id": "RET-RET-17A", "target_id": "TRIAL-NCT02484404", "edge_type": "RETRIEVED_FROM"},
+        {"edge_id": "e175", "source_id": "RET-RET-17B", "target_id": "CRIT-INC-17B", "edge_type": "RETRIEVED_CRITERION"},
+        {"edge_id": "e176", "source_id": "RET-RET-17B", "target_id": "TRIAL-NCT02484404", "edge_type": "RETRIEVED_FROM"},
+        {"edge_id": "e177", "source_id": "PAT-PT-117", "target_id": "FACT-FACT-17", "edge_type": "HAS_FACT"},
+        {"edge_id": "e178", "source_id": "CRIT-INC-17A", "target_id": "EVAL-EVAL-17A", "edge_type": "EVALUATED_BY"},
+        {"edge_id": "e179", "source_id": "CRIT-INC-17B", "target_id": "EVAL-EVAL-17B", "edge_type": "EVALUATED_BY"},
+        {"edge_id": "e180", "source_id": "FACT-FACT-17", "target_id": "EVAL-EVAL-17A", "edge_type": "SUPPORTS"},
+        {"edge_id": "e181", "source_id": "FACT-FACT-17", "target_id": "EVAL-EVAL-17B", "edge_type": "SUPPORTS"},
+        {"edge_id": "e182", "source_id": "EVAL-EVAL-17A", "target_id": "DEC-DEC-17", "edge_type": "CONTRIBUTES_TO"},
+        {"edge_id": "e183", "source_id": "EVAL-EVAL-17B", "target_id": "DEC-DEC-17", "edge_type": "CONTRIBUTES_TO"}
+      ]
+    }
+  },
+  {
+    "fixture_id": "case-18-machine-output-preserved-after-review",
+    "description": "Graph preserving machine output after human review",
+    "is_valid": true,
+    "expected_errors": [],
+    "graph_data": {
+      "graph_id": "GRAPH-18",
+      "trial_id": "NCT02484404",
+      "patient_id": "PT-118",
+      "nodes": {
+        "PAT-PT-118": {"node_id": "PAT-PT-118", "node_type": "PATIENT", "label": "Patient PT-118", "properties": {"patient_id": "PT-118"}},
+        "TRIAL-NCT02484404": {"node_id": "TRIAL-NCT02484404", "node_type": "TRIAL", "label": "Trial NCT02484404", "properties": {"trial_id": "NCT02484404"}},
+        "CRIT-INC-18": {"node_id": "CRIT-INC-18", "node_type": "TRIAL_CRITERION", "label": "[INCLUSION] Lab verification", "properties": {"criterion_id": "INC-18", "criterion_type": "inclusion", "criterion_text": "Lab verification"}},
+        "EVAL-EVAL-18": {"node_id": "EVAL-EVAL-18", "node_type": "CRITERION_EVALUATION", "label": "Eval INC-18: UNKNOWN", "properties": {"evaluation_id": "EVAL-18", "criterion_id": "INC-18", "status": "UNKNOWN", "reasoning": "Lab pending."}},
+        "UNC-UNC-18": {"node_id": "UNC-UNC-18", "node_type": "UNCERTAINTY", "label": "Uncertainty: MISSING_PATIENT_FACT (HIGH)", "properties": {"uncertainty_id": "UNC-18", "uncertainty_type": "MISSING_PATIENT_FACT", "severity": "HIGH", "description": "Lab pending"}},
+        "REV-REV-18": {"node_id": "REV-REV-18", "node_type": "REVIEW", "label": "Review (RESOLVED)", "properties": {"review_id": "REV-18", "status": "RESOLVED", "priority": "PRIORITY"}},
+        "RES-RES-18": {
+          "node_id": "RES-RES-18", "node_type": "REVIEW_RESOLUTION", "label": "Resolution: RESOLVE_PASS",
+          "properties": {
+            "resolution_id": "RES-18",
+            "reviewer_id": "REV-CLINICIAN-01",
+            "decision": "RESOLVE_PASS",
+            "rationale": "Overridden based on external faxed lab report.",
+            "original_machine_output": {
+              "trial_id": "NCT02484404",
+              "patient_id": "PT-118",
+              "overall_status": "NEEDS_REVIEW",
+              "criteria": {"INC-18": "UNKNOWN"}
+            }
+          }
+        },
+        "DEC-DEC-18": {"node_id": "DEC-DEC-18", "node_type": "ELIGIBILITY_DECISION", "label": "Decision: NEEDS_REVIEW", "properties": {"decision_id": "DEC-18", "status": "NEEDS_REVIEW", "clinical_summary": "Original machine output is preserved as NEEDS_REVIEW."}}
+      },
+      "edges": [
+        {"edge_id": "e181", "source_id": "TRIAL-NCT02484404", "target_id": "CRIT-INC-18", "edge_type": "HAS_CRITERION"},
+        {"edge_id": "e182", "source_id": "CRIT-INC-18", "target_id": "EVAL-EVAL-18", "edge_type": "EVALUATED_BY"},
+        {"edge_id": "e183", "source_id": "EVAL-EVAL-18", "target_id": "UNC-UNC-18", "edge_type": "HAS_UNCERTAINTY"},
+        {"edge_id": "e184", "source_id": "UNC-UNC-18", "target_id": "REV-REV-18", "edge_type": "TRIGGERS"},
+        {"edge_id": "e185", "source_id": "REV-REV-18", "target_id": "RES-RES-18", "edge_type": "RESOLVED_BY"},
+        {"edge_id": "e186", "source_id": "EVAL-EVAL-18", "target_id": "DEC-DEC-18", "edge_type": "CONTRIBUTES_TO"}
+      ]
+    }
+  }
+]
