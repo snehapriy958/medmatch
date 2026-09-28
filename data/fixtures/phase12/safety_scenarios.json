@@ -1,0 +1,454 @@
+[
+  {
+    "scenario_id": "SCEN-01",
+    "name": "Missing Diagnosis (Open-World Completeness)",
+    "description": "Patient note has no mention of CNS/brain status. Protocol excludes active brain metastases. Must evaluate to UNKNOWN, not PASS, and route to NEEDS_REVIEW.",
+    "patient_id": "SYN_SAFE_01",
+    "clinical_note": "62-year-old male with Stage IV NSCLC. ECOG performance status 1. Platelets 180. Completed prior radiation 40 days ago. No neurological symptoms documented.",
+    "patient_facts": [
+      {"fact_id": "f_nsclc", "concept": "Stage IV NSCLC", "assertion": "PRESENT", "source_field": "diagnoses"},
+      {"fact_id": "f_ecog", "concept": "ECOG PS 1", "assertion": "PRESENT", "source_field": "ecog"},
+      {"fact_id": "f_plt", "concept": "Platelets", "value": 180.0, "unit": "10^9/L", "assertion": "PRESENT", "source_field": "labs"}
+    ],
+    "trial_id": "NCT02484404",
+    "trial_criteria": [
+      {"criterion_id": "NCT02484404_EXC_02", "criteria_type": "EXCLUSION", "description": "Active brain metastases or leptomeningeal disease."}
+    ],
+    "expected_criterion_status": "UNKNOWN",
+    "expected_eligibility": "NEEDS_REVIEW",
+    "expected_review_priority": "P2_ELEVATED",
+    "primary_gate": "GATE-11",
+    "target_error_taxonomy": "S4"
+  },
+  {
+    "scenario_id": "SCEN-02",
+    "name": "Explicit Negative Diagnosis",
+    "description": "Patient has documented negative brain MRI. Protocol excludes brain metastases. Evaluates to PASS (exclusion not triggered).",
+    "patient_id": "SYN_SAFE_02",
+    "clinical_note": "Brain MRI performed on 2026-09-01 shows no evidence of intracranial metastases.",
+    "patient_facts": [
+      {"fact_id": "f_brain_mri", "concept": "intracranial metastases", "assertion": "ABSENT", "snippet": "no evidence of intracranial metastases", "source_field": "imaging"}
+    ],
+    "trial_id": "NCT02484404",
+    "trial_criteria": [
+      {"criterion_id": "NCT02484404_EXC_02", "criteria_type": "EXCLUSION", "description": "Active brain metastases or leptomeningeal disease."}
+    ],
+    "expected_criterion_status": "PASS",
+    "expected_eligibility": "ELIGIBLE",
+    "expected_review_priority": "P4_INFORMATIONAL",
+    "primary_gate": "GATE-08",
+    "target_error_taxonomy": "S8"
+  },
+  {
+    "scenario_id": "SCEN-03",
+    "name": "Negated Symptom Scope",
+    "description": "Clinical note states 'Patient denies chest pain or shortness of breath'. Asserts ABSENT.",
+    "patient_id": "SYN_SAFE_03",
+    "clinical_note": "Review of systems: Patient denies chest pain or shortness of breath. No active dyspnea.",
+    "patient_facts": [
+      {"fact_id": "f_dyspnea", "concept": "dyspnea", "assertion": "ABSENT", "snippet": "Patient denies chest pain or shortness of breath", "source_field": "symptoms"}
+    ],
+    "trial_id": "NCT02484404",
+    "trial_criteria": [
+      {"criterion_id": "NCT02484404_EXC_04", "criteria_type": "EXCLUSION", "description": "Severe symptomatic dyspnea at rest."}
+    ],
+    "expected_criterion_status": "PASS",
+    "expected_eligibility": "ELIGIBLE",
+    "expected_review_priority": "P4_INFORMATIONAL",
+    "primary_gate": "GATE-08",
+    "target_error_taxonomy": "S8"
+  },
+  {
+    "scenario_id": "SCEN-04",
+    "name": "Unknown / Hedged Symptom",
+    "description": "Patient note states 'Patient has questionable borderline neuropathy, unconfirmed'. Hedged assertion.",
+    "patient_id": "SYN_SAFE_04",
+    "clinical_note": "Neurology consult: Patient has questionable borderline neuropathy, unconfirmed pending EMG.",
+    "patient_facts": [
+      {"fact_id": "f_neuro", "concept": "peripheral neuropathy", "assertion": "UNKNOWN", "snippet": "questionable borderline neuropathy, unconfirmed", "source_field": "symptoms"}
+    ],
+    "trial_id": "NCT02484404",
+    "trial_criteria": [
+      {"criterion_id": "NCT02484404_EXC_05", "criteria_type": "EXCLUSION", "description": "Grade >= 2 peripheral neuropathy."}
+    ],
+    "expected_criterion_status": "UNKNOWN",
+    "expected_eligibility": "NEEDS_REVIEW",
+    "expected_review_priority": "P3_STANDARD",
+    "primary_gate": "GATE-05",
+    "target_error_taxonomy": "S23"
+  },
+  {
+    "scenario_id": "SCEN-05",
+    "name": "Conflicting Biomarker Diagnosis",
+    "description": "Tissue biopsy positive for EGFR exon 19 del; liquid cfDNA biopsy negative. Contradiction requires UNKNOWN.",
+    "patient_id": "SYN_SAFE_05",
+    "clinical_note": "Pathology: Tissue biopsy positive for EGFR exon 19 deletion. Molecular cfDNA: Liquid biopsy negative for EGFR mutations.",
+    "patient_facts": [
+      {"fact_id": "f_egfr_tissue", "concept": "EGFR exon 19 deletion", "assertion": "PRESENT", "source_field": "biomarkers"},
+      {"fact_id": "f_egfr_liquid", "concept": "EGFR exon 19 deletion", "assertion": "ABSENT", "source_field": "biomarkers"}
+    ],
+    "trial_id": "NCT02484404",
+    "trial_criteria": [
+      {"criterion_id": "NCT02484404_INC_02", "criteria_type": "INCLUSION", "description": "Confirmed sensitizing EGFR mutation (Exon 19 del or L858R)."}
+    ],
+    "expected_criterion_status": "UNKNOWN",
+    "expected_eligibility": "NEEDS_REVIEW",
+    "expected_review_priority": "P1_CRITICAL",
+    "primary_gate": "GATE-09",
+    "target_error_taxonomy": "S7"
+  },
+  {
+    "scenario_id": "SCEN-06",
+    "name": "Old Diagnosis vs Current Status (Stale Clinical Data)",
+    "description": "Patient had normal renal function 2 years ago, but no recent labs. Stale data must not satisfy current criterion.",
+    "patient_id": "SYN_SAFE_06",
+    "clinical_note": "Encounter Date: 2026-09-20. Historical labs (2024-08-10): Creatinine 0.9 mg/dL. No recent metabolic panel on record.",
+    "patient_facts": [
+      {"fact_id": "f_creat_old", "concept": "Creatinine", "value": 0.9, "unit": "mg/dL", "assertion": "PRESENT", "temporal": {"duration_days": 730}, "source_field": "historical_labs"}
+    ],
+    "trial_id": "NCT02484404",
+    "trial_criteria": [
+      {"criterion_id": "NCT02484404_INC_06", "criteria_type": "INCLUSION", "description": "Adequate renal function confirmed within 28 days of study entry."}
+    ],
+    "expected_criterion_status": "UNKNOWN",
+    "expected_eligibility": "NEEDS_REVIEW",
+    "expected_review_priority": "P2_ELEVATED",
+    "primary_gate": "GATE-04",
+    "target_error_taxonomy": "S22"
+  },
+  {
+    "scenario_id": "SCEN-07",
+    "name": "Temporal Washout Window Violation",
+    "description": "Chemotherapy completed 20 days prior to today. Protocol requires 28-day washout. Must evaluate to FAIL.",
+    "patient_id": "SYN_SAFE_07",
+    "clinical_note": "Patient completed Carboplatin/Pemetrexed chemotherapy exactly 20 days prior to today.",
+    "patient_facts": [
+      {"fact_id": "f_chemo_washout", "concept": "cytotoxic chemotherapy", "assertion": "PRESENT", "temporal": {"duration_days": 20}, "source_field": "prior_treatments"}
+    ],
+    "trial_id": "NCT02484404",
+    "trial_criteria": [
+      {"criterion_id": "NCT02484404_EXC_03", "criteria_type": "EXCLUSION", "description": "Cytotoxic chemotherapy administered within 28 days of first study dose."}
+    ],
+    "expected_criterion_status": "FAIL",
+    "expected_eligibility": "INELIGIBLE",
+    "expected_review_priority": "P4_INFORMATIONAL",
+    "primary_gate": "GATE-07",
+    "target_error_taxonomy": "S9"
+  },
+  {
+    "scenario_id": "SCEN-08",
+    "name": "Numerical Value Exactly at Threshold",
+    "description": "Patient platelet count is exactly 100.0 x 10^9/L. Protocol requires >= 100.0. Evaluates to PASS.",
+    "patient_id": "SYN_SAFE_08",
+    "clinical_note": "CBC results: Platelets: 100 x 10^9/L exact.",
+    "patient_facts": [
+      {"fact_id": "f_plt_exact", "concept": "Platelets", "value": 100.0, "unit": "10^9/L", "assertion": "PRESENT", "source_field": "labs"}
+    ],
+    "trial_id": "NCT02484404",
+    "trial_criteria": [
+      {"criterion_id": "NCT02484404_INC_05", "criteria_type": "INCLUSION", "description": "Platelet count >= 100 x 10^9/L."}
+    ],
+    "expected_criterion_status": "PASS",
+    "expected_eligibility": "ELIGIBLE",
+    "expected_review_priority": "P4_INFORMATIONAL",
+    "primary_gate": "GATE-06",
+    "target_error_taxonomy": "S10"
+  },
+  {
+    "scenario_id": "SCEN-09",
+    "name": "Numerical Value Just Below Threshold",
+    "description": "Patient platelet count is 99.0 x 10^9/L. Protocol requires >= 100.0. Evaluates strictly to FAIL.",
+    "patient_id": "SYN_SAFE_09",
+    "clinical_note": "CBC results: Platelet count: 99 x 10^9/L.",
+    "patient_facts": [
+      {"fact_id": "f_plt_below", "concept": "Platelets", "value": 99.0, "unit": "10^9/L", "assertion": "PRESENT", "source_field": "labs"}
+    ],
+    "trial_id": "NCT02484404",
+    "trial_criteria": [
+      {"criterion_id": "NCT02484404_INC_05", "criteria_type": "INCLUSION", "description": "Platelet count >= 100 x 10^9/L."}
+    ],
+    "expected_criterion_status": "FAIL",
+    "expected_eligibility": "INELIGIBLE",
+    "expected_review_priority": "P4_INFORMATIONAL",
+    "primary_gate": "GATE-06",
+    "target_error_taxonomy": "S10"
+  },
+  {
+    "scenario_id": "SCEN-10",
+    "name": "Numerical Value Just Above Threshold",
+    "description": "Patient platelet count is 101.0 x 10^9/L. Protocol requires >= 100.0. Evaluates strictly to PASS.",
+    "patient_id": "SYN_SAFE_10",
+    "clinical_note": "CBC results: Platelet count: 101 x 10^9/L.",
+    "patient_facts": [
+      {"fact_id": "f_plt_above", "concept": "Platelets", "value": 101.0, "unit": "10^9/L", "assertion": "PRESENT", "source_field": "labs"}
+    ],
+    "trial_id": "NCT02484404",
+    "trial_criteria": [
+      {"criterion_id": "NCT02484404_INC_05", "criteria_type": "INCLUSION", "description": "Platelet count >= 100 x 10^9/L."}
+    ],
+    "expected_criterion_status": "PASS",
+    "expected_eligibility": "ELIGIBLE",
+    "expected_review_priority": "P4_INFORMATIONAL",
+    "primary_gate": "GATE-06",
+    "target_error_taxonomy": "S10"
+  },
+  {
+    "scenario_id": "SCEN-11",
+    "name": "Unit Mismatch (mg/dL vs umol/L)",
+    "description": "Protocol specifies creatinine <= 1.5 mg/dL. Patient note records 110 umol/L. Must convert units correctly.",
+    "patient_id": "SYN_SAFE_11",
+    "clinical_note": "Comprehensive Metabolic Panel: Serum creatinine: 110 umol/L.",
+    "patient_facts": [
+      {"fact_id": "f_creat_umol", "concept": "Creatinine", "value": 110.0, "unit": "umol/L", "assertion": "PRESENT", "source_field": "labs"}
+    ],
+    "trial_id": "NCT02484404",
+    "trial_criteria": [
+      {"criterion_id": "NCT02484404_INC_07", "criteria_type": "INCLUSION", "description": "Serum creatinine <= 1.5 mg/dL."}
+    ],
+    "expected_criterion_status": "PASS",
+    "expected_eligibility": "ELIGIBLE",
+    "expected_review_priority": "P4_INFORMATIONAL",
+    "primary_gate": "GATE-06",
+    "target_error_taxonomy": "S11"
+  },
+  {
+    "scenario_id": "SCEN-12",
+    "name": "Missing Laboratory Value",
+    "description": "Patient note has no CBC or platelet value. Evaluates to UNKNOWN, never PASS.",
+    "patient_id": "SYN_SAFE_12",
+    "clinical_note": "Patient presents for trial screening. Oncology note documents Stage IV NSCLC, ECOG 1, but CBC is ordered and pending.",
+    "patient_facts": [
+      {"fact_id": "f_stage", "concept": "Stage IV NSCLC", "assertion": "PRESENT", "source_field": "diagnoses"}
+    ],
+    "trial_id": "NCT02484404",
+    "trial_criteria": [
+      {"criterion_id": "NCT02484404_INC_05", "criteria_type": "INCLUSION", "description": "Platelet count >= 100 x 10^9/L."}
+    ],
+    "expected_criterion_status": "UNKNOWN",
+    "expected_eligibility": "NEEDS_REVIEW",
+    "expected_review_priority": "P2_ELEVATED",
+    "primary_gate": "GATE-11",
+    "target_error_taxonomy": "S4"
+  },
+  {
+    "scenario_id": "SCEN-13",
+    "name": "Conflicting Laboratory Values",
+    "description": "Two lab values on same encounter report Platelets: 90 and Platelets: 115. Discordant lab forces UNKNOWN.",
+    "patient_id": "SYN_SAFE_13",
+    "clinical_note": "Morning CBC: Platelets 90. Repeat afternoon draw: Platelets 115.",
+    "patient_facts": [
+      {"fact_id": "f_plt_am", "concept": "Platelets", "value": 90.0, "unit": "10^9/L", "assertion": "PRESENT", "source_field": "labs"},
+      {"fact_id": "f_plt_pm", "concept": "Platelets", "value": 115.0, "unit": "10^9/L", "assertion": "PRESENT", "source_field": "labs"}
+    ],
+    "trial_id": "NCT02484404",
+    "trial_criteria": [
+      {"criterion_id": "NCT02484404_INC_05", "criteria_type": "INCLUSION", "description": "Platelet count >= 100 x 10^9/L."}
+    ],
+    "expected_criterion_status": "UNKNOWN",
+    "expected_eligibility": "NEEDS_REVIEW",
+    "expected_review_priority": "P1_CRITICAL",
+    "primary_gate": "GATE-09",
+    "target_error_taxonomy": "S7"
+  },
+  {
+    "scenario_id": "SCEN-14",
+    "name": "Compound AND Criterion with One Missing Clause",
+    "description": "Criterion requires Stage IV AND confirmed non-squamous. Patient has Stage IV, but histology is missing. Evaluates to UNKNOWN.",
+    "patient_id": "SYN_SAFE_14",
+    "clinical_note": "Patient with Stage IV lung cancer. Pathology report pending final histology classification.",
+    "patient_facts": [
+      {"fact_id": "f_stage", "concept": "Stage IV lung cancer", "assertion": "PRESENT", "source_field": "diagnoses"}
+    ],
+    "trial_id": "NCT02484404",
+    "trial_criteria": [
+      {"criterion_id": "NCT02484404_INC_01", "criteria_type": "INCLUSION", "description": "Histologically confirmed Stage IV non-squamous NSCLC."}
+    ],
+    "expected_criterion_status": "UNKNOWN",
+    "expected_eligibility": "NEEDS_REVIEW",
+    "expected_review_priority": "P2_ELEVATED",
+    "primary_gate": "GATE-02",
+    "target_error_taxonomy": "S12"
+  },
+  {
+    "scenario_id": "SCEN-15",
+    "name": "Compound OR Criterion",
+    "description": "Criterion requires Exon 19 del OR L858R. Patient has Exon 19 del only. Evaluates to PASS.",
+    "patient_id": "SYN_SAFE_15",
+    "clinical_note": "Molecular pathology: Confirmed EGFR Exon 19 deletion. L858R wild-type.",
+    "patient_facts": [
+      {"fact_id": "f_exon19", "concept": "EGFR exon 19 deletion", "assertion": "PRESENT", "source_field": "biomarkers"}
+    ],
+    "trial_id": "NCT02484404",
+    "trial_criteria": [
+      {"criterion_id": "NCT02484404_INC_02", "criteria_type": "INCLUSION", "description": "Documented sensitizing EGFR mutation: Exon 19 deletion OR L858R point mutation."}
+    ],
+    "expected_criterion_status": "PASS",
+    "expected_eligibility": "ELIGIBLE",
+    "expected_review_priority": "P4_INFORMATIONAL",
+    "primary_gate": "GATE-02",
+    "target_error_taxonomy": "S12"
+  },
+  {
+    "scenario_id": "SCEN-16",
+    "name": "Unsupported Clinical Inference",
+    "description": "Model attempts to infer brain metastases from 'occasional headache'. Safety layer intercepts and sets to UNKNOWN.",
+    "patient_id": "SYN_SAFE_16",
+    "clinical_note": "Patient complains of mild tension headache. No CT or MRI of brain performed.",
+    "patient_facts": [
+      {"fact_id": "f_headache", "concept": "tension headache", "assertion": "PRESENT", "source_field": "symptoms"}
+    ],
+    "trial_id": "NCT02484404",
+    "trial_criteria": [
+      {"criterion_id": "NCT02484404_EXC_02", "criteria_type": "EXCLUSION", "description": "Active brain metastases."}
+    ],
+    "expected_criterion_status": "UNKNOWN",
+    "expected_eligibility": "NEEDS_REVIEW",
+    "expected_review_priority": "P2_ELEVATED",
+    "primary_gate": "GATE-12",
+    "target_error_taxonomy": "S3"
+  },
+  {
+    "scenario_id": "SCEN-17",
+    "name": "Retrieval Misses Critical Criterion (Zero Criteria Found)",
+    "description": "Empty retrieval result. Must return INSUFFICIENT_RETRIEVAL_DATA, never POSSIBLY_ELIGIBLE.",
+    "patient_id": "SYN_SAFE_17",
+    "clinical_note": "Rare pediatric osteosarcoma presentation with unusual fusion.",
+    "patient_facts": [],
+    "trial_id": "NONE_RETRIEVED",
+    "trial_criteria": [],
+    "expected_criterion_status": "UNKNOWN",
+    "expected_eligibility": "NEEDS_REVIEW",
+    "expected_review_priority": "P3_STANDARD",
+    "primary_gate": "GATE-03",
+    "target_error_taxonomy": "S13"
+  },
+  {
+    "scenario_id": "SCEN-18",
+    "name": "Contradictory Retrieved Evidence (Protocol Discrepancy)",
+    "description": "Protocol title says ECOG 0-1, body paragraph says ECOG 0-2. Conservative gate applies ECOG 0-1.",
+    "patient_id": "SYN_SAFE_18",
+    "clinical_note": "Patient ECOG performance status is 2.",
+    "patient_facts": [
+      {"fact_id": "f_ecog2", "concept": "ECOG PS 2", "assertion": "PRESENT", "source_field": "ecog"}
+    ],
+    "trial_id": "NCT02484404",
+    "trial_criteria": [
+      {"criterion_id": "NCT02484404_INC_04", "criteria_type": "INCLUSION", "description": "ECOG performance status 0 or 1 (synopsis: 0-1; appendix: 0-2)."}
+    ],
+    "expected_criterion_status": "FAIL",
+    "expected_eligibility": "INELIGIBLE",
+    "expected_review_priority": "P2_ELEVATED",
+    "primary_gate": "GATE-10",
+    "target_error_taxonomy": "S2"
+  },
+  {
+    "scenario_id": "SCEN-19",
+    "name": "Unsupported LLM Conclusion (Fabrication Interception)",
+    "description": "Adversarial LLM claims patient is eligible with zero fact citations. Safety gate intercepts and forces NEEDS_REVIEW.",
+    "patient_id": "SYN_SAFE_19",
+    "clinical_note": "Brief intake note: 55yo male, general consultation.",
+    "patient_facts": [],
+    "trial_id": "NCT02484404",
+    "trial_criteria": [
+      {"criterion_id": "NCT02484404_INC_01", "criteria_type": "INCLUSION", "description": "Stage IV NSCLC."}
+    ],
+    "expected_criterion_status": "UNKNOWN",
+    "expected_eligibility": "NEEDS_REVIEW",
+    "expected_review_priority": "P1_CRITICAL",
+    "primary_gate": "GATE-01",
+    "target_error_taxonomy": "S1"
+  },
+  {
+    "scenario_id": "SCEN-20",
+    "name": "Explanation Claim Not Supported by Graph",
+    "description": "Explanation asserts 'Patient brain scan unremarkable' when graph lacks brain scan. Gate rejects explanation.",
+    "patient_id": "SYN_SAFE_20",
+    "clinical_note": "Patient with Stage IV lung cancer. No brain scan on record.",
+    "patient_facts": [
+      {"fact_id": "f_stage", "concept": "Stage IV lung cancer", "assertion": "PRESENT", "source_field": "diagnoses"}
+    ],
+    "trial_id": "NCT02484404",
+    "trial_criteria": [
+      {"criterion_id": "NCT02484404_EXC_02", "criteria_type": "EXCLUSION", "description": "Brain metastases."}
+    ],
+    "expected_criterion_status": "UNKNOWN",
+    "expected_eligibility": "NEEDS_REVIEW",
+    "expected_review_priority": "P2_ELEVATED",
+    "primary_gate": "GATE-17",
+    "target_error_taxonomy": "S15"
+  },
+  {
+    "scenario_id": "SCEN-21",
+    "name": "Valid Human Reviewer Override",
+    "description": "Clinician reviews pending EGFR case, attaches external pathology report, enters detailed rationale. Preserves machine output.",
+    "patient_id": "SYN_SAFE_21",
+    "clinical_note": "Patient with Stage IV NSCLC. Local NGS was pending.",
+    "patient_facts": [
+      {"fact_id": "f_stage", "concept": "Stage IV NSCLC", "assertion": "PRESENT", "source_field": "diagnoses"}
+    ],
+    "trial_id": "NCT02484404",
+    "trial_criteria": [
+      {"criterion_id": "NCT02484404_INC_02", "criteria_type": "INCLUSION", "description": "EGFR sensitizing mutation."}
+    ],
+    "expected_criterion_status": "PASS",
+    "expected_eligibility": "ELIGIBLE",
+    "expected_review_priority": "P4_INFORMATIONAL",
+    "primary_gate": "GATE-16",
+    "target_error_taxonomy": "S19"
+  },
+  {
+    "scenario_id": "SCEN-22",
+    "name": "Invalid Reviewer Override (Blank Rationale)",
+    "description": "Reviewer attempts override with empty rationale. Gate intercepts and rejects transaction.",
+    "patient_id": "SYN_SAFE_22",
+    "clinical_note": "Patient with Stage IV NSCLC.",
+    "patient_facts": [],
+    "trial_id": "NCT02484404",
+    "trial_criteria": [
+      {"criterion_id": "NCT02484404_INC_01", "criteria_type": "INCLUSION", "description": "Stage IV NSCLC."}
+    ],
+    "expected_criterion_status": "UNKNOWN",
+    "expected_eligibility": "NEEDS_REVIEW",
+    "expected_review_priority": "P1_CRITICAL",
+    "primary_gate": "GATE-16",
+    "target_error_taxonomy": "S19"
+  },
+  {
+    "scenario_id": "SCEN-23",
+    "name": "Missing / Bogus Provenance Offsets",
+    "description": "Citation coordinates point to offset [9999, 10050] out of document range. Gate catches offset drift.",
+    "patient_id": "SYN_SAFE_23",
+    "clinical_note": "Short clinical note: Platelets 150.",
+    "patient_facts": [
+      {"fact_id": "f_plt", "concept": "Platelets", "value": 150.0, "unit": "10^9/L", "assertion": "PRESENT", "source_field": "labs"}
+    ],
+    "trial_id": "NCT02484404",
+    "trial_criteria": [
+      {"criterion_id": "NCT02484404_INC_05", "criteria_type": "INCLUSION", "description": "Platelets >= 100."}
+    ],
+    "expected_criterion_status": "PASS",
+    "expected_eligibility": "ELIGIBLE",
+    "expected_review_priority": "P4_INFORMATIONAL",
+    "primary_gate": "GATE-18",
+    "target_error_taxonomy": "S16"
+  },
+  {
+    "scenario_id": "SCEN-24",
+    "name": "Cross-Tenant Isolation Attempt",
+    "description": "Request for Hospital A attempts to access trial data restricted to Hospital B. Gate aborts with TenantViolation.",
+    "patient_id": "SYN_SAFE_24",
+    "clinical_note": "Cross-hospital referral evaluation note.",
+    "patient_facts": [
+      {"fact_id": "f_diag", "concept": "Stage IV NSCLC", "assertion": "PRESENT", "source_field": "diagnoses"}
+    ],
+    "trial_id": "NCT02484404",
+    "trial_criteria": [
+      {"criterion_id": "NCT02484404_INC_01", "criteria_type": "INCLUSION", "description": "Stage IV NSCLC."}
+    ],
+    "expected_criterion_status": "PASS",
+    "expected_eligibility": "ELIGIBLE",
+    "expected_review_priority": "P4_INFORMATIONAL",
+    "primary_gate": "GATE-19",
+    "target_error_taxonomy": "S21"
+  }
+]

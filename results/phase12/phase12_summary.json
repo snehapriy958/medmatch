@@ -1,0 +1,22 @@
+{
+  "s_e0_synthetic_unmitigated_unsafe_rate": 0.5833,
+  "s_e4_synthetic_safety_pipeline_unsafe_rate": 0.0,
+  "s_e4_gate_pass_rate": 0.9277,
+  "s_e4_hr_routing_recall": 1.0,
+  "s_e4_tenant_isolation_violation_rate": 0.0,
+  "error_injection": {
+    "total_injections": 14,
+    "prevented_count": 6,
+    "prevention_rate": 0.4286,
+    "detected_count": 14,
+    "detection_rate": 1.0,
+    "mitigated_count": 6,
+    "mitigation_rate": 0.4286,
+    "escalated_to_review_count": 3,
+    "human_review_routing_rate": 0.2143,
+    "missed_count": 0,
+    "missed_injection_rate": 0.0,
+    "aggregate_interception_count": 14,
+    "aggregate_interception_rate": 1.0
+  }
+}

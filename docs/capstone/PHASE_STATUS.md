@@ -35,11 +35,40 @@ PHASE 10 — EXPLAINABILITY & EVIDENCE GRAPH FOUNDATION
 STATUS: COMPLETE and ACCEPTED
 
 PHASE 11 — EVALUATION & ABLATION
-STATUS: IMPLEMENTATION COMPLETE — AWAITING USER ACCEPTANCE
+STATUS: COMPLETE and ACCEPTED
+
+PHASE 12 — CLINICAL SAFETY
+STATUS: IMPLEMENTATION COMPLETE — AWAITING USER REVIEW
 
 Next phase:
-PHASE 12 — CAPSTONE SYNTHESIS & BENCHMARK INTEGRATION (NOT STARTED)
+PHASE 13 — CAPSTONE SYNTHESIS & PRODUCTION HARDENING (NOT STARTED)
 ```
+
+---
+
+## Artifact Index for Phase 12 (Clinical Safety)
+
+- [Phase 12 Clinical Safety Audit](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase12_clinical_safety_audit.md)
+- [Phase 12 Safety Architecture & Model](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase12_safety_model.md)
+- [Phase 12 Clinical Safety Policy](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase12_safety_policy.md)
+- [Phase 12 Safety Error Taxonomy (S1–S24)](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase12_safety_error_taxonomy.md)
+- [Phase 12 Machine-Checkable Safety Invariants (INV-01–INV-15)](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase12_safety_invariants.md)
+- [Phase 12 Safety Metrics Specification](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase12_safety_metrics.md)
+- [Phase 12 Safety Experiment Specification (S-E0–S-E4)](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase12_safety_experiment_specification.md)
+- [Phase 12 Deterministic Error Injection Specification (INJ-01–INJ-14)](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase12_error_injection_specification.md)
+- [Phase 12 Reproducibility Specification](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase12_reproducibility.md)
+- [Phase 12 Final Clinical Safety Report](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase12_clinical_safety_report.md)
+- [Canonical Safety Schemas](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/scripts/safety_schema.py)
+- [Clinical Safety Policy Implementation](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/scripts/safety_policy.py)
+- [Deterministic Safety Gates (GATE-01–GATE-20)](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/scripts/safety_gates.py)
+- [Machine-Checkable Invariant Validator](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/scripts/safety_validator.py)
+- [Clinical Safety Metrics Engine](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/scripts/safety_metrics.py)
+- [Controlled Safety Experiment Runner](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/scripts/safety_experiment.py)
+- [Deterministic Error Injection Harness](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/scripts/error_injector.py)
+- [Phase 12 Master Pipeline Runner](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/scripts/run_phase12_pipeline.py)
+- [Synthetic Clinical Safety Scenarios](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/data/fixtures/phase12/safety_scenarios.json)
+- [Phase 12 Clinical Safety Test Suite](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/tests/clinical_safety/)
+- [Phase 12 Result Artifacts Bundle](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/results/phase12/)
 
 ---
 

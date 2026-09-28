@@ -1,0 +1,214 @@
+{
+  "metrics": {
+    "safety_gate_pass_rate": 0.9123,
+    "unsafe_decision_rate": 0.0,
+    "unsupported_definitive_decision_rate": 0.0,
+    "unknown_to_pass_violation_rate": 0.0,
+    "missing_to_negative_violation_rate": 0.0,
+    "evidence_support_rate": 1.0,
+    "provenance_validity_rate": 0.9583,
+    "contradiction_disclosure_rate": 1.0,
+    "temporal_safety_rate": 1.0,
+    "numerical_safety_rate": 1.0,
+    "human_review_routing_recall": 1.0,
+    "human_override_auditability_rate": 1.0,
+    "explanation_safety_rate": 0.9583,
+    "tenant_isolation_violation_rate": 0.0,
+    "total_evaluations": 24,
+    "total_gate_checks": 57
+  },
+  "cases": [
+    {
+      "scenario_id": "SCEN-01",
+      "status": "NEEDS_REVIEW",
+      "is_unsafe": false,
+      "unknown_count": 1,
+      "has_conflicts": false,
+      "evidence_coverage": 1.0
+    },
+    {
+      "scenario_id": "SCEN-02",
+      "status": "ELIGIBLE",
+      "is_unsafe": false,
+      "unknown_count": 0,
+      "has_conflicts": false,
+      "evidence_coverage": 1.0
+    },
+    {
+      "scenario_id": "SCEN-03",
+      "status": "ELIGIBLE",
+      "is_unsafe": false,
+      "unknown_count": 0,
+      "has_conflicts": false,
+      "evidence_coverage": 1.0
+    },
+    {
+      "scenario_id": "SCEN-04",
+      "status": "NEEDS_REVIEW",
+      "is_unsafe": false,
+      "unknown_count": 1,
+      "has_conflicts": false,
+      "evidence_coverage": 1.0
+    },
+    {
+      "scenario_id": "SCEN-05",
+      "status": "NEEDS_REVIEW",
+      "is_unsafe": false,
+      "unknown_count": 1,
+      "has_conflicts": true,
+      "evidence_coverage": 1.0
+    },
+    {
+      "scenario_id": "SCEN-06",
+      "status": "NEEDS_REVIEW",
+      "is_unsafe": false,
+      "unknown_count": 1,
+      "has_conflicts": false,
+      "evidence_coverage": 1.0
+    },
+    {
+      "scenario_id": "SCEN-07",
+      "status": "INELIGIBLE",
+      "is_unsafe": false,
+      "unknown_count": 0,
+      "has_conflicts": false,
+      "evidence_coverage": 1.0
+    },
+    {
+      "scenario_id": "SCEN-08",
+      "status": "ELIGIBLE",
+      "is_unsafe": false,
+      "unknown_count": 0,
+      "has_conflicts": false,
+      "evidence_coverage": 1.0
+    },
+    {
+      "scenario_id": "SCEN-09",
+      "status": "INELIGIBLE",
+      "is_unsafe": false,
+      "unknown_count": 0,
+      "has_conflicts": false,
+      "evidence_coverage": 1.0
+    },
+    {
+      "scenario_id": "SCEN-10",
+      "status": "ELIGIBLE",
+      "is_unsafe": false,
+      "unknown_count": 0,
+      "has_conflicts": false,
+      "evidence_coverage": 1.0
+    },
+    {
+      "scenario_id": "SCEN-11",
+      "status": "ELIGIBLE",
+      "is_unsafe": false,
+      "unknown_count": 0,
+      "has_conflicts": false,
+      "evidence_coverage": 1.0
+    },
+    {
+      "scenario_id": "SCEN-12",
+      "status": "NEEDS_REVIEW",
+      "is_unsafe": false,
+      "unknown_count": 1,
+      "has_conflicts": false,
+      "evidence_coverage": 1.0
+    },
+    {
+      "scenario_id": "SCEN-13",
+      "status": "NEEDS_REVIEW",
+      "is_unsafe": false,
+      "unknown_count": 1,
+      "has_conflicts": false,
+      "evidence_coverage": 1.0
+    },
+    {
+      "scenario_id": "SCEN-14",
+      "status": "NEEDS_REVIEW",
+      "is_unsafe": false,
+      "unknown_count": 1,
+      "has_conflicts": false,
+      "evidence_coverage": 1.0
+    },
+    {
+      "scenario_id": "SCEN-15",
+      "status": "ELIGIBLE",
+      "is_unsafe": false,
+      "unknown_count": 0,
+      "has_conflicts": false,
+      "evidence_coverage": 1.0
+    },
+    {
+      "scenario_id": "SCEN-16",
+      "status": "NEEDS_REVIEW",
+      "is_unsafe": false,
+      "unknown_count": 1,
+      "has_conflicts": false,
+      "evidence_coverage": 1.0
+    },
+    {
+      "scenario_id": "SCEN-17",
+      "status": "NEEDS_REVIEW",
+      "is_unsafe": false,
+      "unknown_count": 1,
+      "has_conflicts": false,
+      "evidence_coverage": 1.0
+    },
+    {
+      "scenario_id": "SCEN-18",
+      "status": "INELIGIBLE",
+      "is_unsafe": false,
+      "unknown_count": 0,
+      "has_conflicts": false,
+      "evidence_coverage": 1.0
+    },
+    {
+      "scenario_id": "SCEN-19",
+      "status": "NEEDS_REVIEW",
+      "is_unsafe": false,
+      "unknown_count": 1,
+      "has_conflicts": false,
+      "evidence_coverage": 1.0
+    },
+    {
+      "scenario_id": "SCEN-20",
+      "status": "NEEDS_REVIEW",
+      "is_unsafe": false,
+      "unknown_count": 1,
+      "has_conflicts": false,
+      "evidence_coverage": 1.0
+    },
+    {
+      "scenario_id": "SCEN-21",
+      "status": "ELIGIBLE",
+      "is_unsafe": false,
+      "unknown_count": 0,
+      "has_conflicts": false,
+      "evidence_coverage": 1.0
+    },
+    {
+      "scenario_id": "SCEN-22",
+      "status": "NEEDS_REVIEW",
+      "is_unsafe": false,
+      "unknown_count": 1,
+      "has_conflicts": false,
+      "evidence_coverage": 1.0
+    },
+    {
+      "scenario_id": "SCEN-23",
+      "status": "ELIGIBLE",
+      "is_unsafe": false,
+      "unknown_count": 0,
+      "has_conflicts": false,
+      "evidence_coverage": 1.0
+    },
+    {
+      "scenario_id": "SCEN-24",
+      "status": "ELIGIBLE",
+      "is_unsafe": false,
+      "unknown_count": 0,
+      "has_conflicts": false,
+      "evidence_coverage": 1.0
+    }
+  ]
+}

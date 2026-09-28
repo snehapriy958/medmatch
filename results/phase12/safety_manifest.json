@@ -1,0 +1,59 @@
+{
+  "phase": "Phase 12 \u2014 Clinical Safety",
+  "generated_at": "2026-09-28T20:05:52.427572+00:00",
+  "fixture_version": "0.1.0-safety-fixture",
+  "scenarios_count": 24,
+  "experiments_executed": [
+    "S-E0",
+    "S-E1",
+    "S-E2",
+    "S-E3",
+    "S-E4"
+  ],
+  "s_e0_description": "Synthetic Unmitigated Safety Baseline (outcome on 24 predefined synthetic stress scenarios)",
+  "s_e4_description": "Full Multi-Tiered Safety Pipeline (0 unsafe outcomes observed across 24 predefined synthetic scenarios)",
+  "ablations_executed": [
+    "A-S1",
+    "A-S2",
+    "A-S3",
+    "A-S4",
+    "A-S5",
+    "A-S6",
+    "A-S7"
+  ],
+  "error_injections_executed": [
+    "INJ-01",
+    "INJ-02",
+    "INJ-03",
+    "INJ-04",
+    "INJ-05",
+    "INJ-06",
+    "INJ-07",
+    "INJ-08",
+    "INJ-09",
+    "INJ-10",
+    "INJ-11",
+    "INJ-12",
+    "INJ-13",
+    "INJ-14"
+  ],
+  "error_injection_summary": {
+    "total_injections": 14,
+    "prevented_count": 6,
+    "prevention_rate": 0.4286,
+    "detected_count": 14,
+    "detection_rate": 1.0,
+    "mitigated_count": 6,
+    "mitigation_rate": 0.4286,
+    "escalated_to_review_count": 3,
+    "human_review_routing_rate": 0.2143,
+    "missed_count": 0,
+    "missed_injection_rate": 0.0,
+    "aggregate_interception_count": 14,
+    "aggregate_interception_rate": 1.0
+  },
+  "is_development_fixture_observation_only": true,
+  "clinical_claim_permitted": false,
+  "gate_pass_rate_notice": "Gate Pass Rate is NOT an overall clinical safety score; lower rates reflect active interception of non-compliant inputs.",
+  "summary": "All safety gates, invariants, error injections, and experiments executed cleanly on synthetic fixtures."
+}

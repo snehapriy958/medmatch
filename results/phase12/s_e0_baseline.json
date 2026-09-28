@@ -1,0 +1,190 @@
+{
+  "metrics": {
+    "safety_gate_pass_rate": 1.0,
+    "unsafe_decision_rate": 0.5833,
+    "unsupported_definitive_decision_rate": 0.0833,
+    "unknown_to_pass_violation_rate": 1.0,
+    "missing_to_negative_violation_rate": 1.0,
+    "evidence_support_rate": 0.5,
+    "provenance_validity_rate": 0.9583,
+    "contradiction_disclosure_rate": 0.0,
+    "temporal_safety_rate": 0.5,
+    "numerical_safety_rate": 0.75,
+    "human_review_routing_recall": 1.0,
+    "human_override_auditability_rate": 1.0,
+    "explanation_safety_rate": 0.9583,
+    "tenant_isolation_violation_rate": 0.0,
+    "total_evaluations": 24,
+    "total_gate_checks": 0
+  },
+  "cases": [
+    {
+      "scenario_id": "SCEN-01",
+      "status": "ELIGIBLE",
+      "is_unsafe": true,
+      "unknown_count": 0,
+      "evidence_coverage": 1.0
+    },
+    {
+      "scenario_id": "SCEN-02",
+      "status": "ELIGIBLE",
+      "is_unsafe": false,
+      "unknown_count": 0,
+      "evidence_coverage": 1.0
+    },
+    {
+      "scenario_id": "SCEN-03",
+      "status": "ELIGIBLE",
+      "is_unsafe": false,
+      "unknown_count": 0,
+      "evidence_coverage": 1.0
+    },
+    {
+      "scenario_id": "SCEN-04",
+      "status": "ELIGIBLE",
+      "is_unsafe": true,
+      "unknown_count": 0,
+      "evidence_coverage": 1.0
+    },
+    {
+      "scenario_id": "SCEN-05",
+      "status": "ELIGIBLE",
+      "is_unsafe": true,
+      "unknown_count": 0,
+      "evidence_coverage": 1.0
+    },
+    {
+      "scenario_id": "SCEN-06",
+      "status": "ELIGIBLE",
+      "is_unsafe": true,
+      "unknown_count": 0,
+      "evidence_coverage": 1.0
+    },
+    {
+      "scenario_id": "SCEN-07",
+      "status": "ELIGIBLE",
+      "is_unsafe": true,
+      "unknown_count": 0,
+      "evidence_coverage": 1.0
+    },
+    {
+      "scenario_id": "SCEN-08",
+      "status": "ELIGIBLE",
+      "is_unsafe": false,
+      "unknown_count": 0,
+      "evidence_coverage": 1.0
+    },
+    {
+      "scenario_id": "SCEN-09",
+      "status": "ELIGIBLE",
+      "is_unsafe": true,
+      "unknown_count": 0,
+      "evidence_coverage": 1.0
+    },
+    {
+      "scenario_id": "SCEN-10",
+      "status": "ELIGIBLE",
+      "is_unsafe": false,
+      "unknown_count": 0,
+      "evidence_coverage": 1.0
+    },
+    {
+      "scenario_id": "SCEN-11",
+      "status": "ELIGIBLE",
+      "is_unsafe": false,
+      "unknown_count": 0,
+      "evidence_coverage": 1.0
+    },
+    {
+      "scenario_id": "SCEN-12",
+      "status": "ELIGIBLE",
+      "is_unsafe": true,
+      "unknown_count": 0,
+      "evidence_coverage": 1.0
+    },
+    {
+      "scenario_id": "SCEN-13",
+      "status": "ELIGIBLE",
+      "is_unsafe": true,
+      "unknown_count": 0,
+      "evidence_coverage": 1.0
+    },
+    {
+      "scenario_id": "SCEN-14",
+      "status": "ELIGIBLE",
+      "is_unsafe": true,
+      "unknown_count": 0,
+      "evidence_coverage": 1.0
+    },
+    {
+      "scenario_id": "SCEN-15",
+      "status": "ELIGIBLE",
+      "is_unsafe": false,
+      "unknown_count": 0,
+      "evidence_coverage": 1.0
+    },
+    {
+      "scenario_id": "SCEN-16",
+      "status": "ELIGIBLE",
+      "is_unsafe": true,
+      "unknown_count": 0,
+      "evidence_coverage": 0.5
+    },
+    {
+      "scenario_id": "SCEN-17",
+      "status": "ELIGIBLE",
+      "is_unsafe": true,
+      "unknown_count": 0,
+      "evidence_coverage": 1.0
+    },
+    {
+      "scenario_id": "SCEN-18",
+      "status": "INELIGIBLE",
+      "is_unsafe": false,
+      "unknown_count": 0,
+      "evidence_coverage": 1.0
+    },
+    {
+      "scenario_id": "SCEN-19",
+      "status": "ELIGIBLE",
+      "is_unsafe": true,
+      "unknown_count": 0,
+      "evidence_coverage": 0.5
+    },
+    {
+      "scenario_id": "SCEN-20",
+      "status": "ELIGIBLE",
+      "is_unsafe": true,
+      "unknown_count": 0,
+      "evidence_coverage": 1.0
+    },
+    {
+      "scenario_id": "SCEN-21",
+      "status": "ELIGIBLE",
+      "is_unsafe": false,
+      "unknown_count": 0,
+      "evidence_coverage": 1.0
+    },
+    {
+      "scenario_id": "SCEN-22",
+      "status": "ELIGIBLE",
+      "is_unsafe": true,
+      "unknown_count": 0,
+      "evidence_coverage": 1.0
+    },
+    {
+      "scenario_id": "SCEN-23",
+      "status": "ELIGIBLE",
+      "is_unsafe": false,
+      "unknown_count": 0,
+      "evidence_coverage": 1.0
+    },
+    {
+      "scenario_id": "SCEN-24",
+      "status": "ELIGIBLE",
+      "is_unsafe": false,
+      "unknown_count": 0,
+      "evidence_coverage": 1.0
+    }
+  ]
+}
