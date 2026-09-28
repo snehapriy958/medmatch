@@ -14,11 +14,28 @@ PHASE 3 — CLINICAL TRIAL DOCUMENT INTELLIGENCE
 STATUS: COMPLETE and ACCEPTED
 
 PHASE 4 — PATIENT CLINICAL INFORMATION EXTRACTION
+STATUS: COMPLETE
+
+PHASE 5 — RETRIEVAL ENGINE
 STATUS: IMPLEMENTATION COMPLETE — AWAITING USER ACCEPTANCE
 
 Next phase:
-PHASE 5 — RETRIEVAL ENGINE (NOT STARTED)
+PHASE 6 — ELIGIBILITY REASONING & EVIDENCE SYNTHESIS (NOT STARTED)
 ```
+
+---
+
+## Artifact Index for Phase 5 (Retrieval Engine)
+
+- [Phase 5 Retrieval Audit](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase5_retrieval_audit.md)
+- [Canonical Retrieval Contract](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/retrieval_contract.md)
+- [Retrieval Pydantic Schemas](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/scripts/retrieval_schema.py)
+- [Modular Retrieval Engine & Algorithms](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/scripts/retrieval_engine.py)
+- [Retrieval Evaluation Utilities](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/scripts/retrieval_evaluation.py)
+- [Retrieval Error Taxonomy](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/retrieval_error_taxonomy.md)
+- [Phase 5 Retrieval Experiment Matrix](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase5_retrieval_experiment_matrix.md)
+- [Phase 5 Retrieval Report](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase5_retrieval_report.md)
+- [Phase 5 Retrieval Test Suite](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/tests/retrieval/)
 
 ---
 
