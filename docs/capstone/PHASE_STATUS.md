@@ -23,11 +23,35 @@ PHASE 6 — ELIGIBILITY REASONING
 STATUS: COMPLETE
 
 PHASE 7 — RAG vs. NON-RAG EXPERIMENTAL EVALUATION
-STATUS: IMPLEMENTATION COMPLETE (PHASE 5 RETRIEVAL INTEGRATION CORRECTED) — AWAITING USER ACCEPTANCE
+STATUS: COMPLETE and ACCEPTED
+
+PHASE 8 — EVIDENCE GROUNDING & HALLUCINATION EVALUATION
+STATUS: IMPLEMENTATION COMPLETE — AWAITING USER ACCEPTANCE
 
 Next phase:
-PHASE 8 — ERROR ANALYSIS & CLINICAL DECISION SUPPORT ROBUSTNESS (NOT STARTED)
+PHASE 9 — CLINICAL DECISION SUPPORT ROBUSTNESS & SAFETY HARNESS (NOT STARTED)
 ```
+
+---
+
+## Artifact Index for Phase 8 (Evidence Grounding & Hallucination Evaluation)
+
+- [Phase 8 Grounding Audit](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase8_grounding_audit.md)
+- [Canonical Grounding Schema](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/scripts/grounding_schema.py)
+- [Claim Extraction Specification](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase8_claim_extraction_specification.md)
+- [Deterministic Claim Extractor](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/scripts/claim_extractor.py)
+- [Evidence Support Policy](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase8_grounding_policy.md)
+- [Grounding & Provenance Validator](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/scripts/grounding_validator.py)
+- [Hallucination Error Taxonomy (H1–H10)](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase8_hallucination_error_taxonomy.md)
+- [Grounding Metrics Specification](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase8_metrics_specification.md)
+- [Grounding Metrics Engine](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/scripts/grounding_metrics.py)
+- [Phase 8 Experiment Matrix (G1–G4)](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase8_experiment_matrix.md)
+- [Phase 8 Grounding Experiment Harness](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/scripts/grounding_experiment.py)
+- [Phase 8 Development Fixtures](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/data/fixtures/phase8/grounding_fixtures.json)
+- [Phase 8 Development Fixtures README](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/data/fixtures/phase8/README.md)
+- [Phase 8 Grounding Test Suite](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/tests/grounding_evaluation/)
+- [Phase 8 Reproducibility Specification](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase8_reproducibility.md)
+- [Phase 8 Final Grounding Evaluation Report](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase8_grounding_evaluation_report.md)
 
 ---
 

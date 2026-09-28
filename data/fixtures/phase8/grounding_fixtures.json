@@ -1,0 +1,536 @@
+{
+  "fixture_version": "1.0.0-dev",
+  "phase": "Phase 8: Grounding Evaluation & Faithfulness Auditing",
+  "disclaimer": "DEVELOPMENT TEST FIXTURE ONLY - NOT CLINICAL GROUND TRUTH",
+  "cases": [
+    {
+      "case_id": "case-01-fully-supported",
+      "case_name": "Fully Supported Reasoning",
+      "trial_id": "NCT001",
+      "criterion": {
+        "id": "c1",
+        "criteria_type": "INCLUSION",
+        "description": "Histologically confirmed metastatic non-small cell lung cancer"
+      },
+      "patient_note": "Patient presents with confirmed metastatic non-small cell lung cancer.",
+      "patient_facts": [
+        {
+          "fact_id": "f1",
+          "concept": "metastatic non-small cell lung cancer",
+          "assertion": "PRESENT",
+          "snippet": "confirmed metastatic non-small cell lung cancer",
+          "start_char": 22,
+          "end_char": 69
+        }
+      ],
+      "demographics": { "age": 62 },
+      "reasoning_text": "Direct evidence found: confirmed metastatic non-small cell lung cancer. Patient satisfies inclusion criterion.",
+      "evidence_citations": [
+        {
+          "fact_id": "f1",
+          "text_snippet": "confirmed metastatic non-small cell lung cancer",
+          "source_field": "patient_note",
+          "start_char": 22,
+          "end_char": 69,
+          "assertion_type": "PRESENT"
+        }
+      ],
+      "status": "PASS",
+      "expected_faithful": true
+    },
+    {
+      "case_id": "case-02-partially-supported",
+      "case_name": "Partially Supported Reasoning",
+      "trial_id": "NCT001",
+      "criterion": {
+        "id": "c2",
+        "criteria_type": "INCLUSION",
+        "description": "Confirmed EGFR T790M resistance mutation with prior osimertinib"
+      },
+      "patient_note": "Biopsy positive for EGFR T790M mutation.",
+      "patient_facts": [
+        {
+          "fact_id": "f2",
+          "concept": "EGFR T790M mutation",
+          "assertion": "PRESENT",
+          "snippet": "EGFR T790M mutation",
+          "start_char": 20,
+          "end_char": 39
+        }
+      ],
+      "demographics": { "age": 55 },
+      "reasoning_text": "Patient has confirmed EGFR T790M mutation and completed prior osimertinib therapy.",
+      "evidence_citations": [
+        {
+          "fact_id": "f2",
+          "text_snippet": "EGFR T790M mutation",
+          "source_field": "patient_note",
+          "start_char": 20,
+          "end_char": 39,
+          "assertion_type": "PRESENT"
+        }
+      ],
+      "status": "PASS",
+      "expected_faithful": false
+    },
+    {
+      "case_id": "case-03-unsupported-claim",
+      "case_name": "Unsupported Clinical Condition",
+      "trial_id": "NCT001",
+      "criterion": {
+        "id": "c3",
+        "criteria_type": "INCLUSION",
+        "description": "Documented presence of HER2 amplification"
+      },
+      "patient_note": "Patient has advanced lung adenocarcinoma.",
+      "patient_facts": [
+        {
+          "fact_id": "f3",
+          "concept": "lung adenocarcinoma",
+          "assertion": "PRESENT",
+          "snippet": "lung adenocarcinoma",
+          "start_char": 21,
+          "end_char": 40
+        }
+      ],
+      "demographics": { "age": 60 },
+      "reasoning_text": "Patient has documented presence of HER2 amplification. Patient meets requirement.",
+      "evidence_citations": [
+        {
+          "fact_id": "f3",
+          "text_snippet": "lung adenocarcinoma",
+          "source_field": "patient_note",
+          "start_char": 21,
+          "end_char": 40,
+          "assertion_type": "PRESENT"
+        }
+      ],
+      "status": "PASS",
+      "expected_faithful": false
+    },
+    {
+      "case_id": "case-04-contradicted-claim",
+      "case_name": "Contradiction of Negated Fact",
+      "trial_id": "NCT001",
+      "criterion": {
+        "id": "c4",
+        "criteria_type": "EXCLUSION",
+        "description": "Active brain metastases"
+      },
+      "patient_note": "Brain MRI negative for intracranial metastases.",
+      "patient_facts": [
+        {
+          "fact_id": "f4",
+          "concept": "brain metastases",
+          "assertion": "ABSENT",
+          "snippet": "negative for intracranial metastases",
+          "start_char": 10,
+          "end_char": 46
+        }
+      ],
+      "demographics": { "age": 58 },
+      "reasoning_text": "Patient has active brain metastases. Patient fails criterion.",
+      "evidence_citations": [
+        {
+          "fact_id": "f4",
+          "text_snippet": "negative for intracranial metastases",
+          "source_field": "patient_note",
+          "start_char": 10,
+          "end_char": 46,
+          "assertion_type": "ABSENT"
+        }
+      ],
+      "status": "FAIL",
+      "expected_faithful": false
+    },
+    {
+      "case_id": "case-05-missing-evidence",
+      "case_name": "Epistemic Missingness Handled Correctly",
+      "trial_id": "NCT001",
+      "criterion": {
+        "id": "c5",
+        "criteria_type": "INCLUSION",
+        "description": "Serum creatinine <= 1.5 mg/dL"
+      },
+      "patient_note": "Patient presents for consultation. Routine labs pending.",
+      "patient_facts": [],
+      "demographics": { "age": 45 },
+      "reasoning_text": "Serum creatinine is not documented in clinical record. Status cannot be determined.",
+      "evidence_citations": [],
+      "status": "UNKNOWN",
+      "expected_faithful": true
+    },
+    {
+      "case_id": "case-06-invalid-citation",
+      "case_name": "Citation Pointing to Nonexistent Span",
+      "trial_id": "NCT001",
+      "criterion": {
+        "id": "c1",
+        "criteria_type": "INCLUSION",
+        "description": "NSCLC"
+      },
+      "patient_note": "Patient with NSCLC.",
+      "patient_facts": [
+        {
+          "fact_id": "f1",
+          "concept": "NSCLC",
+          "assertion": "PRESENT",
+          "snippet": "NSCLC",
+          "start_char": 13,
+          "end_char": 18
+        }
+      ],
+      "demographics": { "age": 60 },
+      "reasoning_text": "Patient with NSCLC.",
+      "evidence_citations": [
+        {
+          "fact_id": "f1",
+          "text_snippet": "NSCLC",
+          "source_field": "patient_note",
+          "start_char": 500,
+          "end_char": 550,
+          "assertion_type": "PRESENT"
+        }
+      ],
+      "status": "PASS",
+      "expected_faithful": false
+    },
+    {
+      "case_id": "case-07-wrong-criterion-citation",
+      "case_name": "Citation Referencing Wrong Trial Target",
+      "trial_id": "NCT001",
+      "criterion": {
+        "id": "c1",
+        "criteria_type": "INCLUSION",
+        "description": "NSCLC"
+      },
+      "patient_note": "Patient with NSCLC.",
+      "patient_facts": [
+        {
+          "fact_id": "f1",
+          "concept": "NSCLC",
+          "assertion": "PRESENT",
+          "snippet": "NSCLC",
+          "start_char": 13,
+          "end_char": 18
+        }
+      ],
+      "demographics": { "age": 60 },
+      "reasoning_text": "Patient with NSCLC meets requirement.",
+      "evidence_citations": [
+        {
+          "fact_id": "f1",
+          "text_snippet": "NSCLC",
+          "source_field": "dense:trial:NCT999",
+          "start_char": 13,
+          "end_char": 18,
+          "assertion_type": "PRESENT"
+        }
+      ],
+      "status": "PASS",
+      "expected_faithful": false
+    },
+    {
+      "case_id": "case-08-fabricated-numerical",
+      "case_name": "Fabricated Numerical Value",
+      "trial_id": "NCT001",
+      "criterion": {
+        "id": "c6",
+        "criteria_type": "INCLUSION",
+        "description": "Age >= 65"
+      },
+      "patient_note": "Patient age 45.",
+      "patient_facts": [],
+      "demographics": { "age": 45 },
+      "reasoning_text": "Patient age is 70 meets requirement Age >= 65.",
+      "evidence_citations": [
+        {
+          "fact_id": "demo-age",
+          "text_snippet": "Patient age is 70",
+          "source_field": "patient_demographics",
+          "start_char": -1,
+          "end_char": -1,
+          "assertion_type": "PRESENT"
+        }
+      ],
+      "status": "PASS",
+      "expected_faithful": false
+    },
+    {
+      "case_id": "case-09-fabricated-temporal",
+      "case_name": "Fabricated Temporal Milestone",
+      "trial_id": "NCT001",
+      "criterion": {
+        "id": "c7",
+        "criteria_type": "INCLUSION",
+        "description": "Diagnosed within the past 6 months"
+      },
+      "patient_note": "Initial diagnosis of melanoma made recently.",
+      "patient_facts": [
+        {
+          "fact_id": "f_mel",
+          "concept": "melanoma",
+          "assertion": "PRESENT",
+          "snippet": "melanoma made recently",
+          "start_char": 21,
+          "end_char": 43
+        }
+      ],
+      "demographics": { "age": 52 },
+      "reasoning_text": "The patient was diagnosed in January 2024 within the past 6 months.",
+      "evidence_citations": [
+        {
+          "fact_id": "f_mel",
+          "text_snippet": "melanoma made recently",
+          "source_field": "patient_note",
+          "start_char": 21,
+          "end_char": 43,
+          "assertion_type": "PRESENT"
+        }
+      ],
+      "status": "PASS",
+      "expected_faithful": false
+    },
+    {
+      "case_id": "case-10-unsupported-certainty",
+      "case_name": "Unsupported Certainty / Speculative Inference",
+      "trial_id": "NCT001",
+      "criterion": {
+        "id": "c8",
+        "criteria_type": "INCLUSION",
+        "description": "Confirmed sensory neuropathy"
+      },
+      "patient_note": "Mild paresthesias noted, likely drug-induced.",
+      "patient_facts": [
+        {
+          "fact_id": "f_paresth",
+          "concept": "mild paresthesias",
+          "assertion": "UNKNOWN",
+          "snippet": "Mild paresthesias noted",
+          "start_char": 0,
+          "end_char": 23
+        }
+      ],
+      "demographics": { "age": 50 },
+      "reasoning_text": "Because patient has paresthesias, it likely suggests confirmed severe sensory neuropathy.",
+      "evidence_citations": [
+        {
+          "fact_id": "f_paresth",
+          "text_snippet": "Mild paresthesias noted",
+          "source_field": "patient_note",
+          "start_char": 0,
+          "end_char": 23,
+          "assertion_type": "UNKNOWN"
+        }
+      ],
+      "status": "PASS",
+      "expected_faithful": false
+    },
+    {
+      "case_id": "case-11-negated-fact-handled",
+      "case_name": "Negated Fact Correctly Handled",
+      "trial_id": "NCT001",
+      "criterion": {
+        "id": "c9",
+        "criteria_type": "INCLUSION",
+        "description": "Documented prior platinum chemotherapy"
+      },
+      "patient_note": "Patient denies any prior chemotherapy.",
+      "patient_facts": [
+        {
+          "fact_id": "f_chemo_neg",
+          "concept": "prior chemotherapy",
+          "assertion": "ABSENT",
+          "snippet": "denies any prior chemotherapy",
+          "start_char": 8,
+          "end_char": 37
+        }
+      ],
+      "demographics": { "age": 60 },
+      "reasoning_text": "Direct evidence of absence: patient denies any prior chemotherapy. Fails criterion.",
+      "evidence_citations": [
+        {
+          "fact_id": "f_chemo_neg",
+          "text_snippet": "denies any prior chemotherapy",
+          "source_field": "patient_note",
+          "start_char": 8,
+          "end_char": 37,
+          "assertion_type": "ABSENT"
+        }
+      ],
+      "status": "FAIL",
+      "expected_faithful": true
+    },
+    {
+      "case_id": "case-12-not-mentioned-handled",
+      "case_name": "NOT_MENTIONED Correctly Handled as Unknown",
+      "trial_id": "NCT001",
+      "criterion": {
+        "id": "c10",
+        "criteria_type": "INCLUSION",
+        "description": "ECOG Performance Status 0 or 1"
+      },
+      "patient_note": "Patient ambulatory in clinic.",
+      "patient_facts": [],
+      "demographics": { "age": 65 },
+      "reasoning_text": "ECOG performance status is not documented in clinical record. Status is unknown.",
+      "evidence_citations": [],
+      "status": "UNKNOWN",
+      "expected_faithful": true
+    },
+    {
+      "case_id": "case-13-compound-mixed-support",
+      "case_name": "Compound Reasoning with Mixed Support",
+      "trial_id": "NCT001",
+      "criterion": {
+        "id": "c1",
+        "criteria_type": "INCLUSION",
+        "description": "Metastatic NSCLC"
+      },
+      "patient_note": "Patient with stage IV NSCLC.",
+      "patient_facts": [
+        {
+          "fact_id": "f_nsclc",
+          "concept": "stage IV NSCLC",
+          "assertion": "PRESENT",
+          "snippet": "stage IV NSCLC",
+          "start_char": 13,
+          "end_char": 27
+        }
+      ],
+      "demographics": { "age": 55 },
+      "reasoning_text": "Patient has stage IV NSCLC. Patient has completed 10 prior lines of therapy.",
+      "evidence_citations": [
+        {
+          "fact_id": "f_nsclc",
+          "text_snippet": "stage IV NSCLC",
+          "source_field": "patient_note",
+          "start_char": 13,
+          "end_char": 27,
+          "assertion_type": "PRESENT"
+        }
+      ],
+      "status": "PASS",
+      "expected_faithful": false
+    },
+    {
+      "case_id": "case-14-multiple-evidence",
+      "case_name": "Multiple Verified Evidence Sources",
+      "trial_id": "NCT001",
+      "criterion": {
+        "id": "c11",
+        "criteria_type": "INCLUSION",
+        "description": "Age >= 18 and confirmed melanoma"
+      },
+      "patient_note": "Adult patient diagnosed with cutaneous melanoma.",
+      "patient_facts": [
+        {
+          "fact_id": "f_mel",
+          "concept": "cutaneous melanoma",
+          "assertion": "PRESENT",
+          "snippet": "diagnosed with cutaneous melanoma",
+          "start_char": 14,
+          "end_char": 47
+        }
+      ],
+      "demographics": { "age": 42 },
+      "reasoning_text": "Patient age 42 meets requirement. Documented diagnosed with cutaneous melanoma. Patient satisfies criterion.",
+      "evidence_citations": [
+        {
+          "fact_id": "f_mel",
+          "text_snippet": "diagnosed with cutaneous melanoma",
+          "source_field": "patient_note",
+          "start_char": 14,
+          "end_char": 47,
+          "assertion_type": "PRESENT"
+        }
+      ],
+      "status": "PASS",
+      "expected_faithful": true
+    },
+    {
+      "case_id": "case-15-valid-retrieval-prov",
+      "case_name": "Valid Retrieval Provenance in RAG",
+      "trial_id": "NCT001",
+      "criterion": {
+        "id": "c1",
+        "criteria_type": "INCLUSION",
+        "description": "Advanced NSCLC"
+      },
+      "patient_note": "Patient with advanced NSCLC.",
+      "patient_facts": [
+        {
+          "fact_id": "f1",
+          "concept": "advanced NSCLC",
+          "assertion": "PRESENT",
+          "snippet": "advanced NSCLC",
+          "start_char": 13,
+          "end_char": 27
+        }
+      ],
+      "retrieved_evidence": {
+        "trial_id": "NCT001",
+        "retrieval_method": "dense",
+        "retrieval_rank": 1,
+        "retrieval_score": 0.895,
+        "trial_summary": "Phase 3 study in advanced NSCLC"
+      },
+      "demographics": { "age": 60 },
+      "reasoning_text": "Resolved via dense (rank=1, score=0.895): retrieved trial protocol confirms advanced NSCLC satisfies requirements.",
+      "evidence_citations": [
+        {
+          "fact_id": "f1",
+          "text_snippet": "advanced NSCLC",
+          "source_field": "dense:trial:NCT001",
+          "start_char": 13,
+          "end_char": 27,
+          "assertion_type": "PRESENT"
+        }
+      ],
+      "status": "PASS",
+      "expected_faithful": true
+    },
+    {
+      "case_id": "case-16-invalid-retrieval-prov",
+      "case_name": "Invalid Retrieval Provenance Mismatch",
+      "trial_id": "NCT001",
+      "criterion": {
+        "id": "c1",
+        "criteria_type": "INCLUSION",
+        "description": "Advanced NSCLC"
+      },
+      "patient_note": "Patient with advanced NSCLC.",
+      "patient_facts": [
+        {
+          "fact_id": "f1",
+          "concept": "advanced NSCLC",
+          "assertion": "PRESENT",
+          "snippet": "advanced NSCLC",
+          "start_char": 13,
+          "end_char": 27
+        }
+      ],
+      "retrieved_evidence": {
+        "trial_id": "NCT001",
+        "retrieval_method": "dense",
+        "retrieval_rank": 1,
+        "retrieval_score": 0.895,
+        "trial_summary": "Phase 3 study in advanced NSCLC"
+      },
+      "demographics": { "age": 60 },
+      "reasoning_text": "Patient has advanced NSCLC.",
+      "evidence_citations": [
+        {
+          "fact_id": "f1",
+          "text_snippet": "advanced NSCLC",
+          "source_field": "hybrid_rrf:trial:NCT001",
+          "start_char": 13,
+          "end_char": 27,
+          "assertion_type": "PRESENT"
+        }
+      ],
+      "status": "PASS",
+      "expected_faithful": false
+    }
+  ]
+}
