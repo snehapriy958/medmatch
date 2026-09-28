@@ -1,0 +1,605 @@
+{
+  "fixture_version": "phase9-dev-v1.0",
+  "description": "Synthetic development fixtures for Phase 9 uncertainty representation, routing policy, priority, and human review adjudication. NOT FOR CLINICAL VALIDATION.",
+  "cases": [
+    {
+      "case_id": "case-01-complete-evidence-eligible",
+      "description": "All criteria met with complete, verified evidence. Zero unresolved uncertainties. Automatic ELIGIBLE permitted.",
+      "category": "automatic_eligible",
+      "trial_id": "NCT-PH9-001",
+      "patient_id": "PT-PH9-01",
+      "criteria": [
+        {"criterion_id": "CRIT-01", "status": "PASS", "reasoning": "Age is 58, satisfying inclusion requirement >= 18."}
+      ],
+      "uncertainties": [],
+      "grounding": {
+        "supported_claim_count": 1,
+        "unsupported_claim_count": 0,
+        "contradicted_claim_count": 0,
+        "grounding_score": 1.0,
+        "hallucination_score": 0.0
+      },
+      "expected_trial_status": "ELIGIBLE",
+      "expected_review_status": "NOT_REQUIRED",
+      "expected_priority": "ROUTINE"
+    },
+    {
+      "case_id": "case-02-complete-disqualifying-ineligible",
+      "description": "Clear disqualifying criterion supported by grounded evidence. No conflicting safety data. Automatic INELIGIBLE permitted.",
+      "category": "automatic_ineligible",
+      "trial_id": "NCT-PH9-002",
+      "patient_id": "PT-PH9-02",
+      "criteria": [
+        {"criterion_id": "CRIT-01", "status": "FAIL", "reasoning": "Patient has active brain metastases, violating exclusion criterion."}
+      ],
+      "uncertainties": [],
+      "grounding": {
+        "supported_claim_count": 1,
+        "unsupported_claim_count": 0,
+        "contradicted_claim_count": 0,
+        "grounding_score": 1.0,
+        "hallucination_score": 0.0
+      },
+      "expected_trial_status": "INELIGIBLE",
+      "expected_review_status": "NOT_REQUIRED",
+      "expected_priority": "ROUTINE"
+    },
+    {
+      "case_id": "case-03-missing-required-patient-fact",
+      "description": "Mandatory biomarker status is not mentioned in patient chart. Criterion evaluated as UNKNOWN, trial as NEEDS_REVIEW.",
+      "category": "missing_patient_fact",
+      "trial_id": "NCT-PH9-003",
+      "patient_id": "PT-PH9-03",
+      "criteria": [
+        {"criterion_id": "CRIT-01", "status": "UNKNOWN", "reasoning": "HER2 biomarker status is not mentioned in patient chart."}
+      ],
+      "uncertainties": [
+        {
+          "uncertainty_id": "UNC-03-01",
+          "subject": "HER2_neu_status",
+          "fact_or_criterion_ref": "CRIT-01",
+          "status": "MISSING",
+          "uncertainty_type": "MISSING_PATIENT_FACT",
+          "description": "HER2 receptor status is absent from all clinical notes.",
+          "evidence_references": [],
+          "affected_criterion": "CRIT-01",
+          "severity": "HIGH",
+          "review_required": true,
+          "machine_decision_allowed": false,
+          "reason": "Trial mandates HER2-positive status; missing status prevents determination."
+        }
+      ],
+      "grounding": {
+        "supported_claim_count": 0,
+        "unsupported_claim_count": 0,
+        "contradicted_claim_count": 0,
+        "grounding_score": 1.0,
+        "hallucination_score": 0.0
+      },
+      "expected_trial_status": "NEEDS_REVIEW",
+      "expected_review_status": "PENDING_REVIEW",
+      "expected_priority": "PRIORITY"
+    },
+    {
+      "case_id": "case-04-conflicting-patient-facts",
+      "description": "Patient chart has conflicting allergy documentation: penicillin allergy affirmed in clinical note but denied in intake form.",
+      "category": "conflicting_facts",
+      "trial_id": "NCT-PH9-004",
+      "patient_id": "PT-PH9-04",
+      "criteria": [
+        {"criterion_id": "CRIT-01", "status": "UNKNOWN", "reasoning": "Allergy status is conflicting between admission note and intake history."}
+      ],
+      "uncertainties": [
+        {
+          "uncertainty_id": "UNC-04-01",
+          "subject": "penicillin_allergy",
+          "fact_or_criterion_ref": "CRIT-01",
+          "status": "CONFLICTING",
+          "uncertainty_type": "CONFLICTING_PATIENT_FACTS",
+          "description": "Clinician note asserts anaphylaxis; patient intake reports no known allergies.",
+          "evidence_references": ["FACT-ALLERGY-01", "FACT-ALLERGY-02"],
+          "affected_criterion": "CRIT-01",
+          "severity": "CRITICAL",
+          "review_required": true,
+          "machine_decision_allowed": false,
+          "reason": "Direct clinical contradiction regarding drug contraindication.",
+          "conflict_details": [
+            {
+              "source_id": "FACT-ALLERGY-01",
+              "source_type": "CLINICIAN_NOTE",
+              "asserted_value": "penicillin_anaphylaxis_present",
+              "timestamp": "2024-01-10T10:00:00Z",
+              "snippet": "Patient has documented history of severe penicillin anaphylaxis."
+            },
+            {
+              "source_id": "FACT-ALLERGY-02",
+              "source_type": "PATIENT_INTAKE",
+              "asserted_value": "no_known_drug_allergies",
+              "timestamp": "2024-01-15T09:00:00Z",
+              "snippet": "Patient denies any drug allergies."
+            }
+          ]
+        }
+      ],
+      "grounding": null,
+      "expected_trial_status": "NEEDS_REVIEW",
+      "expected_review_status": "ESCALATED",
+      "expected_priority": "ESCALATED"
+    },
+    {
+      "case_id": "case-05-conflicting-documents",
+      "description": "Pathology report contradicts surgical operative report on histological cancer subtype.",
+      "category": "conflicting_documents",
+      "trial_id": "NCT-PH9-005",
+      "patient_id": "PT-PH9-05",
+      "criteria": [
+        {"criterion_id": "CRIT-01", "status": "UNKNOWN", "reasoning": "Histological subtype is discordant across pathology and surgical reports."}
+      ],
+      "uncertainties": [
+        {
+          "uncertainty_id": "UNC-05-01",
+          "subject": "histology_subtype",
+          "fact_or_criterion_ref": "CRIT-01",
+          "status": "CONFLICTING",
+          "uncertainty_type": "CONFLICTING_DOCUMENTS",
+          "description": "Pathology report asserts ductal carcinoma; operative report documents lobular.",
+          "evidence_references": ["DOC-PATH-101", "DOC-OP-202"],
+          "affected_criterion": "CRIT-01",
+          "severity": "HIGH",
+          "review_required": true,
+          "machine_decision_allowed": false,
+          "reason": "Trial specifically restricts enrollment to ductal carcinoma.",
+          "conflict_details": [
+            {
+              "source_id": "DOC-PATH-101",
+              "source_type": "PATHOLOGY_REPORT",
+              "asserted_value": "invasive_ductal_carcinoma",
+              "snippet": "Microscopic examination reveals invasive ductal carcinoma."
+            },
+            {
+              "source_id": "DOC-OP-202",
+              "source_type": "OPERATIVE_REPORT",
+              "asserted_value": "invasive_lobular_carcinoma",
+              "snippet": "Surgical impression: invasive lobular neoplasm."
+            }
+          ]
+        }
+      ],
+      "grounding": null,
+      "expected_trial_status": "NEEDS_REVIEW",
+      "expected_review_status": "PENDING_REVIEW",
+      "expected_priority": "PRIORITY"
+    },
+    {
+      "case_id": "case-06-ambiguous-temporal-relationship",
+      "description": "Patient note states 'recent chemotherapy' without anchor date; trial requires chemotherapy completed > 30 days prior.",
+      "category": "temporal_ambiguity",
+      "trial_id": "NCT-PH9-006",
+      "patient_id": "PT-PH9-06",
+      "criteria": [
+        {"criterion_id": "CRIT-01", "status": "UNKNOWN", "reasoning": "Timing of recent chemotherapy is indeterminate relative to 30-day window."}
+      ],
+      "uncertainties": [
+        {
+          "uncertainty_id": "UNC-06-01",
+          "subject": "chemotherapy_completion_timing",
+          "fact_or_criterion_ref": "CRIT-01",
+          "status": "AMBIGUOUS",
+          "uncertainty_type": "TEMPORAL_AMBIGUITY",
+          "description": "Chemotherapy documented as 'recent' without specific calendar date.",
+          "evidence_references": ["NOTE-ONC-03"],
+          "temporal_context": "recent",
+          "affected_criterion": "CRIT-01",
+          "severity": "HIGH",
+          "review_required": true,
+          "machine_decision_allowed": false,
+          "reason": "Protocol requires at least 30-day washout period from prior systemic therapy."
+        }
+      ],
+      "grounding": null,
+      "expected_trial_status": "NEEDS_REVIEW",
+      "expected_review_status": "PENDING_REVIEW",
+      "expected_priority": "PRIORITY"
+    },
+    {
+      "case_id": "case-07-ambiguous-numerical-value",
+      "description": "Patient HbA1c is documented as '~8%' without laboratory decimal precision; trial cutoff is HbA1c < 8.0%.",
+      "category": "numerical_ambiguity",
+      "trial_id": "NCT-PH9-007",
+      "patient_id": "PT-PH9-07",
+      "criteria": [
+        {"criterion_id": "CRIT-01", "status": "UNKNOWN", "reasoning": "Approximated HbA1c of ~8% cannot be deterministically evaluated against < 8.0% cutoff."}
+      ],
+      "uncertainties": [
+        {
+          "uncertainty_id": "UNC-07-01",
+          "subject": "HbA1c_level",
+          "fact_or_criterion_ref": "CRIT-01",
+          "status": "AMBIGUOUS",
+          "uncertainty_type": "NUMERICAL_AMBIGUITY",
+          "description": "Laboratory value approximated as ~8% without decimal or certified lab panel.",
+          "evidence_references": ["LAB-CLIN-07"],
+          "affected_criterion": "CRIT-01",
+          "severity": "HIGH",
+          "review_required": true,
+          "machine_decision_allowed": false,
+          "reason": "Borderline numerical threshold requires official assay confirmation."
+        }
+      ],
+      "grounding": null,
+      "expected_trial_status": "NEEDS_REVIEW",
+      "expected_review_status": "PENDING_REVIEW",
+      "expected_priority": "PRIORITY"
+    },
+    {
+      "case_id": "case-08-insufficient-retrieval-evidence",
+      "description": "Retriever failed to find relevant protocol passages for obscure trial criterion. Reasoner operates with partial context.",
+      "category": "insufficient_retrieval",
+      "trial_id": "NCT-PH9-008",
+      "patient_id": "PT-PH9-08",
+      "criteria": [
+        {"criterion_id": "CRIT-01", "status": "UNKNOWN", "reasoning": "Protocol specification for criterion could not be retrieved from trial document."}
+      ],
+      "uncertainties": [
+        {
+          "uncertainty_id": "UNC-08-01",
+          "subject": "protocol_criterion_retrieval",
+          "fact_or_criterion_ref": "CRIT-01",
+          "status": "INSUFFICIENT_EVIDENCE",
+          "uncertainty_type": "INSUFFICIENT_RETRIEVAL",
+          "description": "Phase 5 retriever returned zero relevant chunks for criterion definition.",
+          "evidence_references": [],
+          "affected_criterion": "CRIT-01",
+          "severity": "HIGH",
+          "review_required": true,
+          "machine_decision_allowed": false,
+          "reason": "Protocol definition missing; cannot evaluate criterion without verified protocol text."
+        }
+      ],
+      "grounding": null,
+      "expected_trial_status": "NEEDS_REVIEW",
+      "expected_review_status": "PENDING_REVIEW",
+      "expected_priority": "PRIORITY"
+    },
+    {
+      "case_id": "case-09-grounding-unsupported-intercepted",
+      "description": "Machine declared PASS by asserting patient completed surgery, but claim is completely unsupported by patient chart (H1/H8).",
+      "category": "grounding_unsupported",
+      "trial_id": "NCT-PH9-009",
+      "patient_id": "PT-PH9-09",
+      "criteria": [
+        {"criterion_id": "CRIT-01", "status": "PASS", "reasoning": "Patient underwent curative surgical resection."}
+      ],
+      "uncertainties": [
+        {
+          "uncertainty_id": "UNC-09-01",
+          "subject": "surgical_resection_assertion",
+          "fact_or_criterion_ref": "CRIT-01",
+          "status": "INSUFFICIENT_EVIDENCE",
+          "uncertainty_type": "UNSUPPORTED_INFERENCE",
+          "description": "Phase 8 grounding evaluation identified machine claim as UNSUPPORTED.",
+          "evidence_references": [],
+          "affected_criterion": "CRIT-01",
+          "severity": "HIGH",
+          "review_required": true,
+          "machine_decision_allowed": false,
+          "reason": "Machine asserted surgical completion without supporting evidence in patient chart."
+        }
+      ],
+      "grounding": {
+        "supported_claim_count": 0,
+        "unsupported_claim_count": 1,
+        "contradicted_claim_count": 0,
+        "grounding_score": 0.0,
+        "hallucination_score": 1.0
+      },
+      "expected_trial_status": "ELIGIBLE",
+      "expected_review_status": "PENDING_REVIEW",
+      "expected_priority": "PRIORITY"
+    },
+    {
+      "case_id": "case-10-grounding-contradicted-escalated",
+      "description": "Machine reasoning asserted patient is non-smoker, but record clearly states active tobacco use. Phase 8 contradiction (H6).",
+      "category": "grounding_contradicted",
+      "trial_id": "NCT-PH9-010",
+      "patient_id": "PT-PH9-10",
+      "criteria": [
+        {"criterion_id": "CRIT-01", "status": "PASS", "reasoning": "Patient is a non-smoker satisfying pulmonary criterion."}
+      ],
+      "uncertainties": [
+        {
+          "uncertainty_id": "UNC-10-01",
+          "subject": "tobacco_use_contradiction",
+          "fact_or_criterion_ref": "CRIT-01",
+          "status": "CONFLICTING",
+          "uncertainty_type": "GROUNDING_CONTRADICTION",
+          "description": "Phase 8 detected claim CONTRADICTED by patient clinical fact FACT-SMOKE-01.",
+          "evidence_references": ["FACT-SMOKE-01"],
+          "affected_criterion": "CRIT-01",
+          "severity": "CRITICAL",
+          "review_required": true,
+          "machine_decision_allowed": false,
+          "reason": "Machine hallucinated negative smoking status in direct contradiction of patient chart."
+        }
+      ],
+      "grounding": {
+        "supported_claim_count": 0,
+        "unsupported_claim_count": 0,
+        "contradicted_claim_count": 1,
+        "grounding_score": 0.0,
+        "hallucination_score": 1.0
+      },
+      "expected_trial_status": "ELIGIBLE",
+      "expected_review_status": "ESCALATED",
+      "expected_priority": "ESCALATED"
+    },
+    {
+      "case_id": "case-11-reviewer-resolves-unknown",
+      "description": "Reviewer inspects external pathology addendum and resolves an UNKNOWN criterion with verified evidence.",
+      "category": "reviewer_resolution",
+      "trial_id": "NCT-PH9-011",
+      "patient_id": "PT-PH9-11",
+      "criteria": [
+        {"criterion_id": "CRIT-01", "status": "UNKNOWN", "reasoning": "PD-L1 expression was unmentioned in initial EHR extraction."}
+      ],
+      "uncertainties": [
+        {
+          "uncertainty_id": "UNC-11-01",
+          "subject": "PDL1_expression",
+          "fact_or_criterion_ref": "CRIT-01",
+          "status": "MISSING",
+          "uncertainty_type": "MISSING_PATIENT_FACT",
+          "description": "PD-L1 TPS score omitted from chart.",
+          "evidence_references": [],
+          "affected_criterion": "CRIT-01",
+          "severity": "HIGH",
+          "review_required": true,
+          "machine_decision_allowed": false,
+          "reason": "Trial requires PD-L1 TPS >= 50%."
+        }
+      ],
+      "grounding": null,
+      "expected_trial_status": "NEEDS_REVIEW",
+      "expected_review_status": "PENDING_REVIEW",
+      "expected_priority": "PRIORITY",
+      "reviewer_action": {
+        "reviewer_id": "REV-001",
+        "decision": "RESOLVE_PASS",
+        "rationale": "Verified outside pathology addendum dated 2024-02-01 confirming PD-L1 TPS is 75%.",
+        "evidence_references": ["EXT-PATH-ADDENDUM-2024"]
+      },
+      "expected_post_review_status": "RESOLVED"
+    },
+    {
+      "case_id": "case-12-reviewer-confirms-fail",
+      "description": "Reviewer inspects patient record and confirms machine FAIL verdict for severe cardiac dysfunction.",
+      "category": "reviewer_confirmation",
+      "trial_id": "NCT-PH9-012",
+      "patient_id": "PT-PH9-12",
+      "criteria": [
+        {"criterion_id": "CRIT-01", "status": "FAIL", "reasoning": "Patient LVEF is 35%, below the required 50% threshold."}
+      ],
+      "uncertainties": [],
+      "grounding": {
+        "supported_claim_count": 1,
+        "unsupported_claim_count": 0,
+        "contradicted_claim_count": 0,
+        "grounding_score": 1.0,
+        "hallucination_score": 0.0
+      },
+      "expected_trial_status": "INELIGIBLE",
+      "expected_review_status": "NOT_REQUIRED",
+      "expected_priority": "ROUTINE",
+      "reviewer_action": {
+        "reviewer_id": "REV-002",
+        "decision": "CONFIRM_FAIL",
+        "rationale": "Echocardiogram from 2 weeks ago confirms ejection fraction 35%; disqualification verified.",
+        "evidence_references": ["ECHO-REPORT-99"]
+      },
+      "expected_post_review_status": "RESOLVED"
+    },
+    {
+      "case_id": "case-13-reviewer-confirms-pass-eligible",
+      "description": "Candidate with 2 criteria: CRIT-01 PASS, CRIT-02 UNKNOWN. Reviewer resolves CRIT-02 to PASS with evidence, resulting in full ELIGIBLE.",
+      "category": "reviewer_resolution_eligible",
+      "trial_id": "NCT-PH9-013",
+      "patient_id": "PT-PH9-13",
+      "criteria": [
+        {"criterion_id": "CRIT-01", "status": "PASS", "reasoning": "Histologically confirmed NSCLC."},
+        {"criterion_id": "CRIT-02", "status": "UNKNOWN", "reasoning": "ECOG status unmentioned."}
+      ],
+      "uncertainties": [
+        {
+          "uncertainty_id": "UNC-13-01",
+          "subject": "ECOG_performance_status",
+          "fact_or_criterion_ref": "CRIT-02",
+          "status": "MISSING",
+          "uncertainty_type": "MISSING_PATIENT_FACT",
+          "description": "ECOG performance score missing.",
+          "evidence_references": [],
+          "affected_criterion": "CRIT-02",
+          "severity": "HIGH",
+          "review_required": true,
+          "machine_decision_allowed": false,
+          "reason": "Trial requires ECOG 0 or 1."
+        }
+      ],
+      "grounding": null,
+      "expected_trial_status": "NEEDS_REVIEW",
+      "expected_review_status": "PENDING_REVIEW",
+      "expected_priority": "PRIORITY",
+      "reviewer_action": {
+        "reviewer_id": "REV-001",
+        "decision": "RESOLVE_PASS",
+        "rationale": "Clinician confirmed ECOG score is 1 during screening visit note.",
+        "evidence_references": ["VISIT-NOTE-SCREEN-01"]
+      },
+      "expected_post_review_status": "RESOLVED"
+    },
+    {
+      "case_id": "case-14-reviewer-escalates",
+      "description": "Reviewer determines that patient's unusual autoimmune condition requires principal investigator safety review.",
+      "category": "reviewer_escalation",
+      "trial_id": "NCT-PH9-014",
+      "patient_id": "PT-PH9-14",
+      "criteria": [
+        {"criterion_id": "CRIT-01", "status": "UNKNOWN", "reasoning": "Patient has quiescent myasthenia gravis; exclusion ambiguity."}
+      ],
+      "uncertainties": [
+        {
+          "uncertainty_id": "UNC-14-01",
+          "subject": "autoimmune_exclusion",
+          "fact_or_criterion_ref": "CRIT-01",
+          "status": "AMBIGUOUS",
+          "uncertainty_type": "CLINICAL_AMBIGUITY",
+          "description": "Trial excludes active autoimmune disorders; patient is asymptomatic on minimal therapy.",
+          "evidence_references": ["NEURO-NOTE-05"],
+          "affected_criterion": "CRIT-01",
+          "severity": "HIGH",
+          "review_required": true,
+          "machine_decision_allowed": false,
+          "reason": "Protocol boundary unclear regarding quiescent versus active autoimmune disease."
+        }
+      ],
+      "grounding": null,
+      "expected_trial_status": "NEEDS_REVIEW",
+      "expected_review_status": "PENDING_REVIEW",
+      "expected_priority": "PRIORITY",
+      "reviewer_action": {
+        "reviewer_id": "REV-003",
+        "decision": "ESCALATE",
+        "rationale": "Requires formal PI determination regarding asymptomatic myasthenia gravis under checkpoint inhibitor protocol.",
+        "evidence_references": ["NEURO-NOTE-05"],
+        "escalation_reason": "Borderline autoimmune contraindication requiring PI ruling."
+      },
+      "expected_post_review_status": "ESCALATED"
+    },
+    {
+      "case_id": "case-15-multiple-unresolved-criteria-priority",
+      "description": "Case has 4 unresolved criteria. Reviewer priority calculator assigns PRIORITY due to uncertainty accumulation.",
+      "category": "multiple_uncertainties",
+      "trial_id": "NCT-PH9-015",
+      "patient_id": "PT-PH9-15",
+      "criteria": [
+        {"criterion_id": "CRIT-01", "status": "UNKNOWN", "reasoning": "Missing lab 1."},
+        {"criterion_id": "CRIT-02", "status": "UNKNOWN", "reasoning": "Missing lab 2."},
+        {"criterion_id": "CRIT-03", "status": "UNKNOWN", "reasoning": "Missing lab 3."},
+        {"criterion_id": "CRIT-04", "status": "UNKNOWN", "reasoning": "Missing lab 4."}
+      ],
+      "uncertainties": [
+        {"uncertainty_id": "UNC-15-01", "subject": "lab1", "fact_or_criterion_ref": "CRIT-01", "status": "MISSING", "uncertainty_type": "MISSING_PATIENT_FACT", "description": "Lab 1 missing", "evidence_references": [], "affected_criterion": "CRIT-01", "severity": "MEDIUM", "review_required": true, "machine_decision_allowed": false, "reason": "Missing lab 1"},
+        {"uncertainty_id": "UNC-15-02", "subject": "lab2", "fact_or_criterion_ref": "CRIT-02", "status": "MISSING", "uncertainty_type": "MISSING_PATIENT_FACT", "description": "Lab 2 missing", "evidence_references": [], "affected_criterion": "CRIT-02", "severity": "MEDIUM", "review_required": true, "machine_decision_allowed": false, "reason": "Missing lab 2"},
+        {"uncertainty_id": "UNC-15-03", "subject": "lab3", "fact_or_criterion_ref": "CRIT-03", "status": "MISSING", "uncertainty_type": "MISSING_PATIENT_FACT", "description": "Lab 3 missing", "evidence_references": [], "affected_criterion": "CRIT-03", "severity": "MEDIUM", "review_required": true, "machine_decision_allowed": false, "reason": "Missing lab 3"},
+        {"uncertainty_id": "UNC-15-04", "subject": "lab4", "fact_or_criterion_ref": "CRIT-04", "status": "MISSING", "uncertainty_type": "MISSING_PATIENT_FACT", "description": "Lab 4 missing", "evidence_references": [], "affected_criterion": "CRIT-04", "severity": "MEDIUM", "review_required": true, "machine_decision_allowed": false, "reason": "Missing lab 4"}
+      ],
+      "grounding": null,
+      "expected_trial_status": "NEEDS_REVIEW",
+      "expected_review_status": "PENDING_REVIEW",
+      "expected_priority": "PRIORITY"
+    },
+    {
+      "case_id": "case-16-resolved-review-preserves-machine-output",
+      "description": "After review resolution, original_machine_output preserves initial machine verdict and reasoning without mutation.",
+      "category": "audit_preservation",
+      "trial_id": "NCT-PH9-016",
+      "patient_id": "PT-PH9-16",
+      "criteria": [
+        {"criterion_id": "CRIT-01", "status": "UNKNOWN", "reasoning": "Machine could not verify renal clearance."}
+      ],
+      "uncertainties": [
+        {
+          "uncertainty_id": "UNC-16-01",
+          "subject": "creatinine_clearance",
+          "fact_or_criterion_ref": "CRIT-01",
+          "status": "MISSING",
+          "uncertainty_type": "MISSING_PATIENT_FACT",
+          "description": "Creatinine clearance missing from note.",
+          "evidence_references": [],
+          "affected_criterion": "CRIT-01",
+          "severity": "HIGH",
+          "review_required": true,
+          "machine_decision_allowed": false,
+          "reason": "Trial cutoff CrCl >= 50 mL/min."
+        }
+      ],
+      "grounding": null,
+      "expected_trial_status": "NEEDS_REVIEW",
+      "expected_review_status": "PENDING_REVIEW",
+      "expected_priority": "PRIORITY",
+      "reviewer_action": {
+        "reviewer_id": "REV-001",
+        "decision": "RESOLVE_PASS",
+        "rationale": "Verified calculated CrCl is 62 mL/min based on Cockcroft-Gault in chart.",
+        "evidence_references": ["LAB-CRCL-01"]
+      },
+      "expected_post_review_status": "RESOLVED"
+    },
+    {
+      "case_id": "case-17-missing-evidence-never-negative",
+      "description": "Absence of documented diabetes cannot be used to conclude patient does not have diabetes. Status must remain UNKNOWN.",
+      "category": "guardrail_missing_not_negative",
+      "trial_id": "NCT-PH9-017",
+      "patient_id": "PT-PH9-17",
+      "criteria": [
+        {"criterion_id": "CRIT-01", "status": "UNKNOWN", "reasoning": "Diabetes status is not mentioned; cannot assume absence."}
+      ],
+      "uncertainties": [
+        {
+          "uncertainty_id": "UNC-17-01",
+          "subject": "diabetes_mellitus",
+          "fact_or_criterion_ref": "CRIT-01",
+          "status": "MISSING",
+          "uncertainty_type": "MISSING_PATIENT_FACT",
+          "description": "Diabetes history unrecorded.",
+          "evidence_references": [],
+          "affected_criterion": "CRIT-01",
+          "severity": "HIGH",
+          "review_required": true,
+          "machine_decision_allowed": false,
+          "reason": "Missing info must remain UNKNOWN; cannot convert to negative evidence."
+        }
+      ],
+      "grounding": null,
+      "expected_trial_status": "NEEDS_REVIEW",
+      "expected_review_status": "PENDING_REVIEW",
+      "expected_priority": "PRIORITY"
+    },
+    {
+      "case_id": "case-18-reviewer-override-without-evidence-rejected",
+      "description": "Reviewer attempts to override UNKNOWN to RESOLVE_PASS without citing evidence references. System rejects request.",
+      "category": "guardrail_evidence_required",
+      "trial_id": "NCT-PH9-018",
+      "patient_id": "PT-PH9-18",
+      "criteria": [
+        {"criterion_id": "CRIT-01", "status": "UNKNOWN", "reasoning": "Histological grading unknown."}
+      ],
+      "uncertainties": [
+        {
+          "uncertainty_id": "UNC-18-01",
+          "subject": "tumor_grade",
+          "fact_or_criterion_ref": "CRIT-01",
+          "status": "MISSING",
+          "uncertainty_type": "MISSING_PATIENT_FACT",
+          "description": "Tumor grade missing from EHR extraction.",
+          "evidence_references": [],
+          "affected_criterion": "CRIT-01",
+          "severity": "HIGH",
+          "review_required": true,
+          "machine_decision_allowed": false,
+          "reason": "Trial requires Grade 3 histology."
+        }
+      ],
+      "grounding": null,
+      "expected_trial_status": "NEEDS_REVIEW",
+      "expected_review_status": "PENDING_REVIEW",
+      "expected_priority": "PRIORITY",
+      "reviewer_action": {
+        "reviewer_id": "REV-001",
+        "decision": "RESOLVE_PASS",
+        "rationale": "I believe the tumor is grade 3 based on my clinical intuition.",
+        "evidence_references": []
+      },
+      "expected_error": "requires at least one evidence reference"
+    }
+  ]
+}

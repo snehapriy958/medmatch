@@ -26,11 +26,38 @@ PHASE 7 — RAG vs. NON-RAG EXPERIMENTAL EVALUATION
 STATUS: COMPLETE and ACCEPTED
 
 PHASE 8 — EVIDENCE GROUNDING & HALLUCINATION EVALUATION
+STATUS: COMPLETE and ACCEPTED
+
+PHASE 9 — CLINICAL DECISION SUPPORT ROBUSTNESS & SAFETY HARNESS (UNCERTAINTY & HUMAN REVIEW)
 STATUS: IMPLEMENTATION COMPLETE — AWAITING USER ACCEPTANCE
 
 Next phase:
-PHASE 9 — CLINICAL DECISION SUPPORT ROBUSTNESS & SAFETY HARNESS (NOT STARTED)
+PHASE 10 — EXPLAINABILITY & EVIDENCE GRAPH FOUNDATION (NOT STARTED)
 ```
+
+---
+
+## Artifact Index for Phase 9 (Uncertainty & Human Review Foundation)
+
+- [Phase 9 Uncertainty Audit](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase9_uncertainty_audit.md)
+- [Canonical Uncertainty Schema](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/scripts/uncertainty_schema.py)
+- [Canonical Review Schema](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/scripts/review_schema.py)
+- [Uncertainty Model Specification](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase9_uncertainty_model.md)
+- [Human Review Workflow Specification](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase9_review_workflow.md)
+- [Deterministic Review Routing Policy](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/scripts/review_policy.py)
+- [Review Policy Specification](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase9_review_policy.md)
+- [Deterministic Review Prioritizer](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/scripts/review_priority.py)
+- [Review Resolution & Audit Manager](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/scripts/review_audit.py)
+- [Conflict Resolution & Recency Policy](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase9_conflict_resolution.md)
+- [Error Taxonomy & Guardrails (U1–U12)](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase9_error_taxonomy.md)
+- [Uncertainty Metrics Specification](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase9_metrics_specification.md)
+- [Uncertainty Metrics Engine](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/scripts/uncertainty_metrics.py)
+- [Phase 9 Experiment Harness](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/scripts/human_review_experiment.py)
+- [Phase 9 Development Fixtures](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/data/fixtures/phase9/human_review_fixtures.json)
+- [Phase 9 Development Fixtures README](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/data/fixtures/phase9/README.md)
+- [Phase 9 Human Review Test Suite](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/tests/human_review/)
+- [Phase 9 Reproducibility Specification](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase9_reproducibility.md)
+- [Phase 9 Final Report](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase9_human_review_report.md)
 
 ---
 
