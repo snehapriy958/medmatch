@@ -20,11 +20,30 @@ PHASE 5 — RETRIEVAL ENGINE
 STATUS: COMPLETE
 
 PHASE 6 — ELIGIBILITY REASONING
-STATUS: IMPLEMENTATION COMPLETE — AWAITING USER ACCEPTANCE
+STATUS: COMPLETE
+
+PHASE 7 — RAG vs. NON-RAG EXPERIMENTAL EVALUATION
+STATUS: IMPLEMENTATION COMPLETE (PHASE 5 RETRIEVAL INTEGRATION CORRECTED) — AWAITING USER ACCEPTANCE
 
 Next phase:
-PHASE 7 — MULTI-STRATEGY EVALUATION & ERROR ANALYSIS (NOT STARTED)
+PHASE 8 — ERROR ANALYSIS & CLINICAL DECISION SUPPORT ROBUSTNESS (NOT STARTED)
 ```
+
+---
+
+## Artifact Index for Phase 7 (RAG vs. Non-RAG Experimental Evaluation)
+
+- [Phase 7 RAG Audit](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase7_rag_audit.md)
+- [Controlled RAG vs. Non-RAG Experiment Contract](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase7_rag_nonrag_contract.md)
+- [Phase 7 Experiment Matrix & Ablation Design](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase7_experiment_matrix.md)
+- [Phase 7 Comparative Error Taxonomy](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase7_rag_nonrag_error_taxonomy.md)
+- [Phase 7 Reproducibility & Provenance Specification](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase7_reproducibility.md)
+- [Phase 7 Evaluation Methodology & Statistical Protocol](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase7_evaluation_methodology.md)
+- [Phase 7 RAG vs. Non-RAG Report](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase7_rag_nonrag_report.md)
+- [Non-RAG Experiment Runner (E5)](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/scripts/nonrag_experiment.py)
+- [RAG Experiment Runner (E6/E7/E8)](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/scripts/rag_experiment.py)
+- [Phase 7 Comparative Evaluation Harness](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/scripts/run_phase7_experiment.py)
+- [Phase 7 Test Suite](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/tests/rag_evaluation/)
 
 ---
 
