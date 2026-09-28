@@ -1,0 +1,338 @@
+[
+  {
+    "ablation_id": "A1",
+    "specification": {
+      "ablation_id": "A1",
+      "name": "Dense vs Hybrid Retrieval",
+      "hypothesis_tested": "Hybrid RRF retrieval achieves higher candidate recall than dense-only retrieval by combining lexical and semantic signals.",
+      "baseline_experiment": "E2_DENSE_RAG",
+      "treatment_experiment": "E3_HYBRID_RAG",
+      "changed_component": "Retrieval Method: DenseRetriever -> HybridRRFRetriever (BM25 + Dense)",
+      "unchanged_components": [
+        "Structured patient representation",
+        "Candidate pool",
+        "Top-K=5",
+        "Phase 6 eligibility reasoner",
+        "Deterministic aggregation"
+      ],
+      "primary_metrics": [
+        "retrieval_mrr",
+        "retrieval_recall_at_k",
+        "macro_f1"
+      ],
+      "sample_size": 6,
+      "interpretation_constraints": "Development-fixture observation only. n=6 is statistically insufficient to infer generalized retrieval superiority."
+    },
+    "baseline_metrics": {
+      "accuracy": 1.0,
+      "macro_f1": 1.0,
+      "criterion_accuracy": 1.0,
+      "retrieval_mrr": 0.5,
+      "retrieval_recall_at_k": 0.5,
+      "retrieval_precision_at_k": 0.1,
+      "retrieval_ndcg": 0.5,
+      "grounding_score": 0.9875,
+      "claim_support_rate": 1.0,
+      "evidence_coverage": 0.9583,
+      "citation_validity_rate": 1.0
+    },
+    "treatment_metrics": {
+      "accuracy": 1.0,
+      "macro_f1": 1.0,
+      "criterion_accuracy": 1.0,
+      "retrieval_mrr": 0.5,
+      "retrieval_recall_at_k": 0.5,
+      "retrieval_precision_at_k": 0.1,
+      "retrieval_ndcg": 0.5,
+      "grounding_score": 0.9875,
+      "claim_support_rate": 1.0,
+      "evidence_coverage": 0.9583,
+      "citation_validity_rate": 1.0
+    },
+    "metric_deltas": {
+      "accuracy": 0.0,
+      "macro_f1": 0.0,
+      "criterion_accuracy": 0.0,
+      "retrieval_mrr": 0.0,
+      "retrieval_recall_at_k": 0.0,
+      "retrieval_precision_at_k": 0.0,
+      "retrieval_ndcg": 0.0,
+      "grounding_score": 0.0,
+      "claim_support_rate": 0.0,
+      "evidence_coverage": 0.0,
+      "citation_validity_rate": 0.0
+    },
+    "sample_size": 6,
+    "is_development_fixture_observation_only": true,
+    "empirical_superiority_claim_permitted": false,
+    "observation_summary": "Ablation A1 (Dense vs Hybrid Retrieval): Delta Macro-F1=0.0, Delta Accuracy=0.0. DEVELOPMENT FIXTURE OBSERVATION ONLY: no empirical superiority claimed due to small sample size (n=6)."
+  },
+  {
+    "ablation_id": "A2",
+    "specification": {
+      "ablation_id": "A2",
+      "name": "Hybrid Retrieval vs Hybrid + Reranking",
+      "hypothesis_tested": "Second-stage clinical concept reranking improves precision and nDCG of top-ranked trial candidates.",
+      "baseline_experiment": "E3_HYBRID_RAG",
+      "treatment_experiment": "E4_RERANKED_RAG",
+      "changed_component": "Second-stage reranking: None -> ClinicalOverlapReranker",
+      "unchanged_components": [
+        "Hybrid retrieval first-stage",
+        "Patient representation",
+        "Top-K=5",
+        "Eligibility reasoning engine"
+      ],
+      "primary_metrics": [
+        "retrieval_precision_at_k",
+        "retrieval_ndcg",
+        "accuracy"
+      ],
+      "sample_size": 6,
+      "interpretation_constraints": "Development-fixture observation only. Multiplier=2 over n=6 cannot establish clinical ranking significance."
+    },
+    "baseline_metrics": {
+      "accuracy": 1.0,
+      "macro_f1": 1.0,
+      "criterion_accuracy": 1.0,
+      "retrieval_mrr": 0.5,
+      "retrieval_recall_at_k": 0.5,
+      "retrieval_precision_at_k": 0.1,
+      "retrieval_ndcg": 0.5,
+      "grounding_score": 0.9875,
+      "claim_support_rate": 1.0,
+      "evidence_coverage": 0.9583,
+      "citation_validity_rate": 1.0
+    },
+    "treatment_metrics": {
+      "accuracy": 1.0,
+      "macro_f1": 1.0,
+      "criterion_accuracy": 1.0,
+      "retrieval_mrr": 0.5,
+      "retrieval_recall_at_k": 0.5,
+      "retrieval_precision_at_k": 0.1,
+      "retrieval_ndcg": 0.5,
+      "grounding_score": 0.9875,
+      "claim_support_rate": 1.0,
+      "evidence_coverage": 0.9583,
+      "citation_validity_rate": 1.0
+    },
+    "metric_deltas": {
+      "accuracy": 0.0,
+      "macro_f1": 0.0,
+      "criterion_accuracy": 0.0,
+      "retrieval_mrr": 0.0,
+      "retrieval_recall_at_k": 0.0,
+      "retrieval_precision_at_k": 0.0,
+      "retrieval_ndcg": 0.0,
+      "grounding_score": 0.0,
+      "claim_support_rate": 0.0,
+      "evidence_coverage": 0.0,
+      "citation_validity_rate": 0.0
+    },
+    "sample_size": 6,
+    "is_development_fixture_observation_only": true,
+    "empirical_superiority_claim_permitted": false,
+    "observation_summary": "Ablation A2 (Hybrid Retrieval vs Hybrid + Reranking): Delta Macro-F1=0.0, Delta Accuracy=0.0. DEVELOPMENT FIXTURE OBSERVATION ONLY: no empirical superiority claimed due to small sample size (n=6)."
+  },
+  {
+    "ablation_id": "A3",
+    "specification": {
+      "ablation_id": "A3",
+      "name": "Raw Patient Representation vs Structured Profile",
+      "hypothesis_tested": "Structured clinical profiles (Phase 4) resolve explicit criteria more accurately and reduce UNKNOWN rates compared to raw text.",
+      "baseline_experiment": "E0_BASELINE",
+      "treatment_experiment": "E1_STRUCTURED_PROFILE",
+      "changed_component": "Patient Representation: Raw clinical note -> PatientClinicalProfile",
+      "unchanged_components": [
+        "Dense retrieval",
+        "Non-RAG reasoning",
+        "Trial criteria definitions",
+        "Deterministic aggregation"
+      ],
+      "primary_metrics": [
+        "macro_f1",
+        "accuracy",
+        "criterion_accuracy"
+      ],
+      "sample_size": 6,
+      "interpretation_constraints": "Development-fixture observation only. Measures fixture rule coverage rather than broad NLP generalizability."
+    },
+    "baseline_metrics": {
+      "accuracy": 1.0,
+      "macro_f1": 1.0,
+      "criterion_accuracy": 0.9375,
+      "retrieval_mrr": 0.5,
+      "retrieval_recall_at_k": 0.5,
+      "retrieval_precision_at_k": 0.1,
+      "retrieval_ndcg": 0.5,
+      "grounding_score": 0.9187,
+      "claim_support_rate": 0.9375,
+      "evidence_coverage": 0.875,
+      "citation_validity_rate": 1.0
+    },
+    "treatment_metrics": {
+      "accuracy": 1.0,
+      "macro_f1": 1.0,
+      "criterion_accuracy": 1.0,
+      "retrieval_mrr": 0.5,
+      "retrieval_recall_at_k": 0.5,
+      "retrieval_precision_at_k": 0.1,
+      "retrieval_ndcg": 0.5,
+      "grounding_score": 0.9875,
+      "claim_support_rate": 1.0,
+      "evidence_coverage": 0.9583,
+      "citation_validity_rate": 1.0
+    },
+    "metric_deltas": {
+      "accuracy": 0.0,
+      "macro_f1": 0.0,
+      "criterion_accuracy": 0.0625,
+      "retrieval_mrr": 0.0,
+      "retrieval_recall_at_k": 0.0,
+      "retrieval_precision_at_k": 0.0,
+      "retrieval_ndcg": 0.0,
+      "grounding_score": 0.0688,
+      "claim_support_rate": 0.0625,
+      "evidence_coverage": 0.0833,
+      "citation_validity_rate": 0.0
+    },
+    "sample_size": 6,
+    "is_development_fixture_observation_only": true,
+    "empirical_superiority_claim_permitted": false,
+    "observation_summary": "Ablation A3 (Raw Patient Representation vs Structured Profile): Delta Macro-F1=0.0, Delta Accuracy=0.0. DEVELOPMENT FIXTURE OBSERVATION ONLY: no empirical superiority claimed due to small sample size (n=6)."
+  },
+  {
+    "ablation_id": "A4",
+    "specification": {
+      "ablation_id": "A4",
+      "name": "NON-RAG vs RAG",
+      "hypothesis_tested": "Retrieval-augmented grounding allows criteria requiring protocol context to be resolved safely rather than defaulting to UNKNOWN.",
+      "baseline_experiment": "E1_STRUCTURED_PROFILE",
+      "treatment_experiment": "E2_DENSE_RAG",
+      "changed_component": "Augmentation: Non-RAG -> Dense RAG with retrieved protocol passages",
+      "unchanged_components": [
+        "Structured patient profile",
+        "Dense retrieval method",
+        "Rule-based reasoning rules",
+        "Aggregation logic"
+      ],
+      "primary_metrics": [
+        "macro_f1",
+        "grounding_score",
+        "claim_support_rate"
+      ],
+      "sample_size": 6,
+      "interpretation_constraints": "Development-fixture observation only. True RAG superiority must be tested on public external benchmarks (TrialGPT/TREC)."
+    },
+    "baseline_metrics": {
+      "accuracy": 1.0,
+      "macro_f1": 1.0,
+      "criterion_accuracy": 1.0,
+      "retrieval_mrr": 0.5,
+      "retrieval_recall_at_k": 0.5,
+      "retrieval_precision_at_k": 0.1,
+      "retrieval_ndcg": 0.5,
+      "grounding_score": 0.9875,
+      "claim_support_rate": 1.0,
+      "evidence_coverage": 0.9583,
+      "citation_validity_rate": 1.0
+    },
+    "treatment_metrics": {
+      "accuracy": 1.0,
+      "macro_f1": 1.0,
+      "criterion_accuracy": 1.0,
+      "retrieval_mrr": 0.5,
+      "retrieval_recall_at_k": 0.5,
+      "retrieval_precision_at_k": 0.1,
+      "retrieval_ndcg": 0.5,
+      "grounding_score": 0.9875,
+      "claim_support_rate": 1.0,
+      "evidence_coverage": 0.9583,
+      "citation_validity_rate": 1.0
+    },
+    "metric_deltas": {
+      "accuracy": 0.0,
+      "macro_f1": 0.0,
+      "criterion_accuracy": 0.0,
+      "retrieval_mrr": 0.0,
+      "retrieval_recall_at_k": 0.0,
+      "retrieval_precision_at_k": 0.0,
+      "retrieval_ndcg": 0.0,
+      "grounding_score": 0.0,
+      "claim_support_rate": 0.0,
+      "evidence_coverage": 0.0,
+      "citation_validity_rate": 0.0
+    },
+    "sample_size": 6,
+    "is_development_fixture_observation_only": true,
+    "empirical_superiority_claim_permitted": false,
+    "observation_summary": "Ablation A4 (NON-RAG vs RAG): Delta Macro-F1=0.0, Delta Accuracy=0.0. DEVELOPMENT FIXTURE OBSERVATION ONLY: no empirical superiority claimed due to small sample size (n=6)."
+  },
+  {
+    "ablation_id": "A5",
+    "specification": {
+      "ablation_id": "A5",
+      "name": "Evidence-Grounded Reasoning vs Non-Retrieved Reasoning",
+      "hypothesis_tested": "Evidence citations and graph grounding eliminate hallucination and increase decision traceability.",
+      "baseline_experiment": "E1_STRUCTURED_PROFILE",
+      "treatment_experiment": "E2_DENSE_RAG",
+      "changed_component": "Evidence context: Absent -> Present with character-level citations",
+      "unchanged_components": [
+        "Patient facts",
+        "Demographics",
+        "Criterion definitions",
+        "Deterministic aggregation"
+      ],
+      "primary_metrics": [
+        "evidence_coverage",
+        "grounding_score",
+        "citation_validity_rate"
+      ],
+      "sample_size": 6,
+      "interpretation_constraints": "Development-fixture observation only. Traceability metrics reflect schema adherence, not empirical clinical accuracy."
+    },
+    "baseline_metrics": {
+      "accuracy": 1.0,
+      "macro_f1": 1.0,
+      "criterion_accuracy": 1.0,
+      "retrieval_mrr": 0.5,
+      "retrieval_recall_at_k": 0.5,
+      "retrieval_precision_at_k": 0.1,
+      "retrieval_ndcg": 0.5,
+      "grounding_score": 0.9875,
+      "claim_support_rate": 1.0,
+      "evidence_coverage": 0.9583,
+      "citation_validity_rate": 1.0
+    },
+    "treatment_metrics": {
+      "accuracy": 1.0,
+      "macro_f1": 1.0,
+      "criterion_accuracy": 1.0,
+      "retrieval_mrr": 0.5,
+      "retrieval_recall_at_k": 0.5,
+      "retrieval_precision_at_k": 0.1,
+      "retrieval_ndcg": 0.5,
+      "grounding_score": 0.9875,
+      "claim_support_rate": 1.0,
+      "evidence_coverage": 0.9583,
+      "citation_validity_rate": 1.0
+    },
+    "metric_deltas": {
+      "accuracy": 0.0,
+      "macro_f1": 0.0,
+      "criterion_accuracy": 0.0,
+      "retrieval_mrr": 0.0,
+      "retrieval_recall_at_k": 0.0,
+      "retrieval_precision_at_k": 0.0,
+      "retrieval_ndcg": 0.0,
+      "grounding_score": 0.0,
+      "claim_support_rate": 0.0,
+      "evidence_coverage": 0.0,
+      "citation_validity_rate": 0.0
+    },
+    "sample_size": 6,
+    "is_development_fixture_observation_only": true,
+    "empirical_superiority_claim_permitted": false,
+    "observation_summary": "Ablation A5 (Evidence-Grounded Reasoning vs Non-Retrieved Reasoning): Delta Macro-F1=0.0, Delta Accuracy=0.0. DEVELOPMENT FIXTURE OBSERVATION ONLY: no empirical superiority claimed due to small sample size (n=6)."
+  }
+]

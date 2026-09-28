@@ -1,0 +1,129 @@
+{
+  "experiment_id": "E2_DENSE_RAG",
+  "experiment_type": "E2_DENSE_RAG",
+  "config": {
+    "experiment_id": "E2_DENSE_RAG",
+    "experiment_type": "E2_DENSE_RAG",
+    "description": "Dense RAG using actual Phase 5 DenseRetriever and Phase 6 reasoner",
+    "dataset_version": "0.1.0-fixture",
+    "patient_representation": "structured_profile",
+    "retrieval_strategy": "dense",
+    "top_k": 5,
+    "bm25_k1": 1.2,
+    "bm25_b": 0.75,
+    "rrf_constant": 60,
+    "reranker_multiplier": 2,
+    "random_seed": 42,
+    "reasoning_mode": "deterministic_rule_based",
+    "anti_leakage_enforced": true,
+    "ground_truth_isolated": true
+  },
+  "dataset_classification": "DEVELOPMENT/TEST FIXTURE ONLY",
+  "sample_size": 6,
+  "retrieval_metrics": {
+    "recall_at_k": 0.5,
+    "precision_at_k": 0.1,
+    "mrr": 0.5,
+    "ndcg": 0.5,
+    "total_queries": 6
+  },
+  "eligibility_metrics": {
+    "accuracy": 1.0,
+    "macro_precision": 1.0,
+    "macro_recall": 1.0,
+    "macro_f1": 1.0,
+    "per_class_f1": {
+      "ELIGIBLE": 1.0,
+      "INELIGIBLE": 1.0,
+      "NEEDS_REVIEW": 1.0
+    },
+    "trial_count": 6,
+    "criterion_count": 48,
+    "criterion_accuracy": 1.0,
+    "criterion_macro_f1": 1.0
+  },
+  "grounding_metrics": {
+    "claim_support_rate": 1.0,
+    "unsupported_claim_rate": 0.0,
+    "contradiction_rate": 0.0,
+    "citation_validity_rate": 1.0,
+    "evidence_coverage": 0.9583,
+    "grounding_score": 0.9875,
+    "hallucination_rate": 0.0
+  },
+  "uncertainty_metrics": {
+    "uncertainty_rate": 0.3333,
+    "review_routing_rate": 0.3333,
+    "unresolved_uncertainty_rate": 0.0,
+    "total_evaluations": 6
+  },
+  "explainability_metrics": {
+    "evidence_coverage": 0.9583,
+    "decision_traceability_rate": 1.0,
+    "criterion_traceability_rate": 0.8333,
+    "provenance_validity_rate": 1.0,
+    "explanation_support_rate": 1.0,
+    "unsupported_claim_rate": 0.0,
+    "contradiction_disclosure_rate": 1.0,
+    "graph_integrity_rate": 1.0
+  },
+  "execution_time_seconds": 0.0027,
+  "evaluated_cases": [
+    {
+      "patient_id": "SYN_P001",
+      "trial_id": "NCT02484404",
+      "predicted_eligibility": "ELIGIBLE",
+      "ground_truth_eligibility": "ELIGIBLE",
+      "unknown_count": 0,
+      "passed_count": 8,
+      "failed_count": 0
+    },
+    {
+      "patient_id": "SYN_P002",
+      "trial_id": "NCT02484404",
+      "predicted_eligibility": "INELIGIBLE",
+      "ground_truth_eligibility": "INELIGIBLE",
+      "unknown_count": 0,
+      "passed_count": 6,
+      "failed_count": 2
+    },
+    {
+      "patient_id": "SYN_P003",
+      "trial_id": "NCT02484404",
+      "predicted_eligibility": "NEEDS_REVIEW",
+      "ground_truth_eligibility": "NEEDS_REVIEW",
+      "unknown_count": 2,
+      "passed_count": 6,
+      "failed_count": 0
+    },
+    {
+      "patient_id": "SYN_P004",
+      "trial_id": "NCT02484404",
+      "predicted_eligibility": "NEEDS_REVIEW",
+      "ground_truth_eligibility": "NEEDS_REVIEW",
+      "unknown_count": 1,
+      "passed_count": 7,
+      "failed_count": 0
+    },
+    {
+      "patient_id": "SYN_P005",
+      "trial_id": "NCT02484404",
+      "predicted_eligibility": "INELIGIBLE",
+      "ground_truth_eligibility": "INELIGIBLE",
+      "unknown_count": 0,
+      "passed_count": 7,
+      "failed_count": 1
+    },
+    {
+      "patient_id": "SYN_P006",
+      "trial_id": "NCT02484404",
+      "predicted_eligibility": "INELIGIBLE",
+      "ground_truth_eligibility": "INELIGIBLE",
+      "unknown_count": 0,
+      "passed_count": 7,
+      "failed_count": 1
+    }
+  ],
+  "is_development_fixture_observation_only": true,
+  "empirical_claim_permitted": false
+}

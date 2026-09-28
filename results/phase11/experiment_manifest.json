@@ -1,0 +1,127 @@
+{
+  "phase": "Phase 11: Evaluation & Ablation",
+  "generated_at": "2026-09-28T19:31:12.115221+00:00",
+  "git_commit_sha": "59e3f2f",
+  "random_seed": 42,
+  "environment_info": {
+    "python_version": "3.13.14",
+    "os": "Windows-11-10.0.26200-SP0",
+    "platform": "AMD64"
+  },
+  "benchmark_availability": [
+    {
+      "benchmark_name": "ClinicalTrials.gov REST API v2",
+      "official_reference": "NLM / NIH, https://clinicaltrials.gov/data-api/about-api",
+      "physical_files_exist": false,
+      "record_count": 0,
+      "ingestion_status": "SOURCE IDENTIFIED \u2014 NOT YET INGESTED (Curated protocol NCT02484404 extracted as fixture template)",
+      "classification": "RESEARCH_BENCHMARK",
+      "licensing": "Public Domain (U.S. Government work)",
+      "can_support_generalizable_claims": false,
+      "limitation_notes": "Protocol descriptions available; zero patient records or eligibility qrels."
+    },
+    {
+      "benchmark_name": "TrialGPT Benchmark Cohort",
+      "official_reference": "Qiao Jin et al., Nature Communications 15, Article 5772 (2024)",
+      "physical_files_exist": false,
+      "record_count": 0,
+      "ingestion_status": "SOURCE IDENTIFIED \u2014 NOT YET INGESTED",
+      "classification": "RESEARCH_BENCHMARK",
+      "licensing": "Public Domain / MIT License",
+      "can_support_generalizable_claims": false,
+      "limitation_notes": "Public repository identified; external dataset not physically ingested into repo."
+    },
+    {
+      "benchmark_name": "TREC Clinical Trials 2021 Track",
+      "official_reference": "Roberts et al., Overview of the TREC 2021 Clinical Trials Track, NIST SP",
+      "physical_files_exist": false,
+      "record_count": 0,
+      "ingestion_status": "SOURCE IDENTIFIED \u2014 NOT YET INGESTED",
+      "classification": "RESEARCH_BENCHMARK",
+      "licensing": "Open Academic Research Use",
+      "can_support_generalizable_claims": false,
+      "limitation_notes": "Retrieval qrels only; no criterion-level labels or character text spans."
+    },
+    {
+      "benchmark_name": "TREC Clinical Trials 2022 Track",
+      "official_reference": "Roberts et al., Overview of the TREC 2022 Clinical Trials Track, NIST SP",
+      "physical_files_exist": false,
+      "record_count": 0,
+      "ingestion_status": "SOURCE IDENTIFIED \u2014 NOT YET INGESTED",
+      "classification": "RESEARCH_BENCHMARK",
+      "licensing": "Open Academic Research Use",
+      "can_support_generalizable_claims": false,
+      "limitation_notes": "Retrieval qrels only; no criterion-level labels."
+    },
+    {
+      "benchmark_name": "MedMatch Development Test Fixture",
+      "official_reference": "data/fixtures/ (NCT02484404 + 6 synthetic patients)",
+      "physical_files_exist": true,
+      "record_count": 6,
+      "ingestion_status": "LOCAL FIXTURE IMPLEMENTED",
+      "classification": "DEVELOPMENT_FIXTURE",
+      "licensing": "Apache 2.0 (MedMatch project)",
+      "can_support_generalizable_claims": false,
+      "limitation_notes": "DEVELOPMENT/TEST FIXTURE ONLY: small deterministic sample (n=6) for CI/CD and pipeline validation. Strictly prohibited from supporting clinical efficacy claims."
+    }
+  ],
+  "dataset_validation": {
+    "dataset_name": "MedMatch Phase 2 Development Test Fixture & Evaluation Foundation",
+    "version": "0.1.0-fixture",
+    "classification": "DEVELOPMENT/TEST FIXTURE ONLY \u2014 NOT A RESEARCH EVALUATION BENCHMARK",
+    "total_patients": 6,
+    "total_trials": 1,
+    "total_criteria": 8,
+    "total_patient_trial_pairs": 6,
+    "total_criterion_labels": 48,
+    "criterion_label_distribution": {
+      "PASS": 41,
+      "FAIL": 4,
+      "UNKNOWN": 3
+    },
+    "trial_label_distribution": {
+      "ELIGIBLE": 1,
+      "INELIGIBLE": 3,
+      "NEEDS_REVIEW": 2
+    },
+    "unknown_missing_distribution": {
+      "MISSING_EVIDENCE": 0,
+      "UNCERTAIN_EVIDENCE": 3,
+      "OTHER": 0
+    },
+    "split_sizes": {
+      "train": 3,
+      "validation": 1,
+      "test": 2,
+      "stress_test": 4
+    },
+    "patient_leakage_detected": false,
+    "duplicate_record_count": 0,
+    "invalid_record_count": 0,
+    "is_valid": true,
+    "validation_timestamp": "2026-09-28T19:31:12.093400+00:00"
+  },
+  "experiments_executed": [
+    "E0_BASELINE",
+    "E1_STRUCTURED_PROFILE",
+    "E2_DENSE_RAG",
+    "E3_HYBRID_RAG",
+    "E4_RERANKED_RAG"
+  ],
+  "ablations_executed": [
+    "A1",
+    "A2",
+    "A3",
+    "A4",
+    "A5"
+  ],
+  "statistical_checks_executed": [
+    "E2_DENSE_RAG vs E3_HYBRID_RAG",
+    "E3_HYBRID_RAG vs E4_RERANKED_RAG",
+    "E0_BASELINE vs E1_STRUCTURED_PROFILE",
+    "E1_STRUCTURED_PROFILE vs E2_DENSE_RAG"
+  ],
+  "empirical_benchmark_available": false,
+  "generalizable_claims_asserted": false,
+  "summary_verdict": "All evaluation infrastructure, experiments (E0\u2013E4), ablations (A1\u2013A5), error categorization, and statistical safeguards executed cleanly. Due to the absence of ingested external benchmarks (TrialGPT/TREC), all findings remain strictly classified as development-fixture observations."
+}

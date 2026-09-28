@@ -32,11 +32,36 @@ PHASE 9 — CLINICAL DECISION SUPPORT ROBUSTNESS & SAFETY HARNESS (UNCERTAINTY &
 STATUS: COMPLETE and ACCEPTED
 
 PHASE 10 — EXPLAINABILITY & EVIDENCE GRAPH FOUNDATION
+STATUS: COMPLETE and ACCEPTED
+
+PHASE 11 — EVALUATION & ABLATION
 STATUS: IMPLEMENTATION COMPLETE — AWAITING USER ACCEPTANCE
 
 Next phase:
-PHASE 11 — EXTERNAL BENCHMARK INGESTION & EMPIRICAL EVALUATION (NOT STARTED)
+PHASE 12 — CAPSTONE SYNTHESIS & BENCHMARK INTEGRATION (NOT STARTED)
 ```
+
+---
+
+## Artifact Index for Phase 11 (Evaluation & Ablation)
+
+- [Phase 11 Evaluation Audit](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase11_evaluation_audit.md)
+- [Canonical Evaluation Schemas](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/scripts/evaluation_schema.py)
+- [Extended Dataset Validator](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/scripts/dataset_validator_extended.py)
+- [Comprehensive Metrics Engine](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/scripts/evaluation_metrics.py)
+- [Controlled Experiment Runner (E0–E4)](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/scripts/experiment_runner.py)
+- [Controlled Ablation Runner (A1–A5)](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/scripts/ablation_runner.py)
+- [Deterministic Error Analyzer](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/scripts/error_analyzer.py)
+- [Statistical Significance Safeguard Analyzer](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/scripts/statistical_analyzer.py)
+- [Phase 11 Master Pipeline Runner](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/scripts/run_phase11_pipeline.py)
+- [Phase 11 Experiment Specification](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase11_experiment_specification.md)
+- [Phase 11 Ablation Specification](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase11_ablation_specification.md)
+- [Phase 11 Metrics Specification & Report](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase11_metrics_report.md)
+- [Phase 11 Error Analysis](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase11_error_analysis.md)
+- [Phase 11 Reproducibility Specification](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase11_reproducibility.md)
+- [Phase 11 Final Evaluation Report](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase11_evaluation_report.md)
+- [Phase 11 Test Suite](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/tests/evaluation/)
+- [Phase 11 Result Artifacts Bundle](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/results/phase11/)
 
 ---
 

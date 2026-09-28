@@ -1,0 +1,36 @@
+{
+  "dataset_name": "MedMatch Phase 2 Development Test Fixture & Evaluation Foundation",
+  "version": "0.1.0-fixture",
+  "classification": "DEVELOPMENT/TEST FIXTURE ONLY \u2014 NOT A RESEARCH EVALUATION BENCHMARK",
+  "total_patients": 6,
+  "total_trials": 1,
+  "total_criteria": 8,
+  "total_patient_trial_pairs": 6,
+  "total_criterion_labels": 48,
+  "criterion_label_distribution": {
+    "PASS": 41,
+    "FAIL": 4,
+    "UNKNOWN": 3
+  },
+  "trial_label_distribution": {
+    "ELIGIBLE": 1,
+    "INELIGIBLE": 3,
+    "NEEDS_REVIEW": 2
+  },
+  "unknown_missing_distribution": {
+    "MISSING_EVIDENCE": 0,
+    "UNCERTAIN_EVIDENCE": 3,
+    "OTHER": 0
+  },
+  "split_sizes": {
+    "train": 3,
+    "validation": 1,
+    "test": 2,
+    "stress_test": 4
+  },
+  "patient_leakage_detected": false,
+  "duplicate_record_count": 0,
+  "invalid_record_count": 0,
+  "is_valid": true,
+  "validation_timestamp": "2026-09-28T19:31:12.093400+00:00"
+}

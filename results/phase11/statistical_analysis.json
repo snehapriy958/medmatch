@@ -1,0 +1,58 @@
+[
+  {
+    "comparison_name": "E2_DENSE_RAG vs E3_HYBRID_RAG",
+    "system_a": "E2_DENSE_RAG",
+    "system_b": "E3_HYBRID_RAG",
+    "metric_name": "trial_eligibility_accuracy",
+    "sample_size": 6,
+    "is_paired": true,
+    "test_method_attempted": "Paired McNemar's Test / Bootstrap",
+    "p_value": null,
+    "confidence_interval_95": null,
+    "statistically_significant": false,
+    "justification_for_inference": "Sample size (n=6) on the development fixture is far below the minimum threshold (n=30) required for valid statistical hypothesis testing. Reporting p-values or fabricating confidence intervals would violate scientific rigor.",
+    "inference_permitted": false
+  },
+  {
+    "comparison_name": "E3_HYBRID_RAG vs E4_RERANKED_RAG",
+    "system_a": "E3_HYBRID_RAG",
+    "system_b": "E4_RERANKED_RAG",
+    "metric_name": "trial_eligibility_accuracy",
+    "sample_size": 6,
+    "is_paired": true,
+    "test_method_attempted": "Paired McNemar's Test / Bootstrap",
+    "p_value": null,
+    "confidence_interval_95": null,
+    "statistically_significant": false,
+    "justification_for_inference": "Sample size (n=6) on the development fixture is far below the minimum threshold (n=30) required for valid statistical hypothesis testing. Reporting p-values or fabricating confidence intervals would violate scientific rigor.",
+    "inference_permitted": false
+  },
+  {
+    "comparison_name": "E0_BASELINE vs E1_STRUCTURED_PROFILE",
+    "system_a": "E0_BASELINE",
+    "system_b": "E1_STRUCTURED_PROFILE",
+    "metric_name": "trial_eligibility_accuracy",
+    "sample_size": 6,
+    "is_paired": true,
+    "test_method_attempted": "Paired McNemar's Test / Bootstrap",
+    "p_value": null,
+    "confidence_interval_95": null,
+    "statistically_significant": false,
+    "justification_for_inference": "Sample size (n=6) on the development fixture is far below the minimum threshold (n=30) required for valid statistical hypothesis testing. Reporting p-values or fabricating confidence intervals would violate scientific rigor.",
+    "inference_permitted": false
+  },
+  {
+    "comparison_name": "E1_STRUCTURED_PROFILE vs E2_DENSE_RAG",
+    "system_a": "E1_STRUCTURED_PROFILE",
+    "system_b": "E2_DENSE_RAG",
+    "metric_name": "trial_eligibility_accuracy",
+    "sample_size": 6,
+    "is_paired": true,
+    "test_method_attempted": "Paired McNemar's Test / Bootstrap",
+    "p_value": null,
+    "confidence_interval_95": null,
+    "statistically_significant": false,
+    "justification_for_inference": "Sample size (n=6) on the development fixture is far below the minimum threshold (n=30) required for valid statistical hypothesis testing. Reporting p-values or fabricating confidence intervals would violate scientific rigor.",
+    "inference_permitted": false
+  }
+]

@@ -1,0 +1,122 @@
+{
+  "E0_BASELINE": {
+    "experiment_id": "E0_BASELINE",
+    "total_errors": 1,
+    "error_counts_by_category": {
+      "RETRIEVAL_RECALL_MISS": 1
+    },
+    "error_rates_by_category": {
+      "RETRIEVAL_RECALL_MISS": 0.1667
+    },
+    "detailed_errors": [
+      {
+        "error_id": "ERR-E0_BASELINE-001",
+        "error_category": "RETRIEVAL_RECALL_MISS",
+        "taxonomy_source": "Phase 5 Retrieval Taxonomy",
+        "patient_id": "AGGREGATE",
+        "trial_id": "MULTIPLE",
+        "criterion_id": null,
+        "expected": "1.0 Recall@K",
+        "predicted": "0.5",
+        "description": "One or more relevant trials were omitted from the top-k retrieved candidate pool."
+      }
+    ],
+    "interpretation": "Experiment E0_BASELINE produced 1 categorized errors across 6 evaluated patient-trial encounters on the development fixture. All failures are categorized deterministically using rule-based criteria audits."
+  },
+  "E1_STRUCTURED_PROFILE": {
+    "experiment_id": "E1_STRUCTURED_PROFILE",
+    "total_errors": 1,
+    "error_counts_by_category": {
+      "RETRIEVAL_RECALL_MISS": 1
+    },
+    "error_rates_by_category": {
+      "RETRIEVAL_RECALL_MISS": 0.1667
+    },
+    "detailed_errors": [
+      {
+        "error_id": "ERR-E1_STRUCTURED_PROFILE-001",
+        "error_category": "RETRIEVAL_RECALL_MISS",
+        "taxonomy_source": "Phase 5 Retrieval Taxonomy",
+        "patient_id": "AGGREGATE",
+        "trial_id": "MULTIPLE",
+        "criterion_id": null,
+        "expected": "1.0 Recall@K",
+        "predicted": "0.5",
+        "description": "One or more relevant trials were omitted from the top-k retrieved candidate pool."
+      }
+    ],
+    "interpretation": "Experiment E1_STRUCTURED_PROFILE produced 1 categorized errors across 6 evaluated patient-trial encounters on the development fixture. All failures are categorized deterministically using rule-based criteria audits."
+  },
+  "E2_DENSE_RAG": {
+    "experiment_id": "E2_DENSE_RAG",
+    "total_errors": 1,
+    "error_counts_by_category": {
+      "RETRIEVAL_RECALL_MISS": 1
+    },
+    "error_rates_by_category": {
+      "RETRIEVAL_RECALL_MISS": 0.1667
+    },
+    "detailed_errors": [
+      {
+        "error_id": "ERR-E2_DENSE_RAG-001",
+        "error_category": "RETRIEVAL_RECALL_MISS",
+        "taxonomy_source": "Phase 5 Retrieval Taxonomy",
+        "patient_id": "AGGREGATE",
+        "trial_id": "MULTIPLE",
+        "criterion_id": null,
+        "expected": "1.0 Recall@K",
+        "predicted": "0.5",
+        "description": "One or more relevant trials were omitted from the top-k retrieved candidate pool."
+      }
+    ],
+    "interpretation": "Experiment E2_DENSE_RAG produced 1 categorized errors across 6 evaluated patient-trial encounters on the development fixture. All failures are categorized deterministically using rule-based criteria audits."
+  },
+  "E3_HYBRID_RAG": {
+    "experiment_id": "E3_HYBRID_RAG",
+    "total_errors": 1,
+    "error_counts_by_category": {
+      "RETRIEVAL_RECALL_MISS": 1
+    },
+    "error_rates_by_category": {
+      "RETRIEVAL_RECALL_MISS": 0.1667
+    },
+    "detailed_errors": [
+      {
+        "error_id": "ERR-E3_HYBRID_RAG-001",
+        "error_category": "RETRIEVAL_RECALL_MISS",
+        "taxonomy_source": "Phase 5 Retrieval Taxonomy",
+        "patient_id": "AGGREGATE",
+        "trial_id": "MULTIPLE",
+        "criterion_id": null,
+        "expected": "1.0 Recall@K",
+        "predicted": "0.5",
+        "description": "One or more relevant trials were omitted from the top-k retrieved candidate pool."
+      }
+    ],
+    "interpretation": "Experiment E3_HYBRID_RAG produced 1 categorized errors across 6 evaluated patient-trial encounters on the development fixture. All failures are categorized deterministically using rule-based criteria audits."
+  },
+  "E4_RERANKED_RAG": {
+    "experiment_id": "E4_RERANKED_RAG",
+    "total_errors": 1,
+    "error_counts_by_category": {
+      "RETRIEVAL_RECALL_MISS": 1
+    },
+    "error_rates_by_category": {
+      "RETRIEVAL_RECALL_MISS": 0.1667
+    },
+    "detailed_errors": [
+      {
+        "error_id": "ERR-E4_RERANKED_RAG-001",
+        "error_category": "RETRIEVAL_RECALL_MISS",
+        "taxonomy_source": "Phase 5 Retrieval Taxonomy",
+        "patient_id": "AGGREGATE",
+        "trial_id": "MULTIPLE",
+        "criterion_id": null,
+        "expected": "1.0 Recall@K",
+        "predicted": "0.5",
+        "description": "One or more relevant trials were omitted from the top-k retrieved candidate pool."
+      }
+    ],
+    "interpretation": "Experiment E4_RERANKED_RAG produced 1 categorized errors across 6 evaluated patient-trial encounters on the development fixture. All failures are categorized deterministically using rule-based criteria audits."
+  }
+}
