@@ -17,11 +17,31 @@ PHASE 4 — PATIENT CLINICAL INFORMATION EXTRACTION
 STATUS: COMPLETE
 
 PHASE 5 — RETRIEVAL ENGINE
+STATUS: COMPLETE
+
+PHASE 6 — ELIGIBILITY REASONING
 STATUS: IMPLEMENTATION COMPLETE — AWAITING USER ACCEPTANCE
 
 Next phase:
-PHASE 6 — ELIGIBILITY REASONING & EVIDENCE SYNTHESIS (NOT STARTED)
+PHASE 7 — MULTI-STRATEGY EVALUATION & ERROR ANALYSIS (NOT STARTED)
 ```
+
+---
+
+## Artifact Index for Phase 6 (Eligibility Reasoning)
+
+- [Phase 6 Eligibility Reasoning Audit](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase6_eligibility_reasoning_audit.md)
+- [Canonical Eligibility Reasoning Contract](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/eligibility_reasoning_contract.md)
+- [Eligibility Evidence Policy](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/eligibility_evidence_policy.md)
+- [Eligibility Uncertainty Policy](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/eligibility_uncertainty_policy.md)
+- [Phase 6 Eligibility Evaluation Methodology](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase6_eligibility_evaluation.md)
+- [Eligibility Reasoning Error Taxonomy](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/eligibility_reasoning_error_taxonomy.md)
+- [Phase 6 Eligibility Reasoning Report](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase6_eligibility_reasoning_report.md)
+- [Canonical Eligibility Schemas](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/scripts/eligibility_schema.py)
+- [Evidence-Grounded Reasoner](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/scripts/eligibility_reasoner.py)
+- [Deterministic Eligibility Aggregator](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/scripts/eligibility_aggregator.py)
+- [Deterministic Eligibility Validator](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/scripts/validate_eligibility.py)
+- [Phase 6 Eligibility Test Suite](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/tests/eligibility/)
 
 ---
 
