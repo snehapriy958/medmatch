@@ -11,11 +11,33 @@ PHASE 2 — DATASET + GROUND TRUTH
 STATUS: COMPLETE and ACCEPTED
 
 PHASE 3 — CLINICAL TRIAL DOCUMENT INTELLIGENCE
+STATUS: COMPLETE and ACCEPTED
+
+PHASE 4 — PATIENT CLINICAL INFORMATION EXTRACTION
 STATUS: IMPLEMENTATION COMPLETE — AWAITING USER ACCEPTANCE
 
 Next phase:
-PHASE 4 — PATIENT CLINICAL INFORMATION EXTRACTION (NOT STARTED)
+PHASE 5 — RETRIEVAL ENGINE (NOT STARTED)
 ```
+
+---
+
+## Artifact Index for Phase 4 (Patient Clinical Information Extraction)
+
+- [Phase 4 Patient Pipeline Audit](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase4_patient_pipeline_audit.md)
+- [Canonical Patient Profile Schemas](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/scripts/patient_schema.py)
+- [Patient Temporal Representation Specification](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/patient_temporal_representation.md)
+- [Patient Uncertainty & Negation Specification](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/patient_uncertainty_specification.md)
+- [Patient Information Provenance Specification](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/patient_information_provenance.md)
+- [Modular Patient Extractor Interface](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/scripts/patient_extractor.py)
+- [Deterministic Patient Profile Validator](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/scripts/validate_patient_profile.py)
+- [Patient Extraction Evaluation Design](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/patient_extraction_evaluation.md)
+- [Patient Extraction Error Taxonomy](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/patient_extraction_error_taxonomy.md)
+- [Phase 4 Patient Information Report](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase4_patient_information_report.md)
+- [Phase 4 Development Fixture README](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/data/fixtures/phase4/README.md)
+- [Phase 4 Patient Profile Development Fixture](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/data/fixtures/phase4/patient_clinical_profile_fixture.json)
+- [Phase 4 Extraction Contract Fixture](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/data/fixtures/phase4/patient_extraction_contract.json)
+- [Phase 4 Test Suite](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/tests/patient_information/)
 
 ---
 

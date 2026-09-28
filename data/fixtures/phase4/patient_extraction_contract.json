@@ -1,0 +1,582 @@
+{
+  "status": "SUCCESS",
+  "profile": {
+    "patient_id": "PATIENT_SYNTH_001",
+    "profile_version": "0.4.0",
+    "source_reference": "NOTE_ONC_20260928_001",
+    "demographics": {
+      "age": 63,
+      "gender": "Male",
+      "race": null,
+      "ethnicity": null,
+      "birth_date": "1963-04-12"
+    },
+    "diagnoses": [
+      {
+        "fact_id": "FACT_001",
+        "patient_id": "PATIENT_SYNTH_001",
+        "concept": "non_small_cell_lung_cancer_adenocarcinoma",
+        "value": true,
+        "normalized_value": null,
+        "unit": null,
+        "assertion": "affirmed",
+        "temporality": {
+          "temporality_type": "current",
+          "reference_date": null,
+          "relative_interval": null,
+          "duration_days": null,
+          "relative_days_offset": null,
+          "anchor_event": null,
+          "is_approximate": false
+        },
+        "uncertainty": "known",
+        "evidence_source": "pathology_report",
+        "source_text": "histologically confirmed non-small cell lung cancer adenocarcinoma",
+        "provenance": {
+          "note_id": "NOTE_ONC_20260928_001",
+          "patient_id": "PATIENT_SYNTH_001",
+          "source_text": "histologically confirmed non-small cell lung cancer adenocarcinoma",
+          "start_char": 190,
+          "end_char": 256,
+          "source_section": "HISTORY OF PRESENT ILLNESS",
+          "extraction_version": "0.4.0",
+          "extraction_timestamp": "2026-09-28T12:00:00Z",
+          "model_identifier": null
+        },
+        "confidence": 1.0
+      }
+    ],
+    "symptoms": [],
+    "medications": [
+      {
+        "fact_id": "FACT_004",
+        "patient_id": "PATIENT_SYNTH_001",
+        "concept": "amlodipine",
+        "value": "5mg daily",
+        "normalized_value": null,
+        "unit": null,
+        "assertion": "affirmed",
+        "temporality": {
+          "temporality_type": "current",
+          "reference_date": null,
+          "relative_interval": null,
+          "duration_days": null,
+          "relative_days_offset": null,
+          "anchor_event": null,
+          "is_approximate": false
+        },
+        "uncertainty": "known",
+        "evidence_source": "medication_reconciliation",
+        "source_text": "Amlodipine 5mg oral daily for hypertension",
+        "provenance": {
+          "note_id": "NOTE_ONC_20260928_001",
+          "patient_id": "PATIENT_SYNTH_001",
+          "source_text": "Amlodipine 5mg oral daily for hypertension",
+          "start_char": 449,
+          "end_char": 491,
+          "source_section": "CURRENT MEDICATIONS & ALLERGIES",
+          "extraction_version": "0.4.0",
+          "extraction_timestamp": "2026-09-28T12:00:00Z",
+          "model_identifier": null
+        },
+        "confidence": 1.0
+      }
+    ],
+    "allergies": [
+      {
+        "fact_id": "FACT_012",
+        "patient_id": "PATIENT_SYNTH_001",
+        "concept": "penicillin_allergy",
+        "value": "mild childhood rash",
+        "normalized_value": null,
+        "unit": null,
+        "assertion": "affirmed",
+        "temporality": {
+          "temporality_type": "historical",
+          "reference_date": null,
+          "relative_interval": null,
+          "duration_days": null,
+          "relative_days_offset": null,
+          "anchor_event": null,
+          "is_approximate": false
+        },
+        "uncertainty": "patient_reported",
+        "evidence_source": "patient_portal",
+        "source_text": "Patient reports penicillin allergy causing mild childhood rash",
+        "provenance": {
+          "note_id": "NOTE_ONC_20260928_001",
+          "patient_id": "PATIENT_SYNTH_001",
+          "source_text": "Patient reports penicillin allergy causing mild childhood rash",
+          "start_char": 496,
+          "end_char": 558,
+          "source_section": "CURRENT MEDICATIONS & ALLERGIES",
+          "extraction_version": "0.4.0",
+          "extraction_timestamp": "2026-09-28T12:00:00Z",
+          "model_identifier": null
+        },
+        "confidence": 1.0
+      }
+    ],
+    "laboratory_results": [
+      {
+        "fact_id": "FACT_006",
+        "patient_id": "PATIENT_SYNTH_001",
+        "concept": "absolute_neutrophil_count",
+        "value": 2.1,
+        "normalized_value": 2.1,
+        "unit": "x 10^9/L",
+        "assertion": "affirmed",
+        "temporality": {
+          "temporality_type": "current",
+          "reference_date": null,
+          "relative_interval": null,
+          "duration_days": null,
+          "relative_days_offset": null,
+          "anchor_event": null,
+          "is_approximate": false
+        },
+        "uncertainty": "known",
+        "evidence_source": "laboratory_report",
+        "source_text": "Absolute neutrophil count (ANC): 2.1 x 10^9/L",
+        "provenance": {
+          "note_id": "NOTE_ONC_20260928_001",
+          "patient_id": "PATIENT_SYNTH_001",
+          "source_text": "Absolute neutrophil count (ANC): 2.1 x 10^9/L",
+          "start_char": 980,
+          "end_char": 1025,
+          "source_section": "LABORATORY & MOLECULAR PROFILING",
+          "extraction_version": "0.4.0",
+          "extraction_timestamp": "2026-09-28T12:00:00Z",
+          "model_identifier": null
+        },
+        "confidence": 1.0
+      }
+    ],
+    "vital_signs": [],
+    "procedures": [],
+    "surgeries": [],
+    "imaging_findings": [],
+    "biomarkers": [
+      {
+        "fact_id": "FACT_007",
+        "patient_id": "PATIENT_SYNTH_001",
+        "concept": "egfr_exon_19_deletion",
+        "value": true,
+        "normalized_value": null,
+        "unit": null,
+        "assertion": "affirmed",
+        "temporality": {
+          "temporality_type": "current",
+          "reference_date": null,
+          "relative_interval": null,
+          "duration_days": null,
+          "relative_days_offset": null,
+          "anchor_event": null,
+          "is_approximate": false
+        },
+        "uncertainty": "known",
+        "evidence_source": "pathology_report",
+        "source_text": "EGFR exon 19 deletion detected",
+        "provenance": {
+          "note_id": "NOTE_ONC_20260928_001",
+          "patient_id": "PATIENT_SYNTH_001",
+          "source_text": "EGFR exon 19 deletion detected",
+          "start_char": 1058,
+          "end_char": 1088,
+          "source_section": "LABORATORY & MOLECULAR PROFILING",
+          "extraction_version": "0.4.0",
+          "extraction_timestamp": "2026-09-28T12:00:00Z",
+          "model_identifier": null
+        },
+        "confidence": 1.0
+      }
+    ],
+    "disease_stage": {
+      "fact_id": "FACT_014",
+      "patient_id": "PATIENT_SYNTH_001",
+      "concept": "disease_stage",
+      "value": "Stage IV",
+      "normalized_value": null,
+      "unit": null,
+      "assertion": "affirmed",
+      "temporality": {
+        "temporality_type": "current",
+        "reference_date": null,
+        "relative_interval": null,
+        "duration_days": null,
+        "relative_days_offset": null,
+        "anchor_event": null,
+        "is_approximate": false
+      },
+      "uncertainty": "known",
+      "evidence_source": "clinician_note",
+      "source_text": "Stage IV lung adenocarcinoma in a former smoker (40 pack-years)",
+      "provenance": {
+        "note_id": "NOTE_ONC_20260928_001",
+        "patient_id": "PATIENT_SYNTH_001",
+        "source_text": "Stage IV lung adenocarcinoma in a former smoker (40 pack-years)",
+        "start_char": 1397,
+        "end_char": 1460,
+        "source_section": "SUMMARY",
+        "extraction_version": "0.4.0",
+        "extraction_timestamp": "2026-09-28T12:00:00Z",
+        "model_identifier": null
+      },
+      "confidence": 1.0
+    },
+    "performance_status": {
+      "fact_id": "FACT_013",
+      "patient_id": "PATIENT_SYNTH_001",
+      "concept": "ecog_performance_status",
+      "value": 1,
+      "normalized_value": 1,
+      "unit": null,
+      "assertion": "affirmed",
+      "temporality": {
+        "temporality_type": "current",
+        "reference_date": null,
+        "relative_interval": null,
+        "duration_days": null,
+        "relative_days_offset": null,
+        "anchor_event": null,
+        "is_approximate": false
+      },
+      "uncertainty": "clinician_documented",
+      "evidence_source": "clinician_note",
+      "source_text": "Attending oncologist documented ECOG performance status 1",
+      "provenance": {
+        "note_id": "NOTE_ONC_20260928_001",
+        "patient_id": "PATIENT_SYNTH_001",
+        "source_text": "Attending oncologist documented ECOG performance status 1",
+        "start_char": 831,
+        "end_char": 888,
+        "source_section": "PHYSICAL EXAMINATION & PERFORMANCE STATUS",
+        "extraction_version": "0.4.0",
+        "extraction_timestamp": "2026-09-28T12:00:00Z",
+        "model_identifier": null
+      },
+      "confidence": 1.0
+    },
+    "comorbidities": [
+      {
+        "fact_id": "FACT_002",
+        "patient_id": "PATIENT_SYNTH_001",
+        "concept": "brain_or_leptomeningeal_metastases",
+        "value": false,
+        "normalized_value": null,
+        "unit": null,
+        "assertion": "negated",
+        "temporality": {
+          "temporality_type": "current",
+          "reference_date": null,
+          "relative_interval": null,
+          "duration_days": null,
+          "relative_days_offset": null,
+          "anchor_event": null,
+          "is_approximate": false
+        },
+        "uncertainty": "known",
+        "evidence_source": "imaging_report",
+        "source_text": "no active brain or leptomeningeal metastases",
+        "provenance": {
+          "note_id": "NOTE_ONC_20260928_001",
+          "patient_id": "PATIENT_SYNTH_001",
+          "source_text": "no active brain or leptomeningeal metastases",
+          "start_char": 298,
+          "end_char": 342,
+          "source_section": "HISTORY OF PRESENT ILLNESS",
+          "extraction_version": "0.4.0",
+          "extraction_timestamp": "2026-09-28T12:00:00Z",
+          "model_identifier": null
+        },
+        "confidence": 1.0
+      },
+      {
+        "fact_id": "FACT_003",
+        "patient_id": "PATIENT_SYNTH_001",
+        "concept": "childhood_asthma",
+        "value": "resolved",
+        "normalized_value": null,
+        "unit": null,
+        "assertion": "historical",
+        "temporality": {
+          "temporality_type": "historical",
+          "reference_date": null,
+          "relative_interval": "15 years ago",
+          "duration_days": null,
+          "relative_days_offset": null,
+          "anchor_event": null,
+          "is_approximate": false
+        },
+        "uncertainty": "known",
+        "evidence_source": "clinician_note",
+        "source_text": "childhood asthma resolved 15 years ago",
+        "provenance": {
+          "note_id": "NOTE_ONC_20260928_001",
+          "patient_id": "PATIENT_SYNTH_001",
+          "source_text": "childhood asthma resolved 15 years ago",
+          "start_char": 372,
+          "end_char": 410,
+          "source_section": "HISTORY OF PRESENT ILLNESS",
+          "extraction_version": "0.4.0",
+          "extraction_timestamp": "2026-09-28T12:00:00Z",
+          "model_identifier": null
+        },
+        "confidence": 1.0
+      },
+      {
+        "fact_id": "FACT_015",
+        "patient_id": "PATIENT_SYNTH_001",
+        "concept": "smoking_history",
+        "value": "former smoker (40 pack-years)",
+        "normalized_value": null,
+        "unit": null,
+        "assertion": "historical",
+        "temporality": {
+          "temporality_type": "historical",
+          "reference_date": null,
+          "relative_interval": null,
+          "duration_days": null,
+          "relative_days_offset": null,
+          "anchor_event": null,
+          "is_approximate": false
+        },
+        "uncertainty": "known",
+        "evidence_source": "clinician_note",
+        "source_text": "Stage IV lung adenocarcinoma in a former smoker (40 pack-years)",
+        "provenance": {
+          "note_id": "NOTE_ONC_20260928_001",
+          "patient_id": "PATIENT_SYNTH_001",
+          "source_text": "Stage IV lung adenocarcinoma in a former smoker (40 pack-years)",
+          "start_char": 1397,
+          "end_char": 1460,
+          "source_section": "SUMMARY",
+          "extraction_version": "0.4.0",
+          "extraction_timestamp": "2026-09-28T12:00:00Z",
+          "model_identifier": null
+        },
+        "confidence": 1.0
+      }
+    ],
+    "treatment_history": [
+      {
+        "fact_id": "FACT_005",
+        "patient_id": "PATIENT_SYNTH_001",
+        "concept": "carboplatin_pemetrexed_chemotherapy",
+        "value": "completed",
+        "normalized_value": null,
+        "unit": null,
+        "assertion": "historical",
+        "temporality": {
+          "temporality_type": "historical",
+          "reference_date": null,
+          "relative_interval": null,
+          "duration_days": null,
+          "relative_days_offset": null,
+          "anchor_event": null,
+          "is_approximate": false
+        },
+        "uncertainty": "known",
+        "evidence_source": "clinician_note",
+        "source_text": "first-line Carboplatin and Pemetrexed chemotherapy",
+        "provenance": {
+          "note_id": "NOTE_ONC_20260928_001",
+          "patient_id": "PATIENT_SYNTH_001",
+          "source_text": "first-line Carboplatin and Pemetrexed chemotherapy",
+          "start_char": 609,
+          "end_char": 659,
+          "source_section": "TREATMENT HISTORY",
+          "extraction_version": "0.4.0",
+          "extraction_timestamp": "2026-09-28T12:00:00Z",
+          "model_identifier": null
+        },
+        "confidence": 1.0
+      },
+      {
+        "fact_id": "FACT_010",
+        "patient_id": "PATIENT_SYNTH_001",
+        "concept": "pulmonary_wedge_resection",
+        "value": true,
+        "normalized_value": null,
+        "unit": null,
+        "assertion": "historical",
+        "temporality": {
+          "temporality_type": "date_specific",
+          "reference_date": "2025-11-10",
+          "relative_interval": null,
+          "duration_days": null,
+          "relative_days_offset": null,
+          "anchor_event": "primary_surgical_resection",
+          "is_approximate": false
+        },
+        "uncertainty": "known",
+        "evidence_source": "surgical_report",
+        "source_text": "Primary pulmonary wedge resection was performed on 2025-11-10",
+        "provenance": {
+          "note_id": "NOTE_ONC_20260928_001",
+          "patient_id": "PATIENT_SYNTH_001",
+          "source_text": "Primary pulmonary wedge resection was performed on 2025-11-10",
+          "start_char": 724,
+          "end_char": 785,
+          "source_section": "TREATMENT HISTORY",
+          "extraction_version": "0.4.0",
+          "extraction_timestamp": "2026-09-28T12:00:00Z",
+          "model_identifier": null
+        },
+        "confidence": 1.0
+      },
+      {
+        "fact_id": "FACT_011",
+        "patient_id": "PATIENT_SYNTH_001",
+        "concept": "stereotactic_body_radiation_therapy",
+        "value": "completed",
+        "normalized_value": null,
+        "unit": null,
+        "assertion": "historical",
+        "temporality": {
+          "temporality_type": "relative_interval",
+          "reference_date": null,
+          "relative_interval": "27 days ago",
+          "duration_days": null,
+          "relative_days_offset": -27,
+          "anchor_event": "radiation_completion",
+          "is_approximate": false
+        },
+        "uncertainty": "known",
+        "evidence_source": "clinician_note",
+        "source_text": "Stereotactic body radiation therapy was completed 27 days ago",
+        "provenance": {
+          "note_id": "NOTE_ONC_20260928_001",
+          "patient_id": "PATIENT_SYNTH_001",
+          "source_text": "Stereotactic body radiation therapy was completed 27 days ago",
+          "start_char": 661,
+          "end_char": 722,
+          "source_section": "TREATMENT HISTORY",
+          "extraction_version": "0.4.0",
+          "extraction_timestamp": "2026-09-28T12:00:00Z",
+          "model_identifier": null
+        },
+        "confidence": 1.0
+      }
+    ],
+    "treatment_response": [],
+    "clinical_events": [],
+    "uncertainty_records": [
+      {
+        "fact_id": "FACT_008",
+        "patient_id": "PATIENT_SYNTH_001",
+        "concept": "adrenal_metastasis",
+        "value": "indeterminate",
+        "normalized_value": null,
+        "unit": null,
+        "assertion": "possible",
+        "temporality": {
+          "temporality_type": "current",
+          "reference_date": null,
+          "relative_interval": null,
+          "duration_days": null,
+          "relative_days_offset": null,
+          "anchor_event": null,
+          "is_approximate": false
+        },
+        "uncertainty": "uncertain",
+        "evidence_source": "imaging_report",
+        "source_text": "suspicious adrenal nodule, indeterminate between adenoma versus metastasis",
+        "provenance": {
+          "note_id": "NOTE_ONC_20260928_001",
+          "patient_id": "PATIENT_SYNTH_001",
+          "source_text": "suspicious adrenal nodule, indeterminate between adenoma versus metastasis",
+          "start_char": 1161,
+          "end_char": 1235,
+          "source_section": "IMAGING & UNCERTAIN FINDINGS",
+          "extraction_version": "0.4.0",
+          "extraction_timestamp": "2026-09-28T12:00:00Z",
+          "model_identifier": null
+        },
+        "confidence": 1.0
+      },
+      {
+        "fact_id": "FACT_009",
+        "patient_id": "PATIENT_SYNTH_001",
+        "concept": "pleural_effusion",
+        "value": "discrepant",
+        "normalized_value": null,
+        "unit": null,
+        "assertion": "possible",
+        "temporality": {
+          "temporality_type": "current",
+          "reference_date": null,
+          "relative_interval": null,
+          "duration_days": null,
+          "relative_days_offset": null,
+          "anchor_event": null,
+          "is_approximate": false
+        },
+        "uncertainty": "conflicting",
+        "evidence_source": "imaging_report",
+        "source_text": "chest CT report on 2026-09-25 notes moderate right pleural effusion, whereas ultrasound on 2026-09-26 notes minimal to no pleural fluid",
+        "provenance": {
+          "note_id": "NOTE_ONC_20260928_001",
+          "patient_id": "PATIENT_SYNTH_001",
+          "source_text": "chest CT report on 2026-09-25 notes moderate right pleural effusion, whereas ultrasound on 2026-09-26 notes minimal to no pleural fluid",
+          "start_char": 1250,
+          "end_char": 1385,
+          "source_section": "IMAGING & UNCERTAIN FINDINGS",
+          "extraction_version": "0.4.0",
+          "extraction_timestamp": "2026-09-28T12:00:00Z",
+          "model_identifier": null
+        },
+        "confidence": 1.0
+      },
+      {
+        "fact_id": "FACT_016",
+        "patient_id": "PATIENT_SYNTH_001",
+        "concept": "general_health_status",
+        "value": "fair",
+        "normalized_value": null,
+        "unit": null,
+        "assertion": "possible",
+        "temporality": {
+          "temporality_type": "current",
+          "reference_date": null,
+          "relative_interval": null,
+          "duration_days": null,
+          "relative_days_offset": null,
+          "anchor_event": null,
+          "is_approximate": false
+        },
+        "uncertainty": "uncertain",
+        "evidence_source": "clinician_note",
+        "source_text": "Overall fair general condition noted at this visit",
+        "provenance": {
+          "note_id": "NOTE_ONC_20260928_001",
+          "patient_id": "PATIENT_SYNTH_001",
+          "source_text": "Overall fair general condition noted at this visit",
+          "start_char": 890,
+          "end_char": 940,
+          "source_section": "PHYSICAL EXAMINATION & PERFORMANCE STATUS",
+          "extraction_version": "0.4.0",
+          "extraction_timestamp": "2026-09-28T12:00:00Z",
+          "model_identifier": null
+        },
+        "confidence": 1.0
+      }
+    ],
+    "missing_information": [
+      "PD-L1 tumor proportion score (TPS) expression status",
+      "KRAS G12C mutation status",
+      "Baseline serum creatinine / creatinine clearance"
+    ]
+  },
+  "total_facts": 16,
+  "affirmed_count": 7,
+  "negated_count": 1,
+  "uncertain_count": 3,
+  "historical_count": 5,
+  "conflicting_count": 1,
+  "missing_concepts_count": 3,
+  "validation_passed": true,
+  "validation_messages": [
+    "Patient profile passed all clinical fact integrity and provenance verifications."
+  ]
+}
