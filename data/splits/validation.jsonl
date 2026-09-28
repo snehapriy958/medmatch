@@ -1,0 +1,1 @@
+{"patient_id": "SYN_P004", "trial_id": "NCT02484404", "split": "validation", "dataset_layer": "development_fixture", "benchmark_classification": "TEST FIXTURE ONLY - NOT A RESEARCH BENCHMARK", "scenario_type": "conflicting_evidence_contradiction", "expected_eligibility": "NEEDS_REVIEW"}

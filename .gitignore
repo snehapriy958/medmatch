@@ -198,3 +198,16 @@ infra/kubernetes/secrets/secrets.yaml
 
 # Local AI model - do not commit
 services/ai-service/models/
+
+# =========================
+# Dataset Files (Phase 2)
+# =========================
+# Exclude bulky raw downloads, intermediate processed files, and run logs
+data/raw/
+data/processed/
+data/annotations/
+data/evaluation/runs/
+*.tar.gz
+*.zip
+*.parquet
+

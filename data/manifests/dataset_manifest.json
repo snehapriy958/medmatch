@@ -1,0 +1,140 @@
+{
+  "dataset_name": "MedMatch Phase 2 Development Test Fixture & Evaluation Foundation",
+  "dataset_version": "0.1.0-fixture",
+  "dataset_classification": "DEVELOPMENT/TEST FIXTURE ONLY — NOT A RESEARCH EVALUATION BENCHMARK",
+  "created_at": "2026-09-28T14:30:00Z",
+  "seed": 42,
+  "dataset_layers": {
+    "development_fixture": {
+      "status": "LOCAL FIXTURE IMPLEMENTED",
+      "description": "Tiny deterministic synthetic fixture used strictly for schema validation, automated testing, and CI/CD regression verification. Not a research benchmark.",
+      "trials": 1,
+      "patients": 6,
+      "criteria": 8,
+      "criterion_labels": 48,
+      "trial_labels": 6,
+      "splits_files": [
+        "data/splits/train.jsonl",
+        "data/splits/validation.jsonl",
+        "data/splits/test.jsonl"
+      ]
+    },
+    "research_benchmark": {
+      "status": "SOURCE IDENTIFIED — NOT YET INGESTED",
+      "description": "External public gold-standard benchmark datasets (TrialGPT, TREC Clinical Trials) to be ingested and normalized in subsequent phases for primary quantitative research evaluation.",
+      "ingested_patient_count": 0,
+      "ingested_trial_count": 0,
+      "ingested_label_count": 0
+    },
+    "stress_test": {
+      "status": "LOCAL FIXTURE IMPLEMENTED",
+      "description": "Dedicated synthetic edge-case evaluation subset for testing numerical thresholds, temporal intervals, missing data, and contradictory evidence. Distinct from primary research benchmark.",
+      "case_count": 4,
+      "scenarios": [
+        "missing_information",
+        "conflicting_evidence",
+        "boundary_condition",
+        "temporal_washout"
+      ],
+      "file": "data/splits/stress_test.jsonl"
+    }
+  },
+  "sources": [
+    {
+      "source_name": "ClinicalTrials.gov REST API v2",
+      "official_reference": "U.S. National Library of Medicine (NLM / NIH), https://clinicaltrials.gov/data-api/about-api",
+      "exact_identifier": "https://clinicaltrials.gov/api/v2/studies",
+      "acquisition_status": "SOURCE IDENTIFIED — NOT YET INGESTED (Curated protocol NCT02484404 extracted as fixture template)",
+      "data_contained": "Protocol descriptions, brief titles, conditions, interventions, phase, eligibility criteria text blocks",
+      "labels_contained": "Zero patient records, zero eligibility labels, zero relevance qrels",
+      "task_supported": "Candidate trial protocol indexing and criteria text extraction",
+      "license_and_terms": "Public Domain (U.S. Government work)",
+      "redistribution_permitted": true,
+      "legal_use_for_academic_evaluation": true
+    },
+    {
+      "source_name": "TrialGPT Benchmark Cohort",
+      "official_reference": "Qiao Jin et al., Nature Communications 15, Article 5772 (2024), DOI: 10.1038/s41467-024-49996-9",
+      "exact_identifier": "GitHub: https://github.com/ncbi-nlp/TrialGPT | Hugging Face: https://huggingface.co/datasets/ncbi/TrialGPT-Criterion-Annotations",
+      "acquisition_status": "SOURCE IDENTIFIED — NOT YET INGESTED",
+      "data_contained": "184 synthetic EHR clinical narratives (derived from TREC/SIGIR cases)",
+      "labels_contained": "Criterion-level clinician annotations (tri-state: meets, fails, not mentioned) for ~1,200 patient-trial pairs (~2.5% of total pairs); aggregated trial-level eligibility labels",
+      "task_supported": "Criterion-level tri-state reasoning (PASS/FAIL/UNKNOWN) and grounded decision attribution",
+      "license_and_terms": "Public Domain (NIH software) / MIT License on GitHub",
+      "redistribution_permitted": true,
+      "legal_use_for_academic_evaluation": true
+    },
+    {
+      "source_name": "TREC Clinical Trials 2021 Track",
+      "official_reference": "Roberts et al., Overview of the TREC 2021 Clinical Trials Track, NIST Special Publication",
+      "exact_identifier": "https://www.trec-cds.org/2021.html",
+      "acquisition_status": "SOURCE IDENTIFIED — NOT YET INGESTED",
+      "data_contained": "75 synthetic/semi-synthetic clinical case topics written by medical students and clinicians",
+      "labels_contained": "Retrieval relevance judgments (qrels): 0=irrelevant, 1=excluded, 2=eligible. NO criterion-level labels or character text spans.",
+      "task_supported": "Candidate retrieval evaluation (Recall@K, MRR, nDCG@K)",
+      "license_and_terms": "Open Academic Research Use under NIST TREC guidelines",
+      "redistribution_permitted": true,
+      "legal_use_for_academic_evaluation": true
+    },
+    {
+      "source_name": "TREC Clinical Trials 2022 Track",
+      "official_reference": "Roberts et al., Overview of the TREC 2022 Clinical Trials Track, NIST Special Publication",
+      "exact_identifier": "https://www.trec-cds.org/2022.html",
+      "acquisition_status": "SOURCE IDENTIFIED — NOT YET INGESTED",
+      "data_contained": "50 clinical case topics",
+      "labels_contained": "Retrieval relevance judgments (qrels): 0, 1, 2. NO criterion-level labels.",
+      "task_supported": "Candidate retrieval evaluation (Recall@K, MRR, nDCG@K)",
+      "license_and_terms": "Open Academic Research Use under NIST TREC guidelines",
+      "redistribution_permitted": true,
+      "legal_use_for_academic_evaluation": true
+    },
+    {
+      "source_name": "MIMIC-IV Clinical Database",
+      "official_reference": "Johnson et al., Scientific Data (2023), PhysioNet",
+      "exact_identifier": "https://physionet.org/content/mimiciv/2.2/",
+      "acquisition_status": "REJECTED — NOT SUITABLE",
+      "data_contained": "Real de-identified ICU/inpatient EHR data",
+      "labels_contained": "Zero clinical trial matching labels",
+      "task_supported": "None (No trial screening labels, DUA prohibits open redistribution in Git)",
+      "license_and_terms": "PhysioNet Credentialed Data Use Agreement (Requires CITI training)",
+      "redistribution_permitted": false,
+      "legal_use_for_academic_evaluation": false
+    },
+    {
+      "source_name": "MedMatch Development Test Fixture",
+      "official_reference": "scripts/data_generation/generate_synthetic_patients.py",
+      "exact_identifier": "data/fixtures/ (trials.json, patients.json, criteria.json, criterion_labels.json, trial_labels.json)",
+      "acquisition_status": "LOCAL FIXTURE IMPLEMENTED",
+      "data_contained": "1 curated protocol (NCT02484404) and 6 rule-derived synthetic patients",
+      "labels_contained": "48 criterion-level labels (PASS/FAIL/UNKNOWN) and 6 trial-level decisions (ELIGIBLE/INELIGIBLE/NEEDS_REVIEW)",
+      "task_supported": "CI/CD automated testing, schema verification, and validator integrity testing",
+      "license_and_terms": "Apache 2.0 (MedMatch project)",
+      "redistribution_permitted": true,
+      "legal_use_for_academic_evaluation": true
+    }
+  ],
+  "splits": {
+    "fixture_splits_note": "TEST FIXTURE ONLY — The 6-patient split below is a deterministic structural test partition for validator verification, NOT a statistically significant research evaluation split.",
+    "train": {
+      "patient_count": 3,
+      "file": "data/splits/train.jsonl"
+    },
+    "validation": {
+      "patient_count": 1,
+      "file": "data/splits/validation.jsonl"
+    },
+    "test": {
+      "patient_count": 2,
+      "file": "data/splits/test.jsonl"
+    },
+    "stress_test_subset": {
+      "case_count": 4,
+      "file": "data/splits/stress_test.jsonl"
+    }
+  },
+  "notes": [
+    "The current dataset is strictly a development/test fixture and must NOT be represented as a sufficient benchmark for validating MedMatch performance.",
+    "External benchmarks (TrialGPT, TREC CT) are identified and audited, but NOT yet ingested into the codebase.",
+    "Zero Protected Health Information (PHI) is contained in this repository."
+  ]
+}

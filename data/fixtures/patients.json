@@ -1,0 +1,173 @@
+[
+  {
+    "patient_id": "SYN_P001",
+    "source": "synthetic",
+    "age": 62,
+    "sex": "female",
+    "diagnoses": [
+      "Non-Small Cell Lung Cancer (Adenocarcinoma)"
+    ],
+    "stage": "Stage IV",
+    "biomarkers": {
+      "EGFR": "Exon 19 deletion"
+    },
+    "medications": [
+      "Ondansetron PRN"
+    ],
+    "comorbidities": [
+      "Hypertension"
+    ],
+    "laboratory_values": [
+      {
+        "test_name": "Platelets",
+        "value": 185.0,
+        "unit": "x 10^9/L",
+        "reference_range": null,
+        "date_offset_days": null
+      }
+    ],
+    "prior_treatments": [
+      "Carboplatin/Pemetrexed (completed 45 days ago)"
+    ],
+    "ecog_performance_status": 0,
+    "clinical_note": "CLINICAL ONCOLOGY NOTE\nPatient ID: SYN_P001 | Encounter Date: 2026-09-15\nHistory of Present Illness: 62-year-old female presenting for trial evaluation. Pathology confirms Stage IV lung adenocarcinoma with pleural metastases. Next-generation sequencing reveals EGFR Exon 19 deletion (p.E746_A750del). Physical Exam & Labs: ECOG performance status is 0. Ambulatory and active. Complete Blood Count shows Platelet count: 185 x 10^9/L (normal range 150-450). Prior Treatments: Received first-line carboplatin/pemetrexed which was completed 45 days ago. Has never received osimertinib or any third-generation EGFR TKI. Neuro/Imaging: Brain MRI from 2026-09-01 shows no evidence of intracranial metastases."
+  },
+  {
+    "patient_id": "SYN_P002",
+    "source": "synthetic",
+    "age": 58,
+    "sex": "male",
+    "diagnoses": [
+      "Non-Small Cell Lung Cancer"
+    ],
+    "stage": "Stage IV",
+    "biomarkers": {
+      "KRAS": "G12C",
+      "EGFR": "Wild-type"
+    },
+    "medications": [],
+    "comorbidities": [],
+    "laboratory_values": [
+      {
+        "test_name": "Platelets",
+        "value": 140.0,
+        "unit": "x 10^9/L",
+        "reference_range": null,
+        "date_offset_days": null
+      }
+    ],
+    "prior_treatments": [],
+    "ecog_performance_status": 3,
+    "clinical_note": "CLINICAL ONCOLOGY NOTE\nPatient ID: SYN_P002 | Encounter Date: 2026-09-15\nHistory: 58-year-old male with confirmed Stage IV NSCLC. Molecular testing shows KRAS G12C mutation; EGFR testing is wild-type. Exam: ECOG performance status 3 (bedbound > 50% of waking hours). Labs: Platelets 140 x 10^9/L. Prior Therapies: None. No prior TKI. Brain MRI: Negative for CNS lesions."
+  },
+  {
+    "patient_id": "SYN_P003",
+    "source": "synthetic",
+    "age": 65,
+    "sex": "female",
+    "diagnoses": [
+      "Advanced Lung Cancer"
+    ],
+    "stage": null,
+    "biomarkers": {
+      "EGFR": "Pending"
+    },
+    "medications": [],
+    "comorbidities": [],
+    "laboratory_values": [
+      {
+        "test_name": "Platelets",
+        "value": 210.0,
+        "unit": "x 10^9/L",
+        "reference_range": null,
+        "date_offset_days": null
+      }
+    ],
+    "prior_treatments": [],
+    "ecog_performance_status": 1,
+    "clinical_note": "CLINICAL ONCOLOGY NOTE\nPatient ID: SYN_P003 | Encounter Date: 2026-09-15\nHistory: 65-year-old female with advanced lung cancer. CT scan shows multiple pulmonary nodules. ECOG performance status is 1. Next-generation sequencing panel has been ordered and is currently pending results. Platelet count is 210 x 10^9/L. No prior EGFR targeted therapies. No headaches or neurologic symptoms."
+  },
+  {
+    "patient_id": "SYN_P004",
+    "source": "synthetic",
+    "age": 70,
+    "sex": "male",
+    "diagnoses": [
+      "Stage IV NSCLC"
+    ],
+    "stage": "Stage IV",
+    "biomarkers": {
+      "EGFR": "Conflicting (Tissue positive L858R vs Liquid negative)"
+    },
+    "medications": [],
+    "comorbidities": [],
+    "laboratory_values": [
+      {
+        "test_name": "Platelets",
+        "value": 155.0,
+        "unit": "x 10^9/L",
+        "reference_range": null,
+        "date_offset_days": null
+      }
+    ],
+    "prior_treatments": [],
+    "ecog_performance_status": 1,
+    "clinical_note": "CLINICAL ONCOLOGY NOTE\nPatient ID: SYN_P004 | Encounter Date: 2026-09-15\nHistory: 70-year-old male with Stage IV NSCLC.\nPATHOLOGY REPORT (Outside facility, 2026-08-10): Molecular panel positive for EGFR L858R point mutation.\nONCOLOGY PROGRESS NOTE (Current clinic, 2026-09-15): Liquid biopsy NGS reported as EGFR negative/wild-type. Discrepancy noted between tissue and cfDNA; repeat tissue biopsy requested.\nExam: ECOG 1. Platelets: 155 x 10^9/L. No prior third-gen TKI. Brain MRI unremarkable."
+  },
+  {
+    "patient_id": "SYN_P005",
+    "source": "synthetic",
+    "age": 54,
+    "sex": "female",
+    "diagnoses": [
+      "Metastatic Non-Small Cell Lung Cancer"
+    ],
+    "stage": "Stage IV",
+    "biomarkers": {
+      "EGFR": "Exon 19 deletion"
+    },
+    "medications": [],
+    "comorbidities": [],
+    "laboratory_values": [
+      {
+        "test_name": "Platelets",
+        "value": 99.0,
+        "unit": "x 10^9/L",
+        "reference_range": null,
+        "date_offset_days": null
+      }
+    ],
+    "prior_treatments": [],
+    "ecog_performance_status": 1,
+    "clinical_note": "CLINICAL ONCOLOGY NOTE\nPatient ID: SYN_P005 | Encounter Date: 2026-09-15\nHistory: 54-year-old female with metastatic Stage IV NSCLC, documented EGFR Exon 19 deletion. ECOG performance status is 1. Routine laboratory evaluation reveals Platelet count: 99 x 10^9/L (mild thrombocytopenia). Prior treatments: Chemotherapy finished 60 days ago. No prior osimertinib. Brain MRI: Clear."
+  },
+  {
+    "patient_id": "SYN_P006",
+    "source": "synthetic",
+    "age": 61,
+    "sex": "male",
+    "diagnoses": [
+      "Stage IV NSCLC"
+    ],
+    "stage": "Stage IV",
+    "biomarkers": {
+      "EGFR": "L858R"
+    },
+    "medications": [],
+    "comorbidities": [],
+    "laboratory_values": [
+      {
+        "test_name": "Platelets",
+        "value": 205.0,
+        "unit": "x 10^9/L",
+        "reference_range": null,
+        "date_offset_days": null
+      }
+    ],
+    "prior_treatments": [
+      "Carboplatin/Paclitaxel (completed 27 days ago)"
+    ],
+    "ecog_performance_status": 0,
+    "clinical_note": "CLINICAL ONCOLOGY NOTE\nPatient ID: SYN_P006 | Encounter Date: 2026-09-15\nHistory: 61-year-old male with Stage IV NSCLC, EGFR L858R mutation positive. ECOG performance status is 0. Platelets: 205 x 10^9/L. Brain MRI: Clear. Treatment History: Completed Carboplatin/Paclitaxel chemotherapy exactly 27 days prior to today. Patient is eager to start trial therapy immediately."
+  }
+]

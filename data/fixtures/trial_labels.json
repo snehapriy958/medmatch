@@ -1,0 +1,104 @@
+[
+  {
+    "patient_id": "SYN_P001",
+    "trial_id": "NCT02484404",
+    "eligibility": "ELIGIBLE",
+    "criterion_summary": {
+      "total": 8,
+      "pass_count": 8,
+      "fail_count": 0,
+      "unknown_count": 0
+    },
+    "evidence": [
+      "Patient satisfies all inclusion criteria and exhibits no exclusion conditions."
+    ],
+    "annotation_source": "synthetic",
+    "annotator_id": "generator_seed_42",
+    "annotation_notes": "Scenario A: Clearly Eligible"
+  },
+  {
+    "patient_id": "SYN_P002",
+    "trial_id": "NCT02484404",
+    "eligibility": "INELIGIBLE",
+    "criterion_summary": {
+      "total": 8,
+      "pass_count": 6,
+      "fail_count": 2,
+      "unknown_count": 0
+    },
+    "evidence": [
+      "Patient fails EGFR mutation inclusion and ECOG performance status inclusion."
+    ],
+    "annotation_source": "synthetic",
+    "annotator_id": "generator_seed_42",
+    "annotation_notes": "Scenario B: Clearly Ineligible"
+  },
+  {
+    "patient_id": "SYN_P003",
+    "trial_id": "NCT02484404",
+    "eligibility": "NEEDS_REVIEW",
+    "criterion_summary": {
+      "total": 8,
+      "pass_count": 6,
+      "fail_count": 0,
+      "unknown_count": 2
+    },
+    "evidence": [
+      "EGFR molecular status pending; brain MRI not documented. Clinical review required."
+    ],
+    "annotation_source": "synthetic",
+    "annotator_id": "generator_seed_42",
+    "annotation_notes": "Scenario C: Missing Information (NEEDS_REVIEW)"
+  },
+  {
+    "patient_id": "SYN_P004",
+    "trial_id": "NCT02484404",
+    "eligibility": "NEEDS_REVIEW",
+    "criterion_summary": {
+      "total": 8,
+      "pass_count": 7,
+      "fail_count": 0,
+      "unknown_count": 1
+    },
+    "evidence": [
+      "Contradictory EGFR biomarker findings require clinical pathologist adjudication."
+    ],
+    "annotation_source": "synthetic",
+    "annotator_id": "generator_seed_42",
+    "annotation_notes": "Scenario D: Conflicting Evidence (NEEDS_REVIEW)"
+  },
+  {
+    "patient_id": "SYN_P005",
+    "trial_id": "NCT02484404",
+    "eligibility": "INELIGIBLE",
+    "criterion_summary": {
+      "total": 8,
+      "pass_count": 7,
+      "fail_count": 1,
+      "unknown_count": 0
+    },
+    "evidence": [
+      "Platelet count 99 x 10^9/L fails protocol lower boundary of >= 100 x 10^9/L."
+    ],
+    "annotation_source": "synthetic",
+    "annotator_id": "generator_seed_42",
+    "annotation_notes": "Scenario E: Numerical Boundary (INELIGIBLE)"
+  },
+  {
+    "patient_id": "SYN_P006",
+    "trial_id": "NCT02484404",
+    "eligibility": "INELIGIBLE",
+    "criterion_summary": {
+      "total": 8,
+      "pass_count": 7,
+      "fail_count": 1,
+      "unknown_count": 0
+    },
+    "evidence": [
+      "Chemotherapy completed 27 days ago; violates protocol 28-day washout window."
+    ],
+    "annotation_source": "synthetic",
+    "annotator_id": "generator_seed_42",
+    "annotation_notes": "Scenario F: Temporal Condition (INELIGIBLE)"
+  }
+]

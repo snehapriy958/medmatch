@@ -1,0 +1,114 @@
+[
+  {
+    "trial_id": "NCT02484404",
+    "source": "clinicaltrials.gov",
+    "source_id": "NCT02484404",
+    "title": "Study of Osimertinib in Patients With Advanced Non-Small Cell Lung Cancer",
+    "condition": [
+      "Non-Small Cell Lung Cancer (NSCLC)"
+    ],
+    "intervention": [
+      "Osimertinib 80mg oral daily"
+    ],
+    "phase": "Phase 3",
+    "eligibility_text": "Inclusion Criteria:\n1. Histologically confirmed locally advanced or metastatic NSCLC (Stage IV).\n2. Documented EGFR sensitizing mutation (Exon 19 deletion or L858R).\n3. Age >= 18 years.\n4. ECOG performance status 0 or 1.\n5. Adequate hematologic function: Absolute Neutrophil Count (ANC) >= 1.5 x 10^9/L, Platelet count >= 100 x 10^9/L.\n\nExclusion Criteria:\n1. Prior treatment with third-generation EGFR-TKI.\n2. Untreated or symptomatic central nervous system (CNS) metastases.\n3. Cytotoxic chemotherapy completed within 28 days prior to Day 1.\n4. Major surgical procedure within 14 days prior to screening.\n",
+    "criteria": [
+      {
+        "criterion_id": "NCT02484404_INC_01",
+        "trial_id": "NCT02484404",
+        "criterion_type": "inclusion",
+        "domain": "diagnosis_stage",
+        "source_text": "Histologically confirmed locally advanced or metastatic NSCLC (Stage IV).",
+        "normalized_form": null,
+        "source_location": {
+          "section": "Eligibility Criteria",
+          "page": null
+        }
+      },
+      {
+        "criterion_id": "NCT02484404_INC_02",
+        "trial_id": "NCT02484404",
+        "criterion_type": "inclusion",
+        "domain": "biomarker_genomics",
+        "source_text": "Documented EGFR sensitizing mutation (Exon 19 deletion or L858R).",
+        "normalized_form": null,
+        "source_location": {
+          "section": "Eligibility Criteria",
+          "page": null
+        }
+      },
+      {
+        "criterion_id": "NCT02484404_INC_03",
+        "trial_id": "NCT02484404",
+        "criterion_type": "inclusion",
+        "domain": "age",
+        "source_text": "Age >= 18 years.",
+        "normalized_form": null,
+        "source_location": {
+          "section": "Eligibility Criteria",
+          "page": null
+        }
+      },
+      {
+        "criterion_id": "NCT02484404_INC_04",
+        "trial_id": "NCT02484404",
+        "criterion_type": "inclusion",
+        "domain": "performance_status",
+        "source_text": "ECOG performance status 0 or 1.",
+        "normalized_form": null,
+        "source_location": {
+          "section": "Eligibility Criteria",
+          "page": null
+        }
+      },
+      {
+        "criterion_id": "NCT02484404_INC_05",
+        "trial_id": "NCT02484404",
+        "criterion_type": "inclusion",
+        "domain": "laboratory_values",
+        "source_text": "Adequate hematologic function: Platelet count >= 100 x 10^9/L.",
+        "normalized_form": null,
+        "source_location": {
+          "section": "Eligibility Criteria",
+          "page": null
+        }
+      },
+      {
+        "criterion_id": "NCT02484404_EXC_01",
+        "trial_id": "NCT02484404",
+        "criterion_type": "exclusion",
+        "domain": "prior_treatment",
+        "source_text": "Prior treatment with third-generation EGFR-TKI.",
+        "normalized_form": null,
+        "source_location": {
+          "section": "Eligibility Criteria",
+          "page": null
+        }
+      },
+      {
+        "criterion_id": "NCT02484404_EXC_02",
+        "trial_id": "NCT02484404",
+        "criterion_type": "exclusion",
+        "domain": "comorbidities",
+        "source_text": "Untreated or symptomatic central nervous system (CNS) metastases.",
+        "normalized_form": null,
+        "source_location": {
+          "section": "Eligibility Criteria",
+          "page": null
+        }
+      },
+      {
+        "criterion_id": "NCT02484404_EXC_03",
+        "trial_id": "NCT02484404",
+        "criterion_type": "exclusion",
+        "domain": "prior_treatment",
+        "source_text": "Cytotoxic chemotherapy completed within 28 days prior to Day 1.",
+        "normalized_form": null,
+        "source_location": {
+          "section": "Eligibility Criteria",
+          "page": null
+        }
+      }
+    ]
+  }
+]

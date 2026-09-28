@@ -1,0 +1,318 @@
+{
+  "status": "SUCCESS",
+  "document": {
+    "document_id": "DOC_NCT02484404_PROTO_V1",
+    "trial_id": "NCT02484404",
+    "source_uri": "protocols/NCT02484404_protocol.pdf",
+    "document_type": "protocol_pdf",
+    "extraction_version": "0.3.0",
+    "processing_timestamp": "2026-09-28T12:00:00Z",
+    "document_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "sections": [
+      {
+        "section_id": "SEC_001",
+        "section_type": "INCLUSION_CRITERIA",
+        "heading": "Inclusion Criteria",
+        "text": "1. Histologically or cytologically confirmed non-small cell lung cancer (NSCLC) Stage IV.\n2. Patient must be aged >= 18 years and have an ECOG performance status <= 1 at time of screening.\n3. Absolute neutrophil count (ANC) >= 1.5 x 10^9/L.\n4. Patient has adequate organ and marrow reserve in the opinion of the investigator.\n5. Left ventricular ejection fraction (LVEF) >= 50% only in patients with prior cumulative doxorubicin exposure > 300 mg/m2; otherwise baseline cardiac evaluation not required.",
+        "page_start": 1,
+        "page_end": 2,
+        "source_order": 1,
+        "confidence": 1.0,
+        "criteria": [
+          {
+            "criterion_id": "NCT02484404_INC_001",
+            "trial_id": "NCT02484404",
+            "section_id": "SEC_001",
+            "criterion_type": "inclusion",
+            "domain": "diagnosis_stage",
+            "raw_text": "1. Histologically or cytologically confirmed non-small cell lung cancer (NSCLC) Stage IV.",
+            "normalized_text": "Histologically or cytologically confirmed non-small cell lung cancer (NSCLC) Stage IV",
+            "is_atomic": true,
+            "can_decompose": true,
+            "decomposition_block_reason": null,
+            "compound_relation": null,
+            "atomic_constraints": [
+              {
+                "concept": "non_small_cell_lung_cancer",
+                "operator": "==",
+                "value": "Stage IV",
+                "unit": null,
+                "temporal_window_days": null,
+                "temporal_anchor": null,
+                "is_negated": false
+              }
+            ],
+            "provenance": {
+              "document_id": "DOC_NCT02484404_PROTO_V1",
+              "trial_id": "NCT02484404",
+              "section_id": "SEC_001",
+              "page_number": 1,
+              "start_char": 0,
+              "end_char": 89,
+              "source_text": "1. Histologically or cytologically confirmed non-small cell lung cancer (NSCLC) Stage IV.",
+              "extraction_version": "0.3.0"
+            },
+            "extraction_confidence": 1.0
+          },
+          {
+            "criterion_id": "NCT02484404_INC_002",
+            "trial_id": "NCT02484404",
+            "section_id": "SEC_001",
+            "criterion_type": "inclusion",
+            "domain": "performance_status",
+            "raw_text": "2. Patient must be aged >= 18 years and have an ECOG performance status <= 1 at time of screening.",
+            "normalized_text": "Patient must be aged >= 18 years and have an ECOG performance status <= 1 at time of screening",
+            "is_atomic": false,
+            "can_decompose": true,
+            "decomposition_block_reason": null,
+            "compound_relation": "AND",
+            "atomic_constraints": [
+              {
+                "concept": "age",
+                "operator": ">=",
+                "value": 18,
+                "unit": "years",
+                "temporal_window_days": null,
+                "temporal_anchor": null,
+                "is_negated": false
+              },
+              {
+                "concept": "ecog_performance_status",
+                "operator": "<=",
+                "value": 1,
+                "unit": null,
+                "temporal_window_days": null,
+                "temporal_anchor": "at_screening",
+                "is_negated": false
+              }
+            ],
+            "provenance": {
+              "document_id": "DOC_NCT02484404_PROTO_V1",
+              "trial_id": "NCT02484404",
+              "section_id": "SEC_001",
+              "page_number": 1,
+              "start_char": 90,
+              "end_char": 188,
+              "source_text": "2. Patient must be aged >= 18 years and have an ECOG performance status <= 1 at time of screening.",
+              "extraction_version": "0.3.0"
+            },
+            "extraction_confidence": 0.98
+          },
+          {
+            "criterion_id": "NCT02484404_INC_003",
+            "trial_id": "NCT02484404",
+            "section_id": "SEC_001",
+            "criterion_type": "inclusion",
+            "domain": "laboratory_values",
+            "raw_text": "3. Absolute neutrophil count (ANC) >= 1.5 x 10^9/L.",
+            "normalized_text": "Absolute neutrophil count (ANC) >= 1.5 x 10^9/L",
+            "is_atomic": true,
+            "can_decompose": true,
+            "decomposition_block_reason": null,
+            "compound_relation": null,
+            "atomic_constraints": [
+              {
+                "concept": "absolute_neutrophil_count",
+                "operator": ">=",
+                "value": 1.5,
+                "unit": "x 10^9/L",
+                "temporal_window_days": null,
+                "temporal_anchor": null,
+                "is_negated": false
+              }
+            ],
+            "provenance": {
+              "document_id": "DOC_NCT02484404_PROTO_V1",
+              "trial_id": "NCT02484404",
+              "section_id": "SEC_001",
+              "page_number": 1,
+              "start_char": 189,
+              "end_char": 240,
+              "source_text": "3. Absolute neutrophil count (ANC) >= 1.5 x 10^9/L.",
+              "extraction_version": "0.3.0"
+            },
+            "extraction_confidence": 1.0
+          },
+          {
+            "criterion_id": "NCT02484404_INC_004",
+            "trial_id": "NCT02484404",
+            "section_id": "SEC_001",
+            "criterion_type": "ambiguous",
+            "domain": "organ_function",
+            "raw_text": "4. Patient has adequate organ and marrow reserve in the opinion of the investigator.",
+            "normalized_text": "Patient has adequate organ and marrow reserve in the opinion of the investigator",
+            "is_atomic": true,
+            "can_decompose": true,
+            "decomposition_block_reason": null,
+            "compound_relation": null,
+            "atomic_constraints": [],
+            "provenance": {
+              "document_id": "DOC_NCT02484404_PROTO_V1",
+              "trial_id": "NCT02484404",
+              "section_id": "SEC_001",
+              "page_number": 2,
+              "start_char": 241,
+              "end_char": 325,
+              "source_text": "4. Patient has adequate organ and marrow reserve in the opinion of the investigator.",
+              "extraction_version": "0.3.0"
+            },
+            "extraction_confidence": 0.85
+          },
+          {
+            "criterion_id": "NCT02484404_INC_005",
+            "trial_id": "NCT02484404",
+            "section_id": "SEC_001",
+            "criterion_type": "inclusion",
+            "domain": "organ_function",
+            "raw_text": "5. Left ventricular ejection fraction (LVEF) >= 50% only in patients with prior cumulative doxorubicin exposure > 300 mg/m2; otherwise baseline cardiac evaluation not required.",
+            "normalized_text": "Left ventricular ejection fraction (LVEF) >= 50% only in patients with prior cumulative doxorubicin exposure > 300 mg/m2; otherwise baseline cardiac evaluation not required",
+            "is_atomic": false,
+            "can_decompose": false,
+            "decomposition_block_reason": "Conditional requirement with coupled dependent clauses; premature splitting would distort cardiac evaluation eligibility",
+            "compound_relation": null,
+            "atomic_constraints": [],
+            "provenance": {
+              "document_id": "DOC_NCT02484404_PROTO_V1",
+              "trial_id": "NCT02484404",
+              "section_id": "SEC_001",
+              "page_number": 2,
+              "start_char": 326,
+              "end_char": 502,
+              "source_text": "5. Left ventricular ejection fraction (LVEF) >= 50% only in patients with prior cumulative doxorubicin exposure > 300 mg/m2; otherwise baseline cardiac evaluation not required.",
+              "extraction_version": "0.3.0"
+            },
+            "extraction_confidence": 0.92
+          }
+        ]
+      },
+      {
+        "section_id": "SEC_002",
+        "section_type": "EXCLUSION_CRITERIA",
+        "heading": "Exclusion Criteria",
+        "text": "1. Known active central nervous system (CNS) metastases or untreated leptomeningeal disease.\n2. No chemotherapy or radiotherapy within 28 days prior to Day 1 of study treatment.\n3. Pregnant or lactating females, or females of childbearing potential not willing to use highly effective contraception.",
+        "page_start": 2,
+        "page_end": 2,
+        "source_order": 2,
+        "confidence": 1.0,
+        "criteria": [
+          {
+            "criterion_id": "NCT02484404_EXC_001",
+            "trial_id": "NCT02484404",
+            "section_id": "SEC_002",
+            "criterion_type": "exclusion",
+            "domain": "comorbidities",
+            "raw_text": "1. Known active central nervous system (CNS) metastases or untreated leptomeningeal disease.",
+            "normalized_text": "Known active central nervous system (CNS) metastases or untreated leptomeningeal disease",
+            "is_atomic": true,
+            "can_decompose": true,
+            "decomposition_block_reason": null,
+            "compound_relation": null,
+            "atomic_constraints": [
+              {
+                "concept": "cns_metastases_or_leptomeningeal_disease",
+                "operator": "exists",
+                "value": true,
+                "unit": null,
+                "temporal_window_days": null,
+                "temporal_anchor": null,
+                "is_negated": false
+              }
+            ],
+            "provenance": {
+              "document_id": "DOC_NCT02484404_PROTO_V1",
+              "trial_id": "NCT02484404",
+              "section_id": "SEC_002",
+              "page_number": 2,
+              "start_char": 0,
+              "end_char": 92,
+              "source_text": "1. Known active central nervous system (CNS) metastases or untreated leptomeningeal disease.",
+              "extraction_version": "0.3.0"
+            },
+            "extraction_confidence": 1.0
+          },
+          {
+            "criterion_id": "NCT02484404_EXC_002",
+            "trial_id": "NCT02484404",
+            "section_id": "SEC_002",
+            "criterion_type": "exclusion",
+            "domain": "prior_treatment",
+            "raw_text": "2. No chemotherapy or radiotherapy within 28 days prior to Day 1 of study treatment.",
+            "normalized_text": "No chemotherapy or radiotherapy within 28 days prior to Day 1 of study treatment",
+            "is_atomic": true,
+            "can_decompose": true,
+            "decomposition_block_reason": null,
+            "compound_relation": null,
+            "atomic_constraints": [
+              {
+                "concept": "chemotherapy_or_radiotherapy",
+                "operator": "exists",
+                "value": true,
+                "unit": null,
+                "temporal_window_days": 28,
+                "temporal_anchor": "prior_to_day_1",
+                "is_negated": true
+              }
+            ],
+            "provenance": {
+              "document_id": "DOC_NCT02484404_PROTO_V1",
+              "trial_id": "NCT02484404",
+              "section_id": "SEC_002",
+              "page_number": 2,
+              "start_char": 93,
+              "end_char": 177,
+              "source_text": "2. No chemotherapy or radiotherapy within 28 days prior to Day 1 of study treatment.",
+              "extraction_version": "0.3.0"
+            },
+            "extraction_confidence": 0.99
+          },
+          {
+            "criterion_id": "NCT02484404_EXC_003",
+            "trial_id": "NCT02484404",
+            "section_id": "SEC_002",
+            "criterion_type": "exclusion",
+            "domain": "ethical_consent",
+            "raw_text": "3. Pregnant or lactating females, or females of childbearing potential not willing to use highly effective contraception.",
+            "normalized_text": "Pregnant or lactating females, or females of childbearing potential not willing to use highly effective contraception",
+            "is_atomic": true,
+            "can_decompose": true,
+            "decomposition_block_reason": null,
+            "compound_relation": null,
+            "atomic_constraints": [
+              {
+                "concept": "pregnancy_or_lactation",
+                "operator": "exists",
+                "value": true,
+                "unit": null,
+                "temporal_window_days": null,
+                "temporal_anchor": null,
+                "is_negated": false
+              }
+            ],
+            "provenance": {
+              "document_id": "DOC_NCT02484404_PROTO_V1",
+              "trial_id": "NCT02484404",
+              "section_id": "SEC_002",
+              "page_number": 2,
+              "start_char": 178,
+              "end_char": 299,
+              "source_text": "3. Pregnant or lactating females, or females of childbearing potential not willing to use highly effective contraception.",
+              "extraction_version": "0.3.0"
+            },
+            "extraction_confidence": 0.99
+          }
+        ]
+      }
+    ]
+  },
+  "total_sections": 2,
+  "total_criteria": 8,
+  "inclusion_count": 4,
+  "exclusion_count": 3,
+  "ambiguous_count": 1,
+  "atomic_count": 6,
+  "compound_count": 2,
+  "validation_passed": true,
+  "validation_messages": [
+    "Document extraction passed all structural and provenance verifications."
+  ]
+}

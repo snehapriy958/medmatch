@@ -1,0 +1,914 @@
+[
+  {
+    "patient_id": "SYN_P001",
+    "trial_id": "NCT02484404",
+    "criterion_id": "NCT02484404_INC_01",
+    "criterion_type": "inclusion",
+    "ground_truth": "PASS",
+    "patient_evidence": {
+      "text": "Stage IV lung adenocarcinoma with pleural metastases.",
+      "start_char": 172,
+      "end_char": 225,
+      "source_section": "Clinical Narrative"
+    },
+    "criterion_evidence": {
+      "text": "Histologically confirmed locally advanced or metastatic NSCLC (Stage IV)."
+    },
+    "annotation_source": "synthetic",
+    "annotator_id": "generator_seed_42",
+    "annotation_notes": "Scenario A: Clearly Eligible positive control"
+  },
+  {
+    "patient_id": "SYN_P001",
+    "trial_id": "NCT02484404",
+    "criterion_id": "NCT02484404_INC_02",
+    "criterion_type": "inclusion",
+    "ground_truth": "PASS",
+    "patient_evidence": {
+      "text": "EGFR Exon 19 deletion (p.E746_A750del).",
+      "start_char": 261,
+      "end_char": 300,
+      "source_section": "Clinical Narrative"
+    },
+    "criterion_evidence": {
+      "text": "Documented EGFR sensitizing mutation (Exon 19 deletion or L858R)."
+    },
+    "annotation_source": "synthetic",
+    "annotator_id": "generator_seed_42",
+    "annotation_notes": "Scenario A: Clearly Eligible positive control"
+  },
+  {
+    "patient_id": "SYN_P001",
+    "trial_id": "NCT02484404",
+    "criterion_id": "NCT02484404_INC_03",
+    "criterion_type": "inclusion",
+    "ground_truth": "PASS",
+    "patient_evidence": {
+      "text": "62-year-old female",
+      "start_char": 101,
+      "end_char": 119,
+      "source_section": "Clinical Narrative"
+    },
+    "criterion_evidence": {
+      "text": "Age >= 18 years."
+    },
+    "annotation_source": "synthetic",
+    "annotator_id": "generator_seed_42",
+    "annotation_notes": "Scenario A: Clearly Eligible positive control"
+  },
+  {
+    "patient_id": "SYN_P001",
+    "trial_id": "NCT02484404",
+    "criterion_id": "NCT02484404_INC_04",
+    "criterion_type": "inclusion",
+    "ground_truth": "PASS",
+    "patient_evidence": {
+      "text": "ECOG performance status is 0.",
+      "start_char": 323,
+      "end_char": 352,
+      "source_section": "Clinical Narrative"
+    },
+    "criterion_evidence": {
+      "text": "ECOG performance status 0 or 1."
+    },
+    "annotation_source": "synthetic",
+    "annotator_id": "generator_seed_42",
+    "annotation_notes": "Scenario A: Clearly Eligible positive control"
+  },
+  {
+    "patient_id": "SYN_P001",
+    "trial_id": "NCT02484404",
+    "criterion_id": "NCT02484404_INC_05",
+    "criterion_type": "inclusion",
+    "ground_truth": "PASS",
+    "patient_evidence": {
+      "text": "Platelet count: 185 x 10^9/L",
+      "start_char": 403,
+      "end_char": 431,
+      "source_section": "Clinical Narrative"
+    },
+    "criterion_evidence": {
+      "text": "Adequate hematologic function: Platelet count >= 100 x 10^9/L."
+    },
+    "annotation_source": "synthetic",
+    "annotator_id": "generator_seed_42",
+    "annotation_notes": "Scenario A: Clearly Eligible positive control"
+  },
+  {
+    "patient_id": "SYN_P001",
+    "trial_id": "NCT02484404",
+    "criterion_id": "NCT02484404_EXC_01",
+    "criterion_type": "exclusion",
+    "ground_truth": "PASS",
+    "patient_evidence": {
+      "text": "Has never received osimertinib or any third-generation EGFR TKI.",
+      "start_char": 550,
+      "end_char": 614,
+      "source_section": "Clinical Narrative"
+    },
+    "criterion_evidence": {
+      "text": "Prior treatment with third-generation EGFR-TKI."
+    },
+    "annotation_source": "synthetic",
+    "annotator_id": "generator_seed_42",
+    "annotation_notes": "Scenario A: Clearly Eligible positive control"
+  },
+  {
+    "patient_id": "SYN_P001",
+    "trial_id": "NCT02484404",
+    "criterion_id": "NCT02484404_EXC_02",
+    "criterion_type": "exclusion",
+    "ground_truth": "PASS",
+    "patient_evidence": {
+      "text": "Brain MRI from 2026-09-01 shows no evidence of intracranial metastases.",
+      "start_char": 630,
+      "end_char": 701,
+      "source_section": "Clinical Narrative"
+    },
+    "criterion_evidence": {
+      "text": "Untreated or symptomatic central nervous system (CNS) metastases."
+    },
+    "annotation_source": "synthetic",
+    "annotator_id": "generator_seed_42",
+    "annotation_notes": "Scenario A: Clearly Eligible positive control"
+  },
+  {
+    "patient_id": "SYN_P001",
+    "trial_id": "NCT02484404",
+    "criterion_id": "NCT02484404_EXC_03",
+    "criterion_type": "exclusion",
+    "ground_truth": "PASS",
+    "patient_evidence": {
+      "text": "carboplatin/pemetrexed which was completed 45 days ago",
+      "start_char": 494,
+      "end_char": 548,
+      "source_section": "Clinical Narrative"
+    },
+    "criterion_evidence": {
+      "text": "Cytotoxic chemotherapy completed within 28 days prior to Day 1."
+    },
+    "annotation_source": "synthetic",
+    "annotator_id": "generator_seed_42",
+    "annotation_notes": "Scenario A: Clearly Eligible positive control"
+  },
+  {
+    "patient_id": "SYN_P002",
+    "trial_id": "NCT02484404",
+    "criterion_id": "NCT02484404_INC_01",
+    "criterion_type": "inclusion",
+    "ground_truth": "PASS",
+    "patient_evidence": {
+      "text": "Stage IV NSCLC.",
+      "start_char": 114,
+      "end_char": 129,
+      "source_section": "Clinical Narrative"
+    },
+    "criterion_evidence": {
+      "text": "Histologically confirmed locally advanced or metastatic NSCLC (Stage IV)."
+    },
+    "annotation_source": "synthetic",
+    "annotator_id": "generator_seed_42",
+    "annotation_notes": "Scenario B: Clearly Ineligible (EGFR wild-type and ECOG 3)"
+  },
+  {
+    "patient_id": "SYN_P002",
+    "trial_id": "NCT02484404",
+    "criterion_id": "NCT02484404_INC_02",
+    "criterion_type": "inclusion",
+    "ground_truth": "FAIL",
+    "patient_evidence": {
+      "text": "EGFR testing is wild-type.",
+      "start_char": 174,
+      "end_char": 200,
+      "source_section": "Clinical Narrative"
+    },
+    "criterion_evidence": {
+      "text": "Documented EGFR sensitizing mutation (Exon 19 deletion or L858R)."
+    },
+    "annotation_source": "synthetic",
+    "annotator_id": "generator_seed_42",
+    "annotation_notes": "Scenario B: Clearly Ineligible (EGFR wild-type and ECOG 3)"
+  },
+  {
+    "patient_id": "SYN_P002",
+    "trial_id": "NCT02484404",
+    "criterion_id": "NCT02484404_INC_03",
+    "criterion_type": "inclusion",
+    "ground_truth": "PASS",
+    "patient_evidence": {
+      "text": "58-year-old male",
+      "start_char": 82,
+      "end_char": 98,
+      "source_section": "Clinical Narrative"
+    },
+    "criterion_evidence": {
+      "text": "Age >= 18 years."
+    },
+    "annotation_source": "synthetic",
+    "annotator_id": "generator_seed_42",
+    "annotation_notes": "Scenario B: Clearly Ineligible (EGFR wild-type and ECOG 3)"
+  },
+  {
+    "patient_id": "SYN_P002",
+    "trial_id": "NCT02484404",
+    "criterion_id": "NCT02484404_INC_04",
+    "criterion_type": "inclusion",
+    "ground_truth": "FAIL",
+    "patient_evidence": {
+      "text": "ECOG performance status 3 (bedbound > 50% of waking hours).",
+      "start_char": 207,
+      "end_char": 266,
+      "source_section": "Clinical Narrative"
+    },
+    "criterion_evidence": {
+      "text": "ECOG performance status 0 or 1."
+    },
+    "annotation_source": "synthetic",
+    "annotator_id": "generator_seed_42",
+    "annotation_notes": "Scenario B: Clearly Ineligible (EGFR wild-type and ECOG 3)"
+  },
+  {
+    "patient_id": "SYN_P002",
+    "trial_id": "NCT02484404",
+    "criterion_id": "NCT02484404_INC_05",
+    "criterion_type": "inclusion",
+    "ground_truth": "PASS",
+    "patient_evidence": {
+      "text": "Platelets 140 x 10^9/L.",
+      "start_char": 273,
+      "end_char": 296,
+      "source_section": "Clinical Narrative"
+    },
+    "criterion_evidence": {
+      "text": "Adequate hematologic function: Platelet count >= 100 x 10^9/L."
+    },
+    "annotation_source": "synthetic",
+    "annotator_id": "generator_seed_42",
+    "annotation_notes": "Scenario B: Clearly Ineligible (EGFR wild-type and ECOG 3)"
+  },
+  {
+    "patient_id": "SYN_P002",
+    "trial_id": "NCT02484404",
+    "criterion_id": "NCT02484404_EXC_01",
+    "criterion_type": "exclusion",
+    "ground_truth": "PASS",
+    "patient_evidence": {
+      "text": "No prior TKI.",
+      "start_char": 320,
+      "end_char": 333,
+      "source_section": "Clinical Narrative"
+    },
+    "criterion_evidence": {
+      "text": "Prior treatment with third-generation EGFR-TKI."
+    },
+    "annotation_source": "synthetic",
+    "annotator_id": "generator_seed_42",
+    "annotation_notes": "Scenario B: Clearly Ineligible (EGFR wild-type and ECOG 3)"
+  },
+  {
+    "patient_id": "SYN_P002",
+    "trial_id": "NCT02484404",
+    "criterion_id": "NCT02484404_EXC_02",
+    "criterion_type": "exclusion",
+    "ground_truth": "PASS",
+    "patient_evidence": {
+      "text": "Brain MRI: Negative for CNS lesions.",
+      "start_char": 334,
+      "end_char": 370,
+      "source_section": "Clinical Narrative"
+    },
+    "criterion_evidence": {
+      "text": "Untreated or symptomatic central nervous system (CNS) metastases."
+    },
+    "annotation_source": "synthetic",
+    "annotator_id": "generator_seed_42",
+    "annotation_notes": "Scenario B: Clearly Ineligible (EGFR wild-type and ECOG 3)"
+  },
+  {
+    "patient_id": "SYN_P002",
+    "trial_id": "NCT02484404",
+    "criterion_id": "NCT02484404_EXC_03",
+    "criterion_type": "exclusion",
+    "ground_truth": "PASS",
+    "patient_evidence": {
+      "text": "Prior Therapies: None.",
+      "start_char": 297,
+      "end_char": 319,
+      "source_section": "Clinical Narrative"
+    },
+    "criterion_evidence": {
+      "text": "Cytotoxic chemotherapy completed within 28 days prior to Day 1."
+    },
+    "annotation_source": "synthetic",
+    "annotator_id": "generator_seed_42",
+    "annotation_notes": "Scenario B: Clearly Ineligible (EGFR wild-type and ECOG 3)"
+  },
+  {
+    "patient_id": "SYN_P003",
+    "trial_id": "NCT02484404",
+    "criterion_id": "NCT02484404_INC_01",
+    "criterion_type": "inclusion",
+    "ground_truth": "PASS",
+    "patient_evidence": {
+      "text": "advanced lung cancer. CT scan shows multiple pulmonary nodules.",
+      "start_char": 106,
+      "end_char": 169,
+      "source_section": "Clinical Narrative"
+    },
+    "criterion_evidence": {
+      "text": "Histologically confirmed locally advanced or metastatic NSCLC (Stage IV)."
+    },
+    "annotation_source": "synthetic",
+    "annotator_id": "generator_seed_42",
+    "annotation_notes": "Scenario C: Missing EGFR status and missing brain imaging"
+  },
+  {
+    "patient_id": "SYN_P003",
+    "trial_id": "NCT02484404",
+    "criterion_id": "NCT02484404_INC_02",
+    "criterion_type": "inclusion",
+    "ground_truth": "UNKNOWN",
+    "patient_evidence": {
+      "text": "",
+      "start_char": -1,
+      "end_char": -1,
+      "source_section": "None"
+    },
+    "criterion_evidence": {
+      "text": "Documented EGFR sensitizing mutation (Exon 19 deletion or L858R)."
+    },
+    "annotation_source": "synthetic",
+    "annotator_id": "generator_seed_42",
+    "annotation_notes": "Scenario C: Missing EGFR status and missing brain imaging"
+  },
+  {
+    "patient_id": "SYN_P003",
+    "trial_id": "NCT02484404",
+    "criterion_id": "NCT02484404_INC_03",
+    "criterion_type": "inclusion",
+    "ground_truth": "PASS",
+    "patient_evidence": {
+      "text": "65-year-old female",
+      "start_char": 82,
+      "end_char": 100,
+      "source_section": "Clinical Narrative"
+    },
+    "criterion_evidence": {
+      "text": "Age >= 18 years."
+    },
+    "annotation_source": "synthetic",
+    "annotator_id": "generator_seed_42",
+    "annotation_notes": "Scenario C: Missing EGFR status and missing brain imaging"
+  },
+  {
+    "patient_id": "SYN_P003",
+    "trial_id": "NCT02484404",
+    "criterion_id": "NCT02484404_INC_04",
+    "criterion_type": "inclusion",
+    "ground_truth": "PASS",
+    "patient_evidence": {
+      "text": "ECOG performance status is 1.",
+      "start_char": 170,
+      "end_char": 199,
+      "source_section": "Clinical Narrative"
+    },
+    "criterion_evidence": {
+      "text": "ECOG performance status 0 or 1."
+    },
+    "annotation_source": "synthetic",
+    "annotator_id": "generator_seed_42",
+    "annotation_notes": "Scenario C: Missing EGFR status and missing brain imaging"
+  },
+  {
+    "patient_id": "SYN_P003",
+    "trial_id": "NCT02484404",
+    "criterion_id": "NCT02484404_INC_05",
+    "criterion_type": "inclusion",
+    "ground_truth": "PASS",
+    "patient_evidence": {
+      "text": "Platelet count is 210 x 10^9/L.",
+      "start_char": 284,
+      "end_char": 315,
+      "source_section": "Clinical Narrative"
+    },
+    "criterion_evidence": {
+      "text": "Adequate hematologic function: Platelet count >= 100 x 10^9/L."
+    },
+    "annotation_source": "synthetic",
+    "annotator_id": "generator_seed_42",
+    "annotation_notes": "Scenario C: Missing EGFR status and missing brain imaging"
+  },
+  {
+    "patient_id": "SYN_P003",
+    "trial_id": "NCT02484404",
+    "criterion_id": "NCT02484404_EXC_01",
+    "criterion_type": "exclusion",
+    "ground_truth": "PASS",
+    "patient_evidence": {
+      "text": "No prior EGFR targeted therapies.",
+      "start_char": 316,
+      "end_char": 349,
+      "source_section": "Clinical Narrative"
+    },
+    "criterion_evidence": {
+      "text": "Prior treatment with third-generation EGFR-TKI."
+    },
+    "annotation_source": "synthetic",
+    "annotator_id": "generator_seed_42",
+    "annotation_notes": "Scenario C: Missing EGFR status and missing brain imaging"
+  },
+  {
+    "patient_id": "SYN_P003",
+    "trial_id": "NCT02484404",
+    "criterion_id": "NCT02484404_EXC_02",
+    "criterion_type": "exclusion",
+    "ground_truth": "UNKNOWN",
+    "patient_evidence": {
+      "text": "",
+      "start_char": -1,
+      "end_char": -1,
+      "source_section": "None"
+    },
+    "criterion_evidence": {
+      "text": "Untreated or symptomatic central nervous system (CNS) metastases."
+    },
+    "annotation_source": "synthetic",
+    "annotator_id": "generator_seed_42",
+    "annotation_notes": "Scenario C: Missing EGFR status and missing brain imaging"
+  },
+  {
+    "patient_id": "SYN_P003",
+    "trial_id": "NCT02484404",
+    "criterion_id": "NCT02484404_EXC_03",
+    "criterion_type": "exclusion",
+    "ground_truth": "PASS",
+    "patient_evidence": {
+      "text": "No prior EGFR targeted therapies.",
+      "start_char": 316,
+      "end_char": 349,
+      "source_section": "Clinical Narrative"
+    },
+    "criterion_evidence": {
+      "text": "Cytotoxic chemotherapy completed within 28 days prior to Day 1."
+    },
+    "annotation_source": "synthetic",
+    "annotator_id": "generator_seed_42",
+    "annotation_notes": "Scenario C: Missing EGFR status and missing brain imaging"
+  },
+  {
+    "patient_id": "SYN_P004",
+    "trial_id": "NCT02484404",
+    "criterion_id": "NCT02484404_INC_01",
+    "criterion_type": "inclusion",
+    "ground_truth": "PASS",
+    "patient_evidence": {
+      "text": "Stage IV NSCLC.",
+      "start_char": 104,
+      "end_char": 119,
+      "source_section": "Clinical Narrative"
+    },
+    "criterion_evidence": {
+      "text": "Histologically confirmed locally advanced or metastatic NSCLC (Stage IV)."
+    },
+    "annotation_source": "synthetic",
+    "annotator_id": "generator_seed_42",
+    "annotation_notes": "Scenario D: Conflicting tissue vs liquid biopsy EGFR status"
+  },
+  {
+    "patient_id": "SYN_P004",
+    "trial_id": "NCT02484404",
+    "criterion_id": "NCT02484404_INC_02",
+    "criterion_type": "inclusion",
+    "ground_truth": "UNKNOWN",
+    "patient_evidence": {
+      "text": "",
+      "start_char": -1,
+      "end_char": -1,
+      "source_section": "None"
+    },
+    "criterion_evidence": {
+      "text": "Documented EGFR sensitizing mutation (Exon 19 deletion or L858R)."
+    },
+    "annotation_source": "synthetic",
+    "annotator_id": "generator_seed_42",
+    "annotation_notes": "Scenario D: Conflicting tissue vs liquid biopsy EGFR status"
+  },
+  {
+    "patient_id": "SYN_P004",
+    "trial_id": "NCT02484404",
+    "criterion_id": "NCT02484404_INC_03",
+    "criterion_type": "inclusion",
+    "ground_truth": "PASS",
+    "patient_evidence": {
+      "text": "70-year-old male",
+      "start_char": 82,
+      "end_char": 98,
+      "source_section": "Clinical Narrative"
+    },
+    "criterion_evidence": {
+      "text": "Age >= 18 years."
+    },
+    "annotation_source": "synthetic",
+    "annotator_id": "generator_seed_42",
+    "annotation_notes": "Scenario D: Conflicting tissue vs liquid biopsy EGFR status"
+  },
+  {
+    "patient_id": "SYN_P004",
+    "trial_id": "NCT02484404",
+    "criterion_id": "NCT02484404_INC_04",
+    "criterion_type": "inclusion",
+    "ground_truth": "PASS",
+    "patient_evidence": {
+      "text": "ECOG 1.",
+      "start_char": 415,
+      "end_char": 422,
+      "source_section": "Clinical Narrative"
+    },
+    "criterion_evidence": {
+      "text": "ECOG performance status 0 or 1."
+    },
+    "annotation_source": "synthetic",
+    "annotator_id": "generator_seed_42",
+    "annotation_notes": "Scenario D: Conflicting tissue vs liquid biopsy EGFR status"
+  },
+  {
+    "patient_id": "SYN_P004",
+    "trial_id": "NCT02484404",
+    "criterion_id": "NCT02484404_INC_05",
+    "criterion_type": "inclusion",
+    "ground_truth": "PASS",
+    "patient_evidence": {
+      "text": "Platelets: 155 x 10^9/L.",
+      "start_char": 423,
+      "end_char": 447,
+      "source_section": "Clinical Narrative"
+    },
+    "criterion_evidence": {
+      "text": "Adequate hematologic function: Platelet count >= 100 x 10^9/L."
+    },
+    "annotation_source": "synthetic",
+    "annotator_id": "generator_seed_42",
+    "annotation_notes": "Scenario D: Conflicting tissue vs liquid biopsy EGFR status"
+  },
+  {
+    "patient_id": "SYN_P004",
+    "trial_id": "NCT02484404",
+    "criterion_id": "NCT02484404_EXC_01",
+    "criterion_type": "exclusion",
+    "ground_truth": "PASS",
+    "patient_evidence": {
+      "text": "No prior third-gen TKI.",
+      "start_char": 448,
+      "end_char": 471,
+      "source_section": "Clinical Narrative"
+    },
+    "criterion_evidence": {
+      "text": "Prior treatment with third-generation EGFR-TKI."
+    },
+    "annotation_source": "synthetic",
+    "annotator_id": "generator_seed_42",
+    "annotation_notes": "Scenario D: Conflicting tissue vs liquid biopsy EGFR status"
+  },
+  {
+    "patient_id": "SYN_P004",
+    "trial_id": "NCT02484404",
+    "criterion_id": "NCT02484404_EXC_02",
+    "criterion_type": "exclusion",
+    "ground_truth": "PASS",
+    "patient_evidence": {
+      "text": "Brain MRI unremarkable.",
+      "start_char": 472,
+      "end_char": 495,
+      "source_section": "Clinical Narrative"
+    },
+    "criterion_evidence": {
+      "text": "Untreated or symptomatic central nervous system (CNS) metastases."
+    },
+    "annotation_source": "synthetic",
+    "annotator_id": "generator_seed_42",
+    "annotation_notes": "Scenario D: Conflicting tissue vs liquid biopsy EGFR status"
+  },
+  {
+    "patient_id": "SYN_P004",
+    "trial_id": "NCT02484404",
+    "criterion_id": "NCT02484404_EXC_03",
+    "criterion_type": "exclusion",
+    "ground_truth": "PASS",
+    "patient_evidence": {
+      "text": "No prior third-gen TKI.",
+      "start_char": 448,
+      "end_char": 471,
+      "source_section": "Clinical Narrative"
+    },
+    "criterion_evidence": {
+      "text": "Cytotoxic chemotherapy completed within 28 days prior to Day 1."
+    },
+    "annotation_source": "synthetic",
+    "annotator_id": "generator_seed_42",
+    "annotation_notes": "Scenario D: Conflicting tissue vs liquid biopsy EGFR status"
+  },
+  {
+    "patient_id": "SYN_P005",
+    "trial_id": "NCT02484404",
+    "criterion_id": "NCT02484404_INC_01",
+    "criterion_type": "inclusion",
+    "ground_truth": "PASS",
+    "patient_evidence": {
+      "text": "metastatic Stage IV NSCLC",
+      "start_char": 106,
+      "end_char": 131,
+      "source_section": "Clinical Narrative"
+    },
+    "criterion_evidence": {
+      "text": "Histologically confirmed locally advanced or metastatic NSCLC (Stage IV)."
+    },
+    "annotation_source": "synthetic",
+    "annotator_id": "generator_seed_42",
+    "annotation_notes": "Scenario E: Numerical Boundary (Platelets 99 vs >= 100 cutoff)"
+  },
+  {
+    "patient_id": "SYN_P005",
+    "trial_id": "NCT02484404",
+    "criterion_id": "NCT02484404_INC_02",
+    "criterion_type": "inclusion",
+    "ground_truth": "PASS",
+    "patient_evidence": {
+      "text": "EGFR Exon 19 deletion.",
+      "start_char": 144,
+      "end_char": 166,
+      "source_section": "Clinical Narrative"
+    },
+    "criterion_evidence": {
+      "text": "Documented EGFR sensitizing mutation (Exon 19 deletion or L858R)."
+    },
+    "annotation_source": "synthetic",
+    "annotator_id": "generator_seed_42",
+    "annotation_notes": "Scenario E: Numerical Boundary (Platelets 99 vs >= 100 cutoff)"
+  },
+  {
+    "patient_id": "SYN_P005",
+    "trial_id": "NCT02484404",
+    "criterion_id": "NCT02484404_INC_03",
+    "criterion_type": "inclusion",
+    "ground_truth": "PASS",
+    "patient_evidence": {
+      "text": "54-year-old female",
+      "start_char": 82,
+      "end_char": 100,
+      "source_section": "Clinical Narrative"
+    },
+    "criterion_evidence": {
+      "text": "Age >= 18 years."
+    },
+    "annotation_source": "synthetic",
+    "annotator_id": "generator_seed_42",
+    "annotation_notes": "Scenario E: Numerical Boundary (Platelets 99 vs >= 100 cutoff)"
+  },
+  {
+    "patient_id": "SYN_P005",
+    "trial_id": "NCT02484404",
+    "criterion_id": "NCT02484404_INC_04",
+    "criterion_type": "inclusion",
+    "ground_truth": "PASS",
+    "patient_evidence": {
+      "text": "ECOG performance status is 1.",
+      "start_char": 167,
+      "end_char": 196,
+      "source_section": "Clinical Narrative"
+    },
+    "criterion_evidence": {
+      "text": "ECOG performance status 0 or 1."
+    },
+    "annotation_source": "synthetic",
+    "annotator_id": "generator_seed_42",
+    "annotation_notes": "Scenario E: Numerical Boundary (Platelets 99 vs >= 100 cutoff)"
+  },
+  {
+    "patient_id": "SYN_P005",
+    "trial_id": "NCT02484404",
+    "criterion_id": "NCT02484404_INC_05",
+    "criterion_type": "inclusion",
+    "ground_truth": "FAIL",
+    "patient_evidence": {
+      "text": "Platelet count: 99 x 10^9/L",
+      "start_char": 235,
+      "end_char": 262,
+      "source_section": "Clinical Narrative"
+    },
+    "criterion_evidence": {
+      "text": "Adequate hematologic function: Platelet count >= 100 x 10^9/L."
+    },
+    "annotation_source": "synthetic",
+    "annotator_id": "generator_seed_42",
+    "annotation_notes": "Scenario E: Numerical Boundary (Platelets 99 vs >= 100 cutoff)"
+  },
+  {
+    "patient_id": "SYN_P005",
+    "trial_id": "NCT02484404",
+    "criterion_id": "NCT02484404_EXC_01",
+    "criterion_type": "exclusion",
+    "ground_truth": "PASS",
+    "patient_evidence": {
+      "text": "No prior osimertinib.",
+      "start_char": 341,
+      "end_char": 362,
+      "source_section": "Clinical Narrative"
+    },
+    "criterion_evidence": {
+      "text": "Prior treatment with third-generation EGFR-TKI."
+    },
+    "annotation_source": "synthetic",
+    "annotator_id": "generator_seed_42",
+    "annotation_notes": "Scenario E: Numerical Boundary (Platelets 99 vs >= 100 cutoff)"
+  },
+  {
+    "patient_id": "SYN_P005",
+    "trial_id": "NCT02484404",
+    "criterion_id": "NCT02484404_EXC_02",
+    "criterion_type": "exclusion",
+    "ground_truth": "PASS",
+    "patient_evidence": {
+      "text": "Brain MRI: Clear.",
+      "start_char": 363,
+      "end_char": 380,
+      "source_section": "Clinical Narrative"
+    },
+    "criterion_evidence": {
+      "text": "Untreated or symptomatic central nervous system (CNS) metastases."
+    },
+    "annotation_source": "synthetic",
+    "annotator_id": "generator_seed_42",
+    "annotation_notes": "Scenario E: Numerical Boundary (Platelets 99 vs >= 100 cutoff)"
+  },
+  {
+    "patient_id": "SYN_P005",
+    "trial_id": "NCT02484404",
+    "criterion_id": "NCT02484404_EXC_03",
+    "criterion_type": "exclusion",
+    "ground_truth": "PASS",
+    "patient_evidence": {
+      "text": "Chemotherapy finished 60 days ago.",
+      "start_char": 306,
+      "end_char": 340,
+      "source_section": "Clinical Narrative"
+    },
+    "criterion_evidence": {
+      "text": "Cytotoxic chemotherapy completed within 28 days prior to Day 1."
+    },
+    "annotation_source": "synthetic",
+    "annotator_id": "generator_seed_42",
+    "annotation_notes": "Scenario E: Numerical Boundary (Platelets 99 vs >= 100 cutoff)"
+  },
+  {
+    "patient_id": "SYN_P006",
+    "trial_id": "NCT02484404",
+    "criterion_id": "NCT02484404_INC_01",
+    "criterion_type": "inclusion",
+    "ground_truth": "PASS",
+    "patient_evidence": {
+      "text": "Stage IV NSCLC",
+      "start_char": 104,
+      "end_char": 118,
+      "source_section": "Clinical Narrative"
+    },
+    "criterion_evidence": {
+      "text": "Histologically confirmed locally advanced or metastatic NSCLC (Stage IV)."
+    },
+    "annotation_source": "synthetic",
+    "annotator_id": "generator_seed_42",
+    "annotation_notes": "Scenario F: Temporal Washout (Chemotherapy 27 days vs >= 28 days required)"
+  },
+  {
+    "patient_id": "SYN_P006",
+    "trial_id": "NCT02484404",
+    "criterion_id": "NCT02484404_INC_02",
+    "criterion_type": "inclusion",
+    "ground_truth": "PASS",
+    "patient_evidence": {
+      "text": "EGFR L858R mutation positive.",
+      "start_char": 120,
+      "end_char": 149,
+      "source_section": "Clinical Narrative"
+    },
+    "criterion_evidence": {
+      "text": "Documented EGFR sensitizing mutation (Exon 19 deletion or L858R)."
+    },
+    "annotation_source": "synthetic",
+    "annotator_id": "generator_seed_42",
+    "annotation_notes": "Scenario F: Temporal Washout (Chemotherapy 27 days vs >= 28 days required)"
+  },
+  {
+    "patient_id": "SYN_P006",
+    "trial_id": "NCT02484404",
+    "criterion_id": "NCT02484404_INC_03",
+    "criterion_type": "inclusion",
+    "ground_truth": "PASS",
+    "patient_evidence": {
+      "text": "61-year-old male",
+      "start_char": 82,
+      "end_char": 98,
+      "source_section": "Clinical Narrative"
+    },
+    "criterion_evidence": {
+      "text": "Age >= 18 years."
+    },
+    "annotation_source": "synthetic",
+    "annotator_id": "generator_seed_42",
+    "annotation_notes": "Scenario F: Temporal Washout (Chemotherapy 27 days vs >= 28 days required)"
+  },
+  {
+    "patient_id": "SYN_P006",
+    "trial_id": "NCT02484404",
+    "criterion_id": "NCT02484404_INC_04",
+    "criterion_type": "inclusion",
+    "ground_truth": "PASS",
+    "patient_evidence": {
+      "text": "ECOG performance status is 0.",
+      "start_char": 150,
+      "end_char": 179,
+      "source_section": "Clinical Narrative"
+    },
+    "criterion_evidence": {
+      "text": "ECOG performance status 0 or 1."
+    },
+    "annotation_source": "synthetic",
+    "annotator_id": "generator_seed_42",
+    "annotation_notes": "Scenario F: Temporal Washout (Chemotherapy 27 days vs >= 28 days required)"
+  },
+  {
+    "patient_id": "SYN_P006",
+    "trial_id": "NCT02484404",
+    "criterion_id": "NCT02484404_INC_05",
+    "criterion_type": "inclusion",
+    "ground_truth": "PASS",
+    "patient_evidence": {
+      "text": "Platelets: 205 x 10^9/L.",
+      "start_char": 180,
+      "end_char": 204,
+      "source_section": "Clinical Narrative"
+    },
+    "criterion_evidence": {
+      "text": "Adequate hematologic function: Platelet count >= 100 x 10^9/L."
+    },
+    "annotation_source": "synthetic",
+    "annotator_id": "generator_seed_42",
+    "annotation_notes": "Scenario F: Temporal Washout (Chemotherapy 27 days vs >= 28 days required)"
+  },
+  {
+    "patient_id": "SYN_P006",
+    "trial_id": "NCT02484404",
+    "criterion_id": "NCT02484404_EXC_01",
+    "criterion_type": "exclusion",
+    "ground_truth": "PASS",
+    "patient_evidence": {
+      "text": "Treatment History: Completed Carboplatin/Paclitaxel",
+      "start_char": 223,
+      "end_char": 274,
+      "source_section": "Clinical Narrative"
+    },
+    "criterion_evidence": {
+      "text": "Prior treatment with third-generation EGFR-TKI."
+    },
+    "annotation_source": "synthetic",
+    "annotator_id": "generator_seed_42",
+    "annotation_notes": "Scenario F: Temporal Washout (Chemotherapy 27 days vs >= 28 days required)"
+  },
+  {
+    "patient_id": "SYN_P006",
+    "trial_id": "NCT02484404",
+    "criterion_id": "NCT02484404_EXC_02",
+    "criterion_type": "exclusion",
+    "ground_truth": "PASS",
+    "patient_evidence": {
+      "text": "Brain MRI: Clear.",
+      "start_char": 205,
+      "end_char": 222,
+      "source_section": "Clinical Narrative"
+    },
+    "criterion_evidence": {
+      "text": "Untreated or symptomatic central nervous system (CNS) metastases."
+    },
+    "annotation_source": "synthetic",
+    "annotator_id": "generator_seed_42",
+    "annotation_notes": "Scenario F: Temporal Washout (Chemotherapy 27 days vs >= 28 days required)"
+  },
+  {
+    "patient_id": "SYN_P006",
+    "trial_id": "NCT02484404",
+    "criterion_id": "NCT02484404_EXC_03",
+    "criterion_type": "exclusion",
+    "ground_truth": "FAIL",
+    "patient_evidence": {
+      "text": "Completed Carboplatin/Paclitaxel chemotherapy exactly 27 days prior to today.",
+      "start_char": 242,
+      "end_char": 319,
+      "source_section": "Clinical Narrative"
+    },
+    "criterion_evidence": {
+      "text": "Cytotoxic chemotherapy completed within 28 days prior to Day 1."
+    },
+    "annotation_source": "synthetic",
+    "annotator_id": "generator_seed_42",
+    "annotation_notes": "Scenario F: Temporal Washout (Chemotherapy 27 days vs >= 28 days required)"
+  }
+]

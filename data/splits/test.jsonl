@@ -1,0 +1,2 @@
+{"patient_id": "SYN_P005", "trial_id": "NCT02484404", "split": "test", "dataset_layer": "development_fixture", "benchmark_classification": "TEST FIXTURE ONLY - NOT A RESEARCH BENCHMARK", "scenario_type": "numerical_boundary_condition", "expected_eligibility": "INELIGIBLE"}
+{"patient_id": "SYN_P006", "trial_id": "NCT02484404", "split": "test", "dataset_layer": "development_fixture", "benchmark_classification": "TEST FIXTURE ONLY - NOT A RESEARCH BENCHMARK", "scenario_type": "temporal_washout_condition", "expected_eligibility": "INELIGIBLE"}
