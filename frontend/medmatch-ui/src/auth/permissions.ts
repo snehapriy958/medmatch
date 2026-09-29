@@ -7,7 +7,8 @@ export type AppRoute =
   | "/matching"
   | "/reports"
   | "/audit"
-  | "/settings";
+  | "/settings"
+  | "/evaluation";
 
 /*
  * Centralized frontend route-access matrix.
@@ -94,6 +95,15 @@ const ROUTE_ACCESS: Record<AppRoute, readonly UserRole[]> = {
     "PHYSICIAN",
     "TRIAL_SPONSOR",
     "PATIENT",
+  ],
+
+  /*
+   * Research evaluation & performance dashboard.
+   */
+  "/evaluation": [
+    "SYSTEM_ADMIN",
+    "HOSPITAL_ADMIN",
+    "RESEARCH_COORDINATOR",
   ],
 };
 

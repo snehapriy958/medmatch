@@ -45,6 +45,14 @@ COPY --chown=fastapi:fastapi services/ai-service/models ./models
 COPY --chown=fastapi:fastapi services/ai-service/alembic.ini ./alembic.ini
 COPY --chown=fastapi:fastapi services/ai-service/alembic ./alembic
 
+# Read-only evaluation artifacts for Phase 15 Evaluation & Performance Dashboard
+COPY --chown=fastapi:fastapi results/phase11 ./results/phase11
+COPY --chown=fastapi:fastapi results/phase12 ./results/phase12
+COPY --chown=fastapi:fastapi results/phase14 ./results/phase14
+COPY --chown=fastapi:fastapi data/fixtures/phase8 ./data/fixtures/phase8
+COPY --chown=fastapi:fastapi data/fixtures/phase9 ./data/fixtures/phase9
+COPY --chown=fastapi:fastapi data/fixtures/phase10 ./data/fixtures/phase10
+
 USER fastapi
 
 EXPOSE 8000

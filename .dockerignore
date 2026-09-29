@@ -62,8 +62,15 @@ uploads/
 tmp/
 **/tmp/
 data/
+!data/fixtures/phase8/*.json
+!data/fixtures/phase9/*.json
+!data/fixtures/phase10/*.json
 datasets/
 results/
+!results/phase11/*.json
+!results/phase12/*.json
+!results/phase14/*.json
+!results/phase14/*.csv
 artifacts/
 .system_generated/
 *.log

@@ -9,6 +9,7 @@ import {
   Settings,
   Cross,
   X,
+  BarChart3,
 } from "lucide-react";
 
 import { useAuth } from "../../context/AuthContext";
@@ -54,6 +55,11 @@ const navItems: NavItem[] = [
     label: "Audit Logs",
     icon: ShieldCheck,
     to: "/audit",
+  },
+  {
+    label: "Evaluation & Benchmarks",
+    icon: BarChart3,
+    to: "/evaluation",
   },
   {
     label: "Settings",

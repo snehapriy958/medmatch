@@ -12,6 +12,7 @@ import Reports from "./pages/Reports";
 import AuditLogs from "./pages/AuditLogs";
 import Settings from "./pages/Settings";
 import Login from "./pages/Login";
+import EvaluationDashboard from "./pages/EvaluationDashboard";
 
 function App() {
   return (
@@ -100,6 +101,18 @@ function App() {
               <ProtectedRoute route="/settings">
                 <DashboardLayout>
                   <Settings />
+                </DashboardLayout>
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Research evaluation & performance dashboard */}
+          <Route
+            path="/evaluation"
+            element={
+              <ProtectedRoute route="/evaluation">
+                <DashboardLayout>
+                  <EvaluationDashboard />
                 </DashboardLayout>
               </ProtectedRoute>
             }
