@@ -3,7 +3,7 @@
 fastapi
 uvicorn[standard]
 
-sqlalchemy
+sqlalchemy<2.1
 psycopg2-binary
 pgvector
 
@@ -31,10 +31,6 @@ google-genai
 
 transformers==5.10.0
 huggingface-hub==1.27.0
-
-# Testing
-pytest
-pytest-mock
 
 # Database migrations
 alembic

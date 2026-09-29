@@ -24,7 +24,7 @@ jobs:
           - name: ai-service
             file: infra/docker/ai-service.Dockerfile
           - name: worker
-            file: infra/docker/worker.Dockerfile
+            file: infra/docker/ai-service.Dockerfile
           - name: frontend
             file: infra/docker/frontend.Dockerfile
 

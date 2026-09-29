@@ -1,0 +1,139 @@
+{
+  "phase": "13.3",
+  "review_name": "Docker / Container Remediation Design Review",
+  "checkpoint": "bfb17e1",
+  "branch": "capstone/phase-13-production-engineering",
+  "review_timestamp": "2026-09-29T09:40:00Z",
+  "status": "Phase 13.3 Docker Remediation Design Complete — Implementation Pending",
+  "verdict_summary": {
+    "total_reviewed": 10,
+    "confirmed": 5,
+    "partially_confirmed": 1,
+    "deferred": 3,
+    "informational": 1,
+    "approved_for_phase13_remediation": [
+      "CONT-01",
+      "CONT-02",
+      "CONT-03",
+      "CONT-04",
+      "CONT-05",
+      "CONT-07"
+    ],
+    "deferred_to_subsequent_phases": [
+      "CONT-06",
+      "CONT-08",
+      "CONT-10"
+    ],
+    "no_code_change_required": [
+      "CONT-09"
+    ]
+  },
+  "remediation_matrix": [
+    {
+      "id": "CONT-01",
+      "title": "Compose external postgres_data volume",
+      "verdict": "CONFIRMED",
+      "verified_severity": "HIGH",
+      "evidence": "docker-compose.yml lines 311-314 declare volume postgres_data as external: true, causing docker compose up to crash on clean checkouts.",
+      "recommended_fix": "Remove external: true and retain name: medmatch_postgres_data.",
+      "risk_of_fix": "VERY LOW",
+      "target_phase": "Phase 13.3"
+    },
+    {
+      "id": "CONT-02",
+      "title": "Missing Compose healthcheck for AI service & worker",
+      "verdict": "PARTIALLY CONFIRMED",
+      "verified_severity": "HIGH",
+      "evidence": "ai-service lacks healthcheck in compose and frontend uses condition: service_started, risking 502 errors during Uvicorn startup. Worker has no HTTP server and no dependents, so Compose worker healthcheck is unnecessary.",
+      "recommended_fix": "Add Python urllib healthcheck on /api/health/ready to ai-service in docker-compose.yml; update frontend dependency condition to service_healthy. Narrow scope to exclude worker from Compose healthcheck.",
+      "risk_of_fix": "LOW",
+      "target_phase": "Phase 13.3"
+    },
+    {
+      "id": "CONT-03",
+      "title": "Redundant HuggingFace cache in runtime image",
+      "verdict": "CONFIRMED",
+      "verified_severity": "MEDIUM",
+      "evidence": "Model path is NOT broken; application successfully loads from /app/models/all-MiniLM-L6-v2. However, Stage 1 downloads ~100MB to /opt/huggingface and Stage 2 copies it into runtime, where it is 100% unused dead weight.",
+      "recommended_fix": "Remove Stage 1 HuggingFace remote model download and Stage 2 COPY /opt/huggingface in ai-service.Dockerfile and worker.Dockerfile.",
+      "risk_of_fix": "VERY LOW",
+      "target_phase": "Phase 13.3"
+    },
+    {
+      "id": "CONT-04",
+      "title": "Missing Kubernetes AI startupProbe",
+      "verdict": "CONFIRMED",
+      "verified_severity": "HIGH",
+      "evidence": "Liveness probe terminates AI pod if startup exceeds 75s. Under CPU throttling (100m request) or cold storage, initialization approaches this limit. No startupProbe exists.",
+      "recommended_fix": "Add startupProbe to infra/kubernetes/ai-service/deployment.yaml targeting /api/health/live with 150s grace window (30 retries * 5s).",
+      "risk_of_fix": "VERY LOW",
+      "target_phase": "Phase 13.3"
+    },
+    {
+      "id": "CONT-05",
+      "title": "Redundant Celery worker Dockerfile",
+      "verdict": "CONFIRMED",
+      "verified_severity": "MEDIUM",
+      "evidence": "worker.Dockerfile duplicates 80% of ai-service.Dockerfile. Both share 100% of dependencies and UID 1000. In Kubernetes, the worker deployment already overrides the container command to celery.",
+      "recommended_fix": "Consolidate worker build onto ai-service.Dockerfile in compose and manifests.",
+      "risk_of_fix": "LOW",
+      "target_phase": "Phase 13.3"
+    },
+    {
+      "id": "CONT-06",
+      "title": "Mutable image tags in production manifests",
+      "verdict": "DEFERRED",
+      "verified_severity": "MEDIUM",
+      "evidence": "Manifests reference :latest and :phase2-migrations with imagePullPolicy: Always. Changing these tags in manifests without a corresponding CI/CD registry push will break image pulls.",
+      "recommended_fix": "Defer to CI/CD release engineering phase when automated image building and semver tagging are established.",
+      "risk_of_fix": "HIGH (if done without registry push)",
+      "target_phase": "CI/CD Release Phase"
+    },
+    {
+      "id": "CONT-07",
+      "title": "pytest in production image",
+      "verdict": "CONFIRMED",
+      "verified_severity": "LOW",
+      "evidence": "pytest and pytest-mock are declared in services/ai-service/requirements.txt and installed into the runtime virtualenv.",
+      "recommended_fix": "Move pytest and pytest-mock to requirements-dev.txt.",
+      "risk_of_fix": "VERY LOW",
+      "target_phase": "Phase 13.3"
+    },
+    {
+      "id": "CONT-08",
+      "title": "Worker root initContainer (UID 0)",
+      "verdict": "DEFERRED",
+      "verified_severity": "LOW",
+      "evidence": "Worker init-uploads runs as UID 0 to chmod 777 /app/uploads for PVC volume mounting. Remediating volume ownership is tightly coupled to PVC storage class design in Phase 13.4.",
+      "recommended_fix": "Defer to Phase 13.4 (Storage & Celery Engineering).",
+      "risk_of_fix": "MEDIUM",
+      "target_phase": "Phase 13.4 (Storage)"
+    },
+    {
+      "id": "CONT-09",
+      "title": "Subdirectory .dockerignore ignored in root-context builds",
+      "verdict": "CONFIRMED (INFORMATIONAL)",
+      "verified_severity": "INFORMATIONAL",
+      "evidence": "Docker BuildKit only parses root .dockerignore for root-context builds. Root .dockerignore is already comprehensive.",
+      "recommended_fix": "No code remediation required. Document authoritative role of root .dockerignore.",
+      "risk_of_fix": "NONE",
+      "target_phase": "Phase 13.3"
+    },
+    {
+      "id": "CONT-10",
+      "title": "Worker Celery inspect ping probe blocking",
+      "verdict": "DEFERRED",
+      "verified_severity": "MEDIUM",
+      "evidence": "Solo worker pool blocks inspect ping during long synchronous PDF processing tasks. Probe redesign is fundamentally linked to worker pool architecture in Phase 13.4.",
+      "recommended_fix": "Defer to Phase 13.4 (Async Worker Engineering).",
+      "risk_of_fix": "MEDIUM",
+      "target_phase": "Phase 13.4 (Worker)"
+    }
+  ],
+  "implementation_order": [
+    "Step 1: Docker Compose Stability (CONT-01, CONT-02)",
+    "Step 2: Kubernetes Startup Resilience (CONT-04)",
+    "Step 3: Dockerfile Build Optimization & Cleanup (CONT-03, CONT-07)",
+    "Step 4: Image Consolidation & Verification (CONT-05)"
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "phase": "13.3",
+  "verification_name": "Docker / Container Pre-Implementation Targeted Verification",
+  "checkpoint": "bfb17e1",
+  "branch": "capstone/phase-13-production-engineering",
+  "timestamp": "2026-09-29T09:45:00Z",
+  "status": "Phase 13.3 Targeted Verification Complete — Implementation Pending",
+  "targets": {
+    "target_1_worker_image_consolidation": {
+      "finding_id": "CONT-05",
+      "verdict": "SAFE TO CONSOLIDATE",
+      "questions_verified": {
+        "1_dependencies_exist_in_ai_image": true,
+        "2_worker_requires_omitted_files": false,
+        "3_worker_requires_alembic": false,
+        "4_worker_requires_model_files": true,
+        "5_worker_requires_different_user_or_permissions": false,
+        "6_worker_image_used_by_init_container": true,
+        "7_consolidation_changes_runtime_filesystem": false,
+        "8_consolidation_affects_migration_gate": false,
+        "9_dockerfiles_functionally_equivalent": true,
+        "10_consolidation_safe_without_code_changes": true
+      },
+      "key_findings": [
+        "AI image already installs 100% of Celery and task dependencies.",
+        "AI Dockerfile copies a strict superset of files compared to worker Dockerfile.",
+        "Both Dockerfiles create non-root users with identical numeric IDs (UID 1000, GID 1000).",
+        "worker/deployment.yaml wait-for-ai-migrations initContainer uses medmatch-worker:latest; updating image to medmatch-ai-service maintains full compatibility.",
+        "CI workflow .github/workflows/docker-build.yaml references worker.Dockerfile in matrix, so worker.Dockerfile should be retained as an alias or build matrix updated accordingly."
+      ]
+    },
+    "target_2_test_dependencies_separation": {
+      "finding_id": "CONT-07",
+      "verdict": "SAFE TO MOVE",
+      "questions_verified": {
+        "1_why_pytest_in_requirements": "Developer convenience for initial setup; not separated in early development.",
+        "2_production_runtime_needs_pytest": false,
+        "3_docker_installs_requirements_into_runtime": true,
+        "4_ci_tests_install_requirements_directly": true,
+        "5_requirements_dev_already_exists": false,
+        "6_moving_pytest_breaks_current_workflow": false,
+        "7_files_requiring_modification": [
+          "services/ai-service/requirements.txt",
+          "services/ai-service/requirements-dev.txt (new file)"
+        ]
+      },
+      "key_findings": [
+        "services/ai-service/app/ contains 0 imports of pytest; pytest is only used in tests/.",
+        "CI workflow ci.yaml runs 'compileall app', not pytest, so it will continue passing without pytest.",
+        "Moving pytest and pytest-mock to requirements-dev.txt eliminates unnecessary packages from the production virtualenv with zero workflow breakage."
+      ]
+    }
+  }
+}

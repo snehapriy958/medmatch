@@ -200,6 +200,18 @@ spec:
                 - ALL
 
 
+          startupProbe:
+
+            httpGet:
+              path: /api/health/live
+              port: 8000
+
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 5
+            failureThreshold: 30
+
+
           livenessProbe:
 
             httpGet:

@@ -11,12 +11,9 @@ COPY services/ai-service/requirements.txt .
 RUN python -m venv /opt/venv
 
 ENV PATH="/opt/venv/bin:$PATH"
-ENV HF_HOME="/opt/huggingface"
-ENV TRANSFORMERS_CACHE="/opt/huggingface"
 
-RUN pip install --upgrade pip \
-    && pip install --retries 10 --timeout 120 -r requirements.txt
-RUN python -c "from sentence_transformers import SentenceTransformer; SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')"
+RUN pip install --no-cache-dir --upgrade pip \
+    && pip install --no-cache-dir --retries 10 --timeout 120 -r requirements.txt
 
 # ---- Stage 2: Runtime ----
 
@@ -26,11 +23,10 @@ RUN groupadd --system --gid 1000 fastapi \
     && useradd --system --uid 1000 --gid fastapi --no-create-home fastapi
 
 COPY --from=build /opt/venv /opt/venv
-COPY --from=build /opt/huggingface /opt/huggingface
 
 ENV PATH="/opt/venv/bin:$PATH"
-ENV HF_HOME="/opt/huggingface"
-ENV TRANSFORMERS_CACHE="/opt/huggingface"
+ENV HF_HOME="/tmp/huggingface"
+ENV TRANSFORMERS_CACHE="/tmp/huggingface"
 
 WORKDIR /app
 

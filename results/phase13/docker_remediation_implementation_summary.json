@@ -1,0 +1,113 @@
+{
+  "phase": "13.3",
+  "implementation_name": "Docker / Container Remediation Implementation",
+  "checkpoint": "bfb17e1",
+  "branch": "capstone/phase-13-production-engineering",
+  "timestamp": "2026-09-29T10:00:00Z",
+  "status": "Phase 13.3 Docker Remediation Implementation Complete — Pending Review",
+  "remediations": {
+    "CONT-01": {
+      "title": "Compose PostgreSQL Volume Declaration",
+      "original_finding": "docker-compose.yml declared postgres_data with 'external: true', causing clean checkouts without pre-created volume to fail on docker compose up.",
+      "implementation": "Removed external: true while preserving name: medmatch_postgres_data, allowing Compose to create the volume automatically if absent or reuse an existing one.",
+      "files_changed": [
+        "docker-compose.yml"
+      ],
+      "validation": "docker compose config passed cleanly with name: medmatch_postgres_data.",
+      "residual_risk": "Low. Retains volume identity; safe on both clean clones and existing workstations.",
+      "status": "RESOLVED"
+    },
+    "CONT-02": {
+      "title": "Compose AI Service Healthcheck",
+      "original_finding": "ai-service lacked a Compose healthcheck, allowing frontend to start and route traffic prematurely via service_started, generating 502 Bad Gateway errors.",
+      "implementation": "Added container healthcheck testing /api/health/ready using python -c urllib.request (avoiding external curl/wget dependencies in python:3.12-slim). Updated frontend depends_on to condition: service_healthy.",
+      "files_changed": [
+        "docker-compose.yml"
+      ],
+      "validation": "docker compose config passed; healthcheck parameters verified (interval: 10s, timeout: 5s, retries: 5, start_period: 40s).",
+      "residual_risk": "Low. 40s start_period prevents premature failure during cold start on low-resource machines.",
+      "status": "RESOLVED"
+    },
+    "CONT-03": {
+      "title": "Redundant HuggingFace Model Cache Removal",
+      "original_finding": "ai-service.Dockerfile downloaded sentence-transformers/all-MiniLM-L6-v2 in Stage 1 and copied /opt/huggingface to Stage 2, bloating image by ~100MB+ with unreferenced files (application exclusively loads /app/models/all-MiniLM-L6-v2).",
+      "implementation": "Removed build-stage HuggingFace download and Stage 2 COPY /opt/huggingface. Aligned HF_HOME and TRANSFORMERS_CACHE to /tmp/huggingface. Added --no-cache-dir to pip install.",
+      "files_changed": [
+        "infra/docker/ai-service.Dockerfile"
+      ],
+      "validation": "Zero occurrences of /opt/huggingface remain in infra/docker/. Git-tracked model directory services/ai-service/models remains intact and baked into /app/models.",
+      "residual_risk": "Very Low. EmbeddingService loader uses local /app/models directory.",
+      "status": "RESOLVED"
+    },
+    "CONT-04": {
+      "title": "Kubernetes AI Service StartupProbe",
+      "original_finding": "infra/kubernetes/ai-service/deployment.yaml lacked a startupProbe, exposing cold-start / slow-load pods to premature termination by livenessProbe.",
+      "implementation": "Added startupProbe targeting /api/health/live with initialDelaySeconds: 10, periodSeconds: 5, timeoutSeconds: 5, failureThreshold: 30 (permitting up to 160s startup window). Steady-state liveness and readiness probes preserved unchanged.",
+      "files_changed": [
+        "infra/kubernetes/ai-service/deployment.yaml"
+      ],
+      "validation": "kubectl kustomize . synthesized valid manifest; kubectl apply --dry-run=client -k . confirmed deployment resource validity.",
+      "residual_risk": "Very Low. Protects cold start without altering steady-state failure detection.",
+      "status": "RESOLVED"
+    },
+    "CONT-07": {
+      "title": "Separate Test Dependencies",
+      "original_finding": "services/ai-service/requirements.txt declared pytest and pytest-mock, installing test tooling into production runtime images and increasing attack surface.",
+      "implementation": "Removed pytest and pytest-mock from requirements.txt. Created requirements-dev.txt containing -r requirements.txt, pytest, and pytest-mock.",
+      "files_changed": [
+        "services/ai-service/requirements.txt",
+        "services/ai-service/requirements-dev.txt"
+      ],
+      "validation": "services/ai-service/requirements.txt contains zero matches for pytest. CI workflow continues to pass compileall.",
+      "residual_risk": "Very Low. Clean separation of test and runtime dependencies.",
+      "status": "RESOLVED"
+    },
+    "CONT-05": {
+      "title": "Consolidate Worker Image",
+      "original_finding": "infra/docker/worker.Dockerfile duplicated 80% of ai-service.Dockerfile, resulting in build maintenance overhead and drift.",
+      "implementation": "Deleted worker.Dockerfile. Updated .github/workflows/docker-build.yaml worker matrix to build from infra/docker/ai-service.Dockerfile. Updated docker-compose.yml celery-worker to build from ai-service.Dockerfile with explicit Celery CMD override. Maintained Kubernetes worker image identity medmatch-worker:latest.",
+      "files_changed": [
+        "infra/docker/worker.Dockerfile",
+        ".github/workflows/docker-build.yaml",
+        "docker-compose.yml"
+      ],
+      "validation": "docker compose config passed. kubectl kustomize . passed. No active build references to deleted worker.Dockerfile remain in CI workflows.",
+      "residual_risk": "Low. Celery command is explicitly declared in Compose and Kubernetes manifests, overriding default Uvicorn CMD.",
+      "status": "RESOLVED"
+    }
+  },
+  "deferred_items": {
+    "CONT-06": {
+      "title": "Mutable Image Tags in Kubernetes Manifests",
+      "reason": "Tag immutability should be addressed via CI/CD release workflow automation with Kustomize image transformers rather than hardcoding static SHAs in manifest templates.",
+      "target_phase": "Release Engineering / CI Hardening"
+    },
+    "CONT-08": {
+      "title": "Worker initContainer Root Permissions",
+      "reason": "Requires coordinating PVC volume ownership, fsGroup, and storage class permissions.",
+      "target_phase": "Phase 13.4 Storage & Volume Permissions Hardening"
+    },
+    "CONT-10": {
+      "title": "Celery Solo Probe Behavior",
+      "reason": "Probe timeouts under heavy task load require load testing and benchmarking before altering probe mechanism.",
+      "target_phase": "Phase 13.4 after task-load benchmarking"
+    }
+  },
+  "validation_suite": {
+    "git_diff_check": "PASS",
+    "docker_compose_config": "PASS",
+    "kustomize_build": "PASS",
+    "kubectl_apply_dry_run": "PASS",
+    "docker_build_ai_service": "PASS",
+    "docker_build_celery_worker": "PASS",
+    "ai_service_startup_to_healthy_seconds": 11.0,
+    "ai_service_healthcheck_endpoint": "/api/health/ready (HTTP 200)",
+    "worker_effective_command": "celery -A app.celery.celery_app worker --loglevel=info --concurrency=1 --pool=solo",
+    "worker_image_alignment": "PASS (ghcr.io/snehapriy958/medmatch-worker:latest built from infra/docker/ai-service.Dockerfile)",
+    "frontend_healthy_dependency": "PASS",
+    "test_dependency_separation": "PASS (pytest absent in requirements.txt, present in requirements-dev.txt)",
+    "ai_service_pytest": "66 PASS, 0 FAIL, 0 ERRORS, 0 SKIPPED (PYTHONPATH=services/ai-service python -m pytest services/ai-service/tests -q)",
+    "dangling_reference_check": "PASS (0 worker.Dockerfile, 0 /opt/huggingface)",
+    "scope_guard_compliance": "PASS"
+  }
+}

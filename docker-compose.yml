@@ -195,6 +195,19 @@ services:
     ports:
       - "8000:8000"
 
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/health/ready')"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
+
     environment:
 
       APPLICATION_PROFILE: dev
@@ -238,9 +251,18 @@ services:
   celery-worker:
     build:
       context: .
-      dockerfile: infra/docker/worker.Dockerfile
+      dockerfile: infra/docker/ai-service.Dockerfile
 
     container_name: medmatch-worker
+
+    command:
+      - celery
+      - -A
+      - app.celery.celery_app
+      - worker
+      - --loglevel=info
+      - --concurrency=1
+      - --pool=solo
 
     environment:
 
@@ -286,7 +308,7 @@ services:
       auth-service:
         condition: service_healthy
       ai-service:
-        condition: service_started
+        condition: service_healthy
     build:
       context: .
       dockerfile: infra/docker/frontend.Dockerfile
@@ -309,7 +331,6 @@ services:
 volumes:
 
   postgres_data:
-    external: true
     name: medmatch_postgres_data
 
   redis_data:

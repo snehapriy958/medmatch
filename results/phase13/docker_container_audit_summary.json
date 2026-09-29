@@ -1,0 +1,186 @@
+{
+  "phase": "13.3",
+  "audit_name": "Docker / Container Production Engineering Audit",
+  "checkpoint": "bfb17e1",
+  "branch": "capstone/phase-13-production-engineering",
+  "audit_timestamp": "2026-09-29T09:30:00Z",
+  "gate_status": "Phase 13.3 Docker/Container Audit Complete — Remediation Pending",
+  "summary": {
+    "total_findings": 10,
+    "by_severity": {
+      "critical": 0,
+      "high": 3,
+      "medium": 4,
+      "low": 2,
+      "informational": 1
+    },
+    "by_category": {
+      "configuration": 2,
+      "healthcheck": 3,
+      "build_efficiency": 1,
+      "kubernetes_stability": 1,
+      "maintenance": 1,
+      "release_engineering": 1,
+      "security": 1
+    }
+  },
+  "findings": [
+    {
+      "id": "CONT-01",
+      "title": "Docker Compose postgres_data external volume dependency",
+      "severity": "HIGH",
+      "category": "CONFIGURATION",
+      "affected_files": [
+        "docker-compose.yml"
+      ],
+      "exact_evidence": "docker-compose.yml lines 311-314 declare volume 'postgres_data' with 'external: true' and 'name: medmatch_postgres_data'.",
+      "impact": "docker compose up fails immediately on a clean checkout with volume not found error, breaking standard developer and CI startup.",
+      "recommended_remediation": "Convert postgres_data to a standard managed local named volume in docker-compose.yml.",
+      "status": "OPEN_AUDITED"
+    },
+    {
+      "id": "CONT-02",
+      "title": "Missing healthchecks for AI Service and Celery Worker in Compose",
+      "severity": "HIGH",
+      "category": "HEALTHCHECK",
+      "affected_files": [
+        "docker-compose.yml",
+        "infra/docker/ai-service.Dockerfile",
+        "infra/docker/worker.Dockerfile"
+      ],
+      "exact_evidence": "Neither ai-service nor worker has a HEALTHCHECK instruction in their Dockerfile or in docker-compose.yml. In compose, frontend depends on ai-service via 'condition: service_started'.",
+      "impact": "Frontend Nginx reverse proxy routes requests to AI service before FastAPI is ready, resulting in 502 Bad Gateway errors for early user traffic.",
+      "recommended_remediation": "Add an HTTP healthcheck to ai-service in docker-compose.yml and update frontend depends_on condition to service_healthy.",
+      "status": "OPEN_AUDITED"
+    },
+    {
+      "id": "CONT-03",
+      "title": "Model duplication and dead-weight HuggingFace cache in runtime image",
+      "severity": "MEDIUM",
+      "category": "BUILD_EFFICIENCY",
+      "affected_files": [
+        "infra/docker/ai-service.Dockerfile",
+        "infra/docker/worker.Dockerfile",
+        "services/ai-service/app/embeddings/model.py",
+        "docker-compose.yml",
+        "infra/kubernetes/ai-service/deployment.yaml"
+      ],
+      "exact_evidence": "Stage 1 of ai-service.Dockerfile downloads all-MiniLM-L6-v2 to /opt/huggingface. Stage 2 copies /opt/huggingface into the runtime image AND copies services/ai-service/models into ./models. EmbeddingModel exclusively loads from /app/models/all-MiniLM-L6-v2, leaving /opt/huggingface completely unused.",
+      "impact": "Inflates clean Docker build time with an unnecessary remote model download and bloats production images with ~100MB+ of unused files.",
+      "recommended_remediation": "Remove the Stage 1 remote model download and COPY /opt/huggingface statement. Rely exclusively on the pre-baked model in /app/models.",
+      "status": "OPEN_AUDITED"
+    },
+    {
+      "id": "CONT-04",
+      "title": "Kubernetes AI Service liveness probe timeout window without startupProbe",
+      "severity": "HIGH",
+      "category": "KUBERNETES_STABILITY",
+      "affected_files": [
+        "infra/kubernetes/ai-service/deployment.yaml"
+      ],
+      "exact_evidence": "ai-service/deployment.yaml lines 203-214 define liveness probe with initialDelaySeconds: 30, periodSeconds: 15, failureThreshold: 3 (total 75s). No startupProbe is declared.",
+      "impact": "If cold storage or CPU throttling (100m request) pushes model and PyTorch initialization beyond 75s, Kubernetes kills the container and initiates a CrashLoopBackOff.",
+      "recommended_remediation": "Add a startupProbe to ai-service/deployment.yaml targeting /api/health/live with up to 150s grace period.",
+      "status": "OPEN_AUDITED"
+    },
+    {
+      "id": "CONT-05",
+      "title": "Redundant separate Celery worker build definition",
+      "severity": "MEDIUM",
+      "category": "MAINTENANCE",
+      "affected_files": [
+        "infra/docker/worker.Dockerfile",
+        "infra/docker/ai-service.Dockerfile",
+        "docker-compose.yml",
+        "infra/kubernetes/worker/deployment.yaml"
+      ],
+      "exact_evidence": "worker.Dockerfile duplicates 80% of ai-service.Dockerfile but diverged by omitting alembic migration files. In Kubernetes, the worker deployment already overrides the command to celery.",
+      "impact": "Doubles CI build times, registry storage, and vulnerability scan overhead while introducing maintenance drift risks.",
+      "recommended_remediation": "Consolidate into a single medmatch-ai-service image and override command to celery in worker deployment.",
+      "status": "OPEN_AUDITED"
+    },
+    {
+      "id": "CONT-06",
+      "title": "Mutable image tags in production manifests",
+      "severity": "MEDIUM",
+      "category": "RELEASE_ENGINEERING",
+      "affected_files": [
+        "infra/kubernetes/auth-service/deployment.yaml",
+        "infra/kubernetes/worker/deployment.yaml",
+        "infra/kubernetes/frontend/deployment.yaml",
+        "infra/kubernetes/ai-service/deployment.yaml",
+        "infra/kubernetes/ai-service/migrate-job.yaml"
+      ],
+      "exact_evidence": "Kubernetes manifests reference mutable tags ':latest' and ':phase2-migrations' with 'imagePullPolicy: Always'.",
+      "impact": "Non-deterministic production deployments, broken rollback guarantees, and mandatory registry dependency on every pod restart.",
+      "recommended_remediation": "Pin production deployments to immutable semantic version tags or sha256 image digests.",
+      "status": "OPEN_AUDITED"
+    },
+    {
+      "id": "CONT-07",
+      "title": "Test dependencies installed in production images",
+      "severity": "LOW",
+      "category": "SECURITY",
+      "affected_files": [
+        "services/ai-service/requirements.txt",
+        "infra/docker/ai-service.Dockerfile",
+        "infra/docker/worker.Dockerfile"
+      ],
+      "exact_evidence": "services/ai-service/requirements.txt includes pytest and pytest-mock, which are installed into the runtime image virtualenv.",
+      "impact": "Unnecessary testing tools in production container increase image size and attack surface.",
+      "recommended_remediation": "Separate test dependencies into requirements-dev.txt.",
+      "status": "OPEN_AUDITED"
+    },
+    {
+      "id": "CONT-08",
+      "title": "Worker initContainer executes as root",
+      "severity": "LOW",
+      "category": "SECURITY",
+      "affected_files": [
+        "infra/kubernetes/worker/deployment.yaml"
+      ],
+      "exact_evidence": "init-uploads initContainer in worker/deployment.yaml specifies runAsUser: 0 to chmod 777 /app/uploads.",
+      "impact": "Violates restricted Pod Security Standards by running a root container and creating world-writable directories.",
+      "recommended_remediation": "Use securityContext.fsGroup: 1000 in Pod spec instead of root chown/chmod initContainer.",
+      "status": "OPEN_AUDITED"
+    },
+    {
+      "id": "CONT-09",
+      "title": "Subdirectory .dockerignore files ignored in root-context builds",
+      "severity": "INFO",
+      "category": "CONFIGURATION",
+      "affected_files": [
+        "services/ai-service/.dockerignore",
+        "services/auth-service/.dockerignore",
+        "frontend/medmatch-ui/.dockerignore",
+        ".dockerignore"
+      ],
+      "exact_evidence": "Root context builds only respect the root .dockerignore. Subdirectory .dockerignore files are ignored by Docker during compose and root builds.",
+      "impact": "Potential false sense of security if developers assume subdirectory ignore files apply to root builds.",
+      "recommended_remediation": "Ensure all critical exclusions remain maintained in root .dockerignore.",
+      "status": "OPEN_AUDITED"
+    },
+    {
+      "id": "CONT-10",
+      "title": "Worker Celery inspect ping probe vulnerable to head-of-line blocking",
+      "severity": "MEDIUM",
+      "category": "HEALTHCHECK",
+      "affected_files": [
+        "infra/kubernetes/worker/deployment.yaml"
+      ],
+      "exact_evidence": "Worker runs with --concurrency=1 --pool=solo while liveness probe executes 'celery inspect ping' with timeout 30s.",
+      "impact": "During heavy synchronous CPU-bound task execution (e.g. 45s PDF processing), the worker cannot answer the inspect ping prompt, risking false-positive liveness probe failures.",
+      "recommended_remediation": "Implement file-based heartbeat probe or optimize inspect timeout thresholds.",
+      "status": "OPEN_AUDITED"
+    }
+  ],
+  "model_path_verification": {
+    "build_stage_storage": "/opt/huggingface (remote download) & services/ai-service/models/all-MiniLM-L6-v2 (git-tracked)",
+    "runtime_container_storage": "/opt/huggingface & /app/models/all-MiniLM-L6-v2",
+    "application_load_path": "/app/models/all-MiniLM-L6-v2",
+    "paths_match_local_baked_dir": true,
+    "paths_match_huggingface_cache": false,
+    "host_volume_expected": false,
+    "model_present_in_image": true
+  }
+}
