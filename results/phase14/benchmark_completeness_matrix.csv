@@ -1,0 +1,15 @@
+benchmark,status,scope
+Embedding latency,MEASURED,In-process SentenceTransformer CPU inference (single & batch 1–32)
+Raw pgvector scan,MEASURED,PostgreSQL 17 + pgvector 0.8.5 unindexed <=> distance scan (100 to 50k rows)
+Production retrieval at scale,NOT MEASURED,"Full MatchingRepository.find_similar_criteria with joins, CTEs, filters at 50k+ rows"
+Gemini latency,NOT MEASURED,"Live external Google GenAI API calls (offline benchmark environment, no production credentials)"
+In-process matching,MEASURED,In-process ASGI application & service layer via FastAPI TestClient / direct service
+Real HTTP matching,NOT MEASURED,External network HTTP requests against live Uvicorn socket server under concurrent load
+Local ingestion stages,MEASURED,"Local PDF text extraction, text cleaning, embedding generation, database persistence"
+Full Gemini ingestion,NOT MEASURED,Live Gemini 2.5 Flash unstructured clinical trial protocol criteria extraction
+Celery configuration serialization,DERIVED,Derived from worker settings (--pool=solo --concurrency=1) and confirmed by 0.000s interval overlap
+Celery representative workload throughput,NOT MEASURED,Real multi-document clinical trial PDF ingestion throughput under Celery
+Local RSS,MEASURED,Process working set memory (RSS) profiling on local Windows 11 host
+Kubernetes CFS,NOT MEASURED,Linux cgroups Completely Fair Scheduler quota throttling (not available on Windows host)
+Single-engine DB pool,MEASURED,"SQLAlchemy QueuePool checkout latency, concurrency, and overflow on an isolated bounded benchmark engine"
+Cluster-wide DB pool saturation,NOT MEASURED,Aggregate multi-replica (AI + Worker + Auth) connection pool exhaustion vs Postgres max_connections

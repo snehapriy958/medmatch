@@ -1,0 +1,5 @@
+corpus_size,execution_time_mean_ms,p50_ms,p95_ms,p99_ms,plan_node_type,shared_hit_blocks,evidence_status
+100,0.589,0.594,0.671,0.682,Seq Scan,32,MEASURED
+1000,0.947,0.887,1.233,1.356,Seq Scan,224,MEASURED
+10000,4.674,4.533,5.232,5.241,Seq Scan,2016,MEASURED
+50000,19.831,19.164,22.824,24.905,Seq Scan,10016,MEASURED

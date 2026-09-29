@@ -1,0 +1,6 @@
+stage,mean_ms,p50_ms,status
+pdf_text_extraction,2.415,2.353,MEASURED
+embedding_generation,6.948,6.452,MEASURED
+database_persistence,18.286,18.251,MEASURED
+total_local_pipeline,27.704,27.121,MEASURED
+full_gemini_extraction,NOT MEASURED,NOT MEASURED,NOT MEASURED

@@ -1,0 +1,22 @@
+metric,value,unit,notes
+cold_initialization,21460.05,ms,16-core CPU host
+single_text_mean,10.567,ms,86 chars text
+single_text_p50,10.344,ms,86 chars text
+single_text_p95,11.723,ms,86 chars text
+single_text_p99,11.96,ms,86 chars text
+single_text_throughput,94.62,items/sec,
+batch_1_batch_mean,11.348,ms,batch_size=1
+batch_1_per_item_mean,11.348,ms,latency per item
+batch_1_throughput,88.1,items/sec,
+batch_4_batch_mean,18.852,ms,batch_size=4
+batch_4_per_item_mean,4.713,ms,latency per item
+batch_4_throughput,212.15,items/sec,
+batch_8_batch_mean,26.638,ms,batch_size=8
+batch_8_per_item_mean,3.33,ms,latency per item
+batch_8_throughput,300.31,items/sec,
+batch_16_batch_mean,48.471,ms,batch_size=16
+batch_16_per_item_mean,3.029,ms,latency per item
+batch_16_throughput,330.08,items/sec,
+batch_32_batch_mean,87.953,ms,batch_size=32
+batch_32_per_item_mean,2.749,ms,latency per item
+batch_32_throughput,363.82,items/sec,

@@ -1,0 +1,8 @@
+metric,value,unit,scope,status
+first_request_latency,64.53,ms,in-process cold path,MEASURED
+warm_local_pipeline_mean,170.088,ms,in-process warm pipeline,MEASURED
+warm_local_pipeline_p50,169.65,ms,in-process warm pipeline,MEASURED
+criteria_loading_mean,128.273,ms,"5 trials, 77 criteria",CONFIRMED BY MEASUREMENT
+criteria_loading_pct_local,75.42,%,local pipeline only,CONFIRMED BY MEASUREMENT
+real_http_p50,NOT MEASURED,ms,external socket HTTP,NOT MEASURED
+real_http_p95,NOT MEASURED,ms,external socket HTTP,NOT MEASURED
