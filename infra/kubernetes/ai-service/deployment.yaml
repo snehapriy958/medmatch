@@ -31,6 +31,10 @@ spec:
     spec:
       serviceAccountName: ai-service-sa
 
+      securityContext:
+        fsGroup: 1000
+        fsGroupChangePolicy: "OnRootMismatch"
+
       initContainers:
         - name: wait-for-ai-migrations
           image: ghcr.io/snehapriy958/medmatch-ai-service:phase2-migrations

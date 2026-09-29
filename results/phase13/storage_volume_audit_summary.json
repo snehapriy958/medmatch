@@ -1,0 +1,155 @@
+{
+  "phase": "13.4",
+  "audit_name": "Storage & Volume Permissions Audit",
+  "checkpoint": "31a9328",
+  "branch": "capstone/phase-13-production-engineering",
+  "timestamp": "2026-09-29T19:26:00Z",
+  "status": "Phase 13.4 Storage & Volume Permissions Audit Complete — Implementation Pending",
+  "pvc_inventory": [
+    {
+      "name": "medmatch-uploads-pvc",
+      "namespace": "medmatch",
+      "access_modes": ["ReadWriteOnce"],
+      "storage_class_name": "medmatch-storage",
+      "requested_storage": "5Gi",
+      "mount_consumers": ["ai-service", "worker"],
+      "mount_path": "/app/uploads",
+      "read_write_mode": "ReadWrite",
+      "multi_node_capable": false,
+      "shared_by_ai_and_worker": true,
+      "survives_pod_recreation": true
+    },
+    {
+      "name": "postgres-data",
+      "namespace": "medmatch",
+      "access_modes": ["ReadWriteOnce"],
+      "storage_class_name": "default",
+      "requested_storage": "10Gi",
+      "mount_consumers": ["postgres-0"],
+      "mount_path": "/var/lib/postgresql/data",
+      "read_write_mode": "ReadWrite",
+      "multi_node_capable": false,
+      "shared_by_ai_and_worker": false,
+      "survives_pod_recreation": true
+    },
+    {
+      "name": "redis-data",
+      "namespace": "medmatch",
+      "access_modes": ["ReadWriteOnce"],
+      "storage_class_name": "default",
+      "requested_storage": "5Gi",
+      "mount_consumers": ["redis-0"],
+      "mount_path": "/data",
+      "read_write_mode": "ReadWrite",
+      "multi_node_capable": false,
+      "shared_by_ai_and_worker": false,
+      "survives_pod_recreation": true
+    }
+  ],
+  "uploads_storage_flow": {
+    "filesystem_path": "/app/uploads",
+    "writer_container": "ai-service (via PDFService.save_pdf and readiness check)",
+    "reader_container": "worker (via PDFService.extract_text in process_trial Celery task)",
+    "both_require_write": true,
+    "files_deleted_after_processing": true,
+    "celery_payload_format": "local filesystem path string (str(file_path))",
+    "shared_path": true,
+    "survives_pod_restarts": true,
+    "posix_dependency": true
+  },
+  "cont_08_audit": {
+    "container_name": "init-uploads",
+    "host_manifest": "infra/kubernetes/worker/deployment.yaml",
+    "image": "busybox",
+    "current_uid": 0,
+    "current_gid": 0,
+    "command": "mkdir -p /app/uploads && chmod 777 /app/uploads",
+    "mounted_volume": "uploads (claimName: medmatch-uploads-pvc)",
+    "mount_path": "/app/uploads",
+    "is_root_required": false,
+    "root_cause_for_root": "CSI volumes mount with root:root (0755) ownership. Developer bypassed non-root UID 1000 permissions with root chmod 777 rather than pod fsGroup.",
+    "latent_vulnerability": "init-uploads is only present in worker; ai-service readiness probe will fail on fresh PVC if ai-service boots before worker."
+  },
+  "permission_strategies_evaluation": {
+    "strategy_A_fsGroup": {
+      "name": "Pod-level fsGroup (fsGroup: 1000)",
+      "compatibility": "100%",
+      "security_posture": "High (eliminates root initContainer, compliant with Pod Security Standards Restricted)",
+      "operational_complexity": "Very Low (declarative YAML)",
+      "kubernetes_portability": "Universal across CSI drivers",
+      "current_pvc_compatibility": "Compatible",
+      "simultaneous_pod_support": "Yes (subject to volume multi-attach capability)",
+      "code_changes_required": false,
+      "recommendation": "RECOMMENDED FOR PHASE 13.4"
+    },
+    "strategy_B_runAsUser_runAsGroup": {
+      "name": "Container runAsUser/runAsGroup without fsGroup",
+      "compatibility": "Incompatible with fresh volumes",
+      "security_posture": "Non-root",
+      "operational_complexity": "Low",
+      "kubernetes_portability": "High",
+      "current_pvc_compatibility": "Incompatible (fails with PermissionDenied on mount root 0755)",
+      "simultaneous_pod_support": "No",
+      "code_changes_required": false,
+      "recommendation": "REJECTED"
+    },
+    "strategy_C_scoped_root_initContainer": {
+      "name": "InitContainer chown 1000:1000 & chmod 770",
+      "compatibility": "Compatible",
+      "security_posture": "Violates Pod Security Standards (runAsUser: 0 required)",
+      "operational_complexity": "Medium (requires duplicating across ai-service and worker)",
+      "kubernetes_portability": "Poor on hardened enterprise clusters",
+      "current_pvc_compatibility": "Compatible",
+      "simultaneous_pod_support": "Yes (if colocated)",
+      "code_changes_required": false,
+      "recommendation": "REJECTED"
+    },
+    "strategy_D_storage_class_mount_options": {
+      "name": "StorageClass Mount Options",
+      "compatibility": "Incompatible with standard ext4/xfs cloud block storage",
+      "security_posture": "Good",
+      "operational_complexity": "High provider coupling",
+      "kubernetes_portability": "Very Poor",
+      "current_pvc_compatibility": "Incompatible with generic StorageClass",
+      "simultaneous_pod_support": "Driver dependent",
+      "code_changes_required": false,
+      "recommendation": "REJECTED"
+    },
+    "strategy_E_object_storage": {
+      "name": "Object Storage Migration (S3/GCS/MinIO)",
+      "compatibility": "Requires code changes",
+      "security_posture": "Maximum (IAM/IRSA, zero shared volume)",
+      "operational_complexity": "High upfront setup",
+      "kubernetes_portability": "Maximum",
+      "current_pvc_compatibility": "Replaces PVC entirely",
+      "simultaneous_pod_support": "Infinite multi-node scale",
+      "code_changes_required": true,
+      "recommendation": "RECOMMENDED FOR POST-PHASE 13 ROADMAP"
+    }
+  },
+  "access_mode_multi_attach_risk": {
+    "current_access_mode": "ReadWriteOnce",
+    "deployments_mounting": ["ai-service (1 replica)", "worker (1-3 replicas via HPA)"],
+    "failure_mode": "Multi-Attach error if pods scheduled on different nodes on cloud block storage (EBS/GKE PD/Azure Disk)",
+    "mitigation_short_term": "Use ReadWriteMany (RWX) storage class (EFS, Azure Files, NFS) for multi-node deployments",
+    "mitigation_long_term": "Object storage (S3/GCS) decoupling"
+  },
+  "compose_vs_k8s_differences": {
+    "compose_volume": "Named volume (uploads_data)",
+    "k8s_volume": "PersistentVolumeClaim (medmatch-uploads-pvc)",
+    "permission_initialization": "Compose inherits image UID 1000 permissions; K8s CSI mounts raw root:root 0755",
+    "divergence_consequence": "Docker Compose works seamlessly without root workarounds; Kubernetes required CONT-08 root initContainer hack"
+  },
+  "security_context_audit": {
+    "worker_init_uploads": "VIOLATION (runAsUser: 0, chmod 777, unpinned image)",
+    "worker_main": "COMPLIANT (runAsNonRoot: true, runAsUser: 1000, drop ALL)",
+    "ai_service_main": "COMPLIANT (runAsNonRoot: true, runAsUser: 1000, drop ALL)",
+    "pod_specs": "DEFECT (missing fsGroup: 1000 on both ai-service and worker)"
+  },
+  "remediation_plan": {
+    "step_1": "Delete init-uploads initContainer from infra/kubernetes/worker/deployment.yaml",
+    "step_2": "Add spec.securityContext.fsGroup: 1000 to infra/kubernetes/worker/deployment.yaml",
+    "step_3": "Add spec.securityContext.fsGroup: 1000 to infra/kubernetes/ai-service/deployment.yaml",
+    "step_4": "Document multi-node RWX requirements in uploads-pvc.yaml and storage-class.yaml"
+  }
+}

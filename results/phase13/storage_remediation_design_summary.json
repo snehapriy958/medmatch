@@ -1,0 +1,84 @@
+{
+  "phase": "13.4",
+  "design_name": "Storage Remediation Design Verification",
+  "checkpoint": "31a9328",
+  "branch": "capstone/phase-13-production-engineering",
+  "timestamp": "2026-09-29T19:29:00Z",
+  "status": "Phase 13.4 Storage Remediation Design Complete — Implementation Pending",
+  "issues_identified": {
+    "CONT-08": {
+      "title": "Worker init-uploads uses root + chmod 777",
+      "severity": "HIGH",
+      "root_cause": "K8s CSI mounts volume root as root:root (0755), blocking non-root UID 1000 without fsGroup.",
+      "latent_bug": "init-uploads omitted from ai-service; ai-service fails readiness probe if started before worker."
+    },
+    "ARCH-08": {
+      "title": "Uploads PVC is RWO with dual consumer Deployments and HPA (max 3)",
+      "severity": "CRITICAL (Multi-node)",
+      "root_cause": "RWO prevents multi-node attachment under cloud block storage CSI drivers."
+    }
+  },
+  "kubernetes_deployment_target": {
+    "evidence_source": "infra/kubernetes/storage/storage-class.yaml and docs/runbooks/production-deployment.md",
+    "target_classification": "Local Development (Rancher Desktop, k3s, kind)",
+    "cloud_target_status": "Documented as external requirement requiring provisioner substitution"
+  },
+  "storage_class_verification": {
+    "provisioner": "rancher.io/local-path",
+    "rwx_supported_by_provisioner": false,
+    "changing_access_mode_to_rwx_effect": "Fails on cloud block storage; unsupported by local-path across nodes",
+    "rwx_provisioners_present_in_repo": false
+  },
+  "hpa_scheduler_interaction": {
+    "min_replicas": 1,
+    "max_replicas": 3,
+    "pod_affinity_present": false,
+    "node_affinity_present": false,
+    "topology_spread_present": false,
+    "node_colocation_guarantee": false,
+    "risk": "Multi-Attach error if worker replicas or ai-service schedule across different nodes"
+  },
+  "concrete_architectures_evaluated": {
+    "architecture_A_rwo_fsgroup_colocation": {
+      "name": "RWO + fsGroup + PodAffinity Co-Location",
+      "app_code_changes": "None",
+      "k8s_changes": "Add fsGroup: 1000 to ai-service and worker; add podAffinity to worker",
+      "multi_node_capability": "Disabled (pinned to single node)",
+      "security_posture": "Clean (non-root)",
+      "suitability": "Valid for local dev and single-node clusters"
+    },
+    "architecture_B_rwx_fsgroup": {
+      "name": "RWX Shared Filesystem + fsGroup",
+      "app_code_changes": "None",
+      "k8s_changes": "Change PVC to RWX; update StorageClass; add fsGroup: 1000",
+      "multi_node_capability": "Full",
+      "security_posture": "Clean (non-root)",
+      "suitability": "Standard cloud pattern with managed NFS (EFS/Filestore)"
+    },
+    "architecture_C_object_storage": {
+      "name": "Object Storage (S3/GCS/MinIO)",
+      "app_code_changes": "Substantial (PDFService, Celery tasks, health endpoint)",
+      "k8s_changes": "Remove PVC and volume mounts entirely",
+      "multi_node_capability": "Infinite",
+      "security_posture": "Strong isolation (IAM-based)",
+      "suitability": "Ideal post-Phase 13 architectural milestone"
+    }
+  },
+  "fsgroup_verification": {
+    "fsgroup_gid": 1000,
+    "provides_write_delete": true,
+    "eliminates_root": true,
+    "eliminates_chmod_777": true,
+    "local_path_compatibility": "Fully compatible via kubelet native volume ownership management"
+  },
+  "safe_scope_determination": {
+    "selected_option": "Option 1 (Remediate CONT-08 permissions via fsGroup; co-locate worker via podAffinity; document ARCH-08 RWO constraint)",
+    "rationale": "Committed manifests target local-path; repo lacks RWX provisioner; Option 1 eliminates root vulnerability immediately without breaking local dev or modifying application logic.",
+    "implementation_bounds": {
+      "cont_08": "Remediated via pod-level fsGroup: 1000 and removal of root init-uploads",
+      "arch_08": "Deliberate RWO architectural constraint; worker co-located on ai-service node via podAffinity",
+      "deployment_model": "Supports local-development model (k3s, Rancher Desktop, kind)",
+      "future_work": "Cloud-scale multi-node storage (RWX / S3) deferred to post-Phase 13 roadmap"
+    }
+  }
+}

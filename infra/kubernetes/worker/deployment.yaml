@@ -41,21 +41,20 @@ spec:
 
       serviceAccountName: worker-sa
 
-      initContainers:
-        - name: init-uploads
-          image: busybox
-          securityContext:
-            runAsUser: 0
-          command:
-          - sh
-          - -c
-          - |
-            mkdir -p /app/uploads
-            chmod 777 /app/uploads
-          volumeMounts:
-          - name: uploads
-            mountPath: /app/uploads
+      securityContext:
+        fsGroup: 1000
+        fsGroupChangePolicy: "OnRootMismatch"
 
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  app: medmatch
+                  component: ai-service
+              topologyKey: kubernetes.io/hostname
+
+      initContainers:
         - name: wait-for-ai-migrations
           image: ghcr.io/snehapriy958/medmatch-worker:latest
           imagePullPolicy: Always
