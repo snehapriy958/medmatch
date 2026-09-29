@@ -16,6 +16,6 @@ spring:
 
 
 jwt:
-  private-key: classpath:keys/private.pem
-  public-key: classpath:keys/public.pem
-  expiration: 3600000
+  private-key: ${JWT_PRIVATE_KEY_PATH:classpath:keys/private.pem}
+  public-key: ${JWT_PUBLIC_KEY_PATH:classpath:keys/public.pem}
+  expiration: ${JWT_EXPIRATION:3600000}

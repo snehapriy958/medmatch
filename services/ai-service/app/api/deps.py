@@ -93,16 +93,6 @@ def get_current_hospital_id(
         "hospital_id"
     )
 
-    print(
-        "AI SERVICE JWT USER =",
-        current_user
-    )
-
-    print(
-        "AI SERVICE EXTRACTED HOSPITAL ID =",
-        hospital_id
-    )
-
     if hospital_id is None:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

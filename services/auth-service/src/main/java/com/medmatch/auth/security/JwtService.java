@@ -43,24 +43,36 @@ public class JwtService {
 
     @PostConstruct
     public void init() throws Exception {
+        String privateKey = null;
+        if (privateKeyResource != null && privateKeyResource.exists()) {
+            privateKey = new String(
+                    privateKeyResource.getInputStream().readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+        } else {
+            privateKey = System.getenv("JWT_PRIVATE_KEY");
+        }
 
-        String privateKey =
-                new String(
-                        privateKeyResource.getInputStream().readAllBytes(),
-                        StandardCharsets.UTF_8
-                );
+        String publicKey = null;
+        if (publicKeyResource != null && publicKeyResource.exists()) {
+            publicKey = new String(
+                    publicKeyResource.getInputStream().readAllBytes(),
+                    StandardCharsets.UTF_8
+            );
+        } else {
+            publicKey = System.getenv("JWT_PUBLIC_KEY");
+        }
 
-        String publicKey =
-                new String(
-                        publicKeyResource.getInputStream().readAllBytes(),
-                        StandardCharsets.UTF_8
-                );
+        if (privateKey == null || privateKey.isBlank()) {
+            throw new IllegalStateException("JWT private key not configured. Provide via jwt.private-key or JWT_PRIVATE_KEY.");
+        }
 
-        RSAPrivateKey rsaPrivateKey =
-                parsePrivateKey(privateKey);
+        if (publicKey == null || publicKey.isBlank()) {
+            throw new IllegalStateException("JWT public key not configured. Provide via jwt.public-key or JWT_PUBLIC_KEY.");
+        }
 
-        RSAPublicKey rsaPublicKey =
-                parsePublicKey(publicKey);
+        RSAPrivateKey rsaPrivateKey = parsePrivateKey(privateKey);
+        RSAPublicKey rsaPublicKey = parsePublicKey(publicKey);
 
         this.signer = new RSASSASigner(rsaPrivateKey);
         this.verifier = new RSASSAVerifier(rsaPublicKey);
@@ -125,6 +137,8 @@ public class JwtService {
         String cleaned = pem
                 .replace("-----BEGIN PRIVATE KEY-----", "")
                 .replace("-----END PRIVATE KEY-----", "")
+                .replace("-----BEGIN RSA PRIVATE KEY-----", "")
+                .replace("-----END RSA PRIVATE KEY-----", "")
                 .replaceAll("\\s", "");
         byte[] decoded = Base64.getDecoder().decode(cleaned);
         KeyFactory keyFactory = KeyFactory.getInstance("RSA");
@@ -135,6 +149,8 @@ public class JwtService {
         String cleaned = pem
                 .replace("-----BEGIN PUBLIC KEY-----", "")
                 .replace("-----END PUBLIC KEY-----", "")
+                .replace("-----BEGIN RSA PUBLIC KEY-----", "")
+                .replace("-----END RSA PUBLIC KEY-----", "")
                 .replaceAll("\\s", "");
         byte[] decoded = Base64.getDecoder().decode(cleaned);
         KeyFactory keyFactory = KeyFactory.getInstance("RSA");

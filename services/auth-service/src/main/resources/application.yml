@@ -26,9 +26,9 @@ spring:
 
 
 jwt:
-  private-key: classpath:keys/private.pem
-  public-key: classpath:keys/public.pem
-  expiration: 3600000
+  private-key: ${JWT_PRIVATE_KEY_PATH:classpath:keys/private.pem}
+  public-key: ${JWT_PUBLIC_KEY_PATH:classpath:keys/public.pem}
+  expiration: ${JWT_EXPIRATION:3600000}
 
 
 management:
@@ -51,5 +51,5 @@ logging:
     root: INFO
     org.springframework.security: INFO
     org.springframework.web: INFO
-    org.hibernate.SQL: DEBUG
-    org.hibernate.orm.jdbc.bind: TRACE
+    org.hibernate.SQL: WARN
+    org.hibernate.orm.jdbc.bind: WARN

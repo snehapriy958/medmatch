@@ -109,12 +109,6 @@ public class AuthServiceImpl implements AuthService {
         // USER NOT FOUND
         // ---------------------------------------------------------
         if (user == null) {
-
-                System.out.println(
-                        "LOGIN FAILED: USER NOT FOUND = "
-                                + request.getEmail()
-                );
-
                 auditService.createAuditLog(
                         null,
                         "LOGIN_FAILURE",
@@ -129,31 +123,9 @@ public class AuthServiceImpl implements AuthService {
                 );
         }
 
-
-        System.out.println(
-                "LOGIN USER FOUND = "
-                        + user.getEmail()
-        );
-
-        System.out.println(
-                "LOGIN USER ID = "
-                        + user.getId()
-        );
-
-        System.out.println(
-                "LOGIN HOSPITAL ID FROM ENTITY = "
-                        + user.getHospital().getId()
-        );
-
-
         boolean passwordMatches = passwordEncoder.matches(
                 request.getPassword(),
                 user.getPassword()
-        );
-
-        System.out.println(
-                "PASSWORD MATCH RESULT = "
-                        + passwordMatches
         );
 
 

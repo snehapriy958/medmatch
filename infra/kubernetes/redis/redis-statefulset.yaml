@@ -55,6 +55,14 @@ spec:
             - "yes"
             - --save
             - "60 1"
+            - --requirepass
+            - "$(REDIS_PASSWORD)"
+          env:
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: medmatch-secrets
+                  key: REDIS_PASSWORD
           volumeMounts:
             - name: redis-storage
               mountPath: /data
@@ -76,8 +84,9 @@ spec:
           livenessProbe:
             exec:
               command:
-                - redis-cli
-                - ping
+                - sh
+                - -c
+                - exec redis-cli -a "$REDIS_PASSWORD" ping
             initialDelaySeconds: 15
             periodSeconds: 15
             timeoutSeconds: 5
@@ -85,8 +94,9 @@ spec:
           readinessProbe:
             exec:
               command:
-                - redis-cli
-                - ping
+                - sh
+                - -c
+                - exec redis-cli -a "$REDIS_PASSWORD" ping
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 5

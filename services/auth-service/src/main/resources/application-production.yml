@@ -24,8 +24,8 @@ spring:
 
 
 jwt:
-  private-key: file:/app/keys/private.pem
-  public-key: file:/app/keys/public.pem
+  private-key: ${JWT_PRIVATE_KEY_PATH:file:/app/keys/private.pem}
+  public-key: ${JWT_PUBLIC_KEY_PATH:file:/app/keys/public.pem}
   expiration: ${JWT_EXPIRATION:3600000}
 
 
@@ -39,4 +39,13 @@ management:
 
   endpoint:
     health:
-      show-details: always
+      show-details: when_authorized
+
+
+logging:
+  level:
+    root: INFO
+    org.springframework.security: INFO
+    org.springframework.web: INFO
+    org.hibernate.SQL: WARN
+    org.hibernate.orm.jdbc.bind: WARN

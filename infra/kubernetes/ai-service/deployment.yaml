@@ -74,6 +74,12 @@ spec:
                   name: medmatch-config
                   key: REDIS_PORT
 
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: medmatch-secrets
+                  key: REDIS_PASSWORD
+
 
             # Gemini API
             - name: GOOGLE_API_KEY

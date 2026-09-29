@@ -62,14 +62,20 @@ public class SecurityConfig {
 
                 .requestMatchers(
                     "/auth/login/**",
-                    "/actuator/**",
+                    "/actuator/health",
+                    "/actuator/health/**",
+                    "/actuator/info",
+                    "/actuator/prometheus",
                     "/swagger-ui/**",
                     "/swagger-ui.html",
                     "/v3/api-docs/**"
                 )
                 .permitAll()
 
-
+                .requestMatchers(
+                    "/actuator/**"
+                )
+                .hasRole("SYSTEM_ADMIN")
 
                 .requestMatchers(
                     "/auth/register"
@@ -78,8 +84,6 @@ public class SecurityConfig {
                     "SYSTEM_ADMIN",
                     "HOSPITAL_ADMIN"
                 )
-
-
 
                 .anyRequest()
                 .authenticated()

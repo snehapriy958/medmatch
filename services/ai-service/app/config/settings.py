@@ -1,4 +1,5 @@
 from typing import Literal
+from urllib.parse import quote
 
 from pydantic import Field, field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -32,6 +33,8 @@ class Settings(BaseSettings):
         "production",
         "testing",
     ] = "development"
+
+    APPLICATION_PROFILE: str | None = None
 
     ALLOWED_ORIGINS: list[str] = Field(
         default_factory=lambda: [
@@ -401,8 +404,12 @@ class Settings(BaseSettings):
         """
         Apply additional safety checks when running in production.
         """
+        is_production = (
+            self.ENVIRONMENT == "production"
+            or (self.APPLICATION_PROFILE is not None and self.APPLICATION_PROFILE.lower() == "production")
+        )
 
-        if self.ENVIRONMENT == "production":
+        if is_production:
 
             if "*" in self.TRUSTED_HOSTS:
                 raise ValueError(
@@ -416,12 +423,39 @@ class Settings(BaseSettings):
                     "in production."
                 )
 
+            if not self.REDIS_PASSWORD or not self.REDIS_PASSWORD.strip():
+                raise ValueError(
+                    "REDIS_PASSWORD must be configured "
+                    "in production."
+                )
+
             if self.LOG_LEVEL == "DEBUG":
                 raise ValueError(
                     "LOG_LEVEL must not be DEBUG "
                     "in production."
                 )
 
+        return self
+
+    @model_validator(
+        mode="after",
+    )
+    def configure_redis_authentication(
+        self,
+    ) -> "Settings":
+        """
+        Ensure Redis URLs incorporate authentication if REDIS_PASSWORD is provided.
+        """
+        if self.REDIS_PASSWORD:
+            pw = self.REDIS_PASSWORD.strip()
+            if pw:
+                encoded_pw = quote(pw, safe="")
+                if "redis://" in self.REDIS_URL and "@" not in self.REDIS_URL:
+                    self.REDIS_URL = self.REDIS_URL.replace("redis://", f"redis://:{encoded_pw}@")
+                if "redis://" in self.CELERY_BROKER_URL and "@" not in self.CELERY_BROKER_URL:
+                    self.CELERY_BROKER_URL = self.CELERY_BROKER_URL.replace("redis://", f"redis://:{encoded_pw}@")
+                if "redis://" in self.CELERY_RESULT_BACKEND and "@" not in self.CELERY_RESULT_BACKEND:
+                    self.CELERY_RESULT_BACKEND = self.CELERY_RESULT_BACKEND.replace("redis://", f"redis://:{encoded_pw}@")
         return self
 
 settings = Settings()

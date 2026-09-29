@@ -1,0 +1,12 @@
+.git/
+target/
+*.class
+.env*
+!.env.example
+secrets.yaml
+src/main/resources/keys/private.pem
+*.key
+*.pk8
+*.pfx
+*.p12
+*.log

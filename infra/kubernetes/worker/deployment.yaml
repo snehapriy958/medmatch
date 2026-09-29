@@ -192,6 +192,16 @@ spec:
 
                   key: REDIS_PORT
 
+            - name: REDIS_PASSWORD
+
+              valueFrom:
+
+                secretKeyRef:
+
+                  name: medmatch-secrets
+
+                  key: REDIS_PASSWORD
+
 
           resources:
 

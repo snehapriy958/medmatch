@@ -78,10 +78,15 @@ class TestDockerAndComposeBaselines:
             p = docker_dir / df
             assert p.exists() and p.stat().st_size > 0, f"{df} must exist and be non-empty"
 
-    def test_dockerignore_gap(self):
-        """Confirm that .dockerignore files are currently missing from repository."""
+    def test_dockerignore_present_and_configured(self):
+        """Confirm that .dockerignore files are present and exclude sensitive files."""
         root_dockerignore = REPO_ROOT / ".dockerignore"
-        assert not root_dockerignore.exists(), "Root .dockerignore is currently missing"
+        assert root_dockerignore.exists(), "Root .dockerignore must exist"
+        content = root_dockerignore.read_text(encoding="utf-8")
+        assert ".git" in content
+        assert ".env*" in content
+        assert "**/*.pem" in content
+        assert "**/secrets.yaml" in content
 
 
 class TestKubernetesManifestBaselines:
@@ -225,17 +230,17 @@ class TestSecurityAndSecretsBaselines:
     Classification: STATIC / CONFIGURATION VALIDATION.
     """
 
-    def test_unauthenticated_tasks_endpoint(self):
-        """Verify /api/tasks/{task_id} lacks auth dependency (STATIC)."""
+    def test_authenticated_tasks_endpoint(self):
+        """Verify /api/tasks/{task_id} enforces authentication and tenant isolation (STATIC)."""
         tasks_route_file = REPO_ROOT / "services" / "ai-service" / "app" / "api" / "routes" / "tasks.py"
         assert tasks_route_file.exists()
         with open(tasks_route_file, "r", encoding="utf-8") as f:
             content = f.read()
-        assert "get_current_user" not in content, "GET /api/tasks/{task_id} lacks authentication"
-        assert "get_current_hospital_id" not in content, "GET /api/tasks/{task_id} lacks tenant isolation"
+        assert "get_current_user" in content, "GET /api/tasks/{task_id} must require authentication"
+        assert "get_current_hospital_id" in content, "GET /api/tasks/{task_id} must enforce tenant isolation"
 
-    def test_spring_security_actuator_permit_all(self):
-        """Verify Spring SecurityConfig permits all on /actuator/** (STATIC)."""
+    def test_spring_security_actuator_hardened(self):
+        """Verify Spring SecurityConfig restricts sensitive actuator endpoints (STATIC)."""
         sec_config = (
             REPO_ROOT
             / "services"
@@ -252,8 +257,9 @@ class TestSecurityAndSecretsBaselines:
         assert sec_config.exists()
         with open(sec_config, "r", encoding="utf-8") as f:
             content = f.read()
-        assert '"/actuator/**"' in content, "SecurityConfig matches /actuator/**"
-        assert ".permitAll()" in content, "SecurityConfig exposes /actuator/** via permitAll()"
+        assert '"/actuator/health"' in content, "Health endpoint is configured"
+        assert '"/actuator/**"' in content, "Actuator wildcard pattern is secured"
+        assert 'hasRole("SYSTEM_ADMIN")' in content, "Sensitive actuator endpoints restricted to SYSTEM_ADMIN"
 
     def test_working_tree_rsa_key_ignored_not_tracked(self):
         """

@@ -1,0 +1,86 @@
+# =============================================================================
+# MedMatch Root .dockerignore
+# Prevents sensitive credentials, keys, virtual environments, caches,
+# temporary files, and local datasets from leaking into Docker build contexts.
+# =============================================================================
+
+# Version control
+.git/
+.gitignore
+.gitattributes
+
+# Environment and secret files
+.env*
+!.env.example
+**/.env*
+!**/.env.example
+**/secrets.yaml
+!**/secrets.yaml.example
+**/*credentials*
+**/*credential*
+
+# Cryptographic Keys (exclude private keys and certificates)
+**/*.pem
+**/*.key
+**/*.pk8
+**/*.pfx
+**/*.p12
+!services/auth-service/src/main/resources/keys/public.pem
+!keys/public.pem
+
+# Python virtual environments, compiled bytecode, test caches
+**/.venv/
+**/venv/
+**/ENV/
+**/env/
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+**/*.pyd
+**/.pytest_cache/
+**/.coverage
+**/htmlcov/
+**/.mypy_cache/
+**/.ruff_cache/
+
+# Java / Maven build artifacts
+**/target/
+**/.mvn/.hidden
+**/*.class
+
+# Node / Frontend dependencies and local bundles
+**/node_modules/
+**/dist/
+**/build/
+**/.npm/
+**/.vite/
+**/.eslintcache
+
+# Local data, uploads, temporary files, logs, and artifacts
+uploads/
+**/uploads/
+tmp/
+**/tmp/
+data/
+datasets/
+results/
+artifacts/
+.system_generated/
+*.log
+**/*.log
+
+# IDE & OS metadata
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Documentation & research notebooks/scripts
+docs/
+research/
+scripts/
+tests/

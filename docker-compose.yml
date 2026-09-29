@@ -42,6 +42,18 @@ services:
 
     container_name: medmatch-redis
 
+    command: >
+      sh -c '
+        if [ -n "$$REDIS_PASSWORD" ]; then
+          exec redis-server --requirepass "$$REDIS_PASSWORD"
+        else
+          exec redis-server
+        fi
+      '
+
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-}
+
     ports:
       - "6380:6379"
 
@@ -49,12 +61,14 @@ services:
       - redis_data:/data
 
     healthcheck:
-      test:
-        [
-          "CMD",
-          "redis-cli",
-          "ping"
-        ]
+      test: >
+        sh -c '
+          if [ -n "$$REDIS_PASSWORD" ]; then
+            redis-cli -a "$$REDIS_PASSWORD" ping
+          else
+            redis-cli ping
+          fi
+        '
       interval: 10s
       timeout: 5s
       retries: 5
@@ -183,7 +197,7 @@ services:
 
     environment:
 
-      APPLICATION_PROFILE: production
+      APPLICATION_PROFILE: dev
 
       DATABASE_URL: postgresql://postgres:${DATABASE_PASSWORD:-postgres}@postgres:5432/medmatch
       DATABASE_USERNAME: postgres
@@ -193,6 +207,7 @@ services:
 
       REDIS_HOST: redis
       REDIS_PORT: "6379"
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-}
 
       CELERY_BROKER_URL: redis://redis:6379/0
       CELERY_RESULT_BACKEND: redis://redis:6379/1
@@ -229,7 +244,7 @@ services:
 
     environment:
 
-      APPLICATION_PROFILE: production
+      APPLICATION_PROFILE: dev
 
       GOOGLE_API_KEY: ${GOOGLE_API_KEY}
 
@@ -239,6 +254,7 @@ services:
 
       REDIS_HOST: redis
       REDIS_PORT: "6379"
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-}
 
       CELERY_BROKER_URL: redis://redis:6379/0
       CELERY_RESULT_BACKEND: redis://redis:6379/1

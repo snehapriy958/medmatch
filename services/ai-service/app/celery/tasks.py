@@ -182,6 +182,7 @@ def process_trial(
             file_path
         )
 
+        result["hospital_id"] = str(hospital_uuid)
         return result
 
     except LLMCommunicationError as exc:

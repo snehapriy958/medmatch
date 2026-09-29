@@ -41,7 +41,7 @@ PHASE 12 — CLINICAL SAFETY
 STATUS: COMPLETE and ACCEPTED
 
 PHASE 13 — PRODUCTION ENGINEERING, RELIABILITY, OBSERVABILITY, PERFORMANCE & DEPLOYMENT HARDENING
-STATUS: AUDIT & READINESS SPECIFICATION COMPLETE — AWAITING IMPLEMENTATION
+STATUS: IN PROGRESS (Phase 13.0 Audit Complete; Phase 13.1 Security & Secrets Remediation Complete — Awaiting Review)
 
 Next phase:
 PHASE 14 — CAPSTONE SYNTHESIS & FINAL SYSTEM INTEGRATION (NOT STARTED)
@@ -52,6 +52,7 @@ PHASE 14 — CAPSTONE SYNTHESIS & FINAL SYSTEM INTEGRATION (NOT STARTED)
 ## Artifact Index for Phase 13 (Production Engineering Audit & Readiness)
 
 - [Phase 13 Production Engineering Baseline Audit](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase13_production_engineering_audit.md)
+- [Phase 13.1 Security & Secrets Remediation Report](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase13_security_remediation.md)
 - [Phase 13 Production Readiness Matrix](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase13_production_readiness_matrix.md)
 - [Phase 13 Resilience & Failure Matrix (Scenarios 1–18)](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase13_failure_matrix.md)
 - [Phase 13 Production Reliability Specification](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase13_reliability_specification.md)
@@ -62,6 +63,9 @@ PHASE 14 — CAPSTONE SYNTHESIS & FINAL SYSTEM INTEGRATION (NOT STARTED)
 - [Phase 13 Reproducibility & Audit Verification Guide](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase13_reproducibility.md)
 - [Phase 13 Final Production Engineering Report](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/docs/capstone/phase13_production_engineering_report.md)
 - [Phase 13 Production Engineering Baseline Test Suite](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/tests/production_engineering/test_production_engineering_baseline.py)
+- [Phase 13.1 Task Endpoint Security Tests](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/services/ai-service/tests/test_task_security.py)
+- [Phase 13.1 Redis Authentication Tests](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/services/ai-service/tests/test_redis_config.py)
+- [Phase 13.1 RSA JWT End-to-End Tests](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/services/ai-service/tests/test_rsa_jwt_verification.py)
 - [Phase 13 Audit Summary Data Artifact](file:///c:/Developers/Sneha/Projects/MEDMATCH_V2/results/phase13/audit_summary.json)
 
 

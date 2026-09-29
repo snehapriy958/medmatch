@@ -10,6 +10,7 @@ metadata:
 data:
   # Application profile / environment
   APPLICATION_PROFILE: "production"
+  ENVIRONMENT: "production"
 
   # PostgreSQL connection (non-sensitive parts only — password lives in secrets.yaml)
   DATABASE_HOST: "postgres-service"

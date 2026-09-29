@@ -23,6 +23,7 @@ from app.api.deps import (
 )
 from app.celery.tasks import process_trial
 from app.config.rate_limit import limiter
+from app.services.task_registry import record_task_tenant
 from app.schemas.trial import (
     TrialCreate,
     TrialResponse,
@@ -63,12 +64,6 @@ def create_trial(
     """
     Create a new clinical trial.
     """
-
-    print(
-        "========== CREATE TRIAL ROUTE HIT ==========",
-        flush=True,
-    )
-
     return service.create_trial(
         trial_data=trial,
         hospital_id=hospital_id,
@@ -312,6 +307,10 @@ def upload_trial_pdf(
         task = process_trial.delay(
             file_path=str(file_path),
             hospital_id=str(hospital_id),
+        )
+        record_task_tenant(
+            task_id=task.id,
+            hospital_id=hospital_id,
         )
 
     except Exception as exc:

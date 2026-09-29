@@ -92,28 +92,6 @@ class TrialService:
         """
 
         try:
-            print("\n========== TRIAL TRANSACTION DEBUG ==========")
-
-            print(
-                "Trial repository session:",
-                id(self.repository.db),
-            )
-
-            print(
-                "Trial embedding repository session:",
-                id(self.embedding_service.trial_repository.db),
-            )
-
-            print(
-                "Criteria embedding repository session:",
-                id(self.embedding_service.criteria_repository.db),
-            )
-
-            print(
-                "Audit repository session:",
-                id(self.audit_service.repository.db),
-            )
-
             existing_trial = (
                 self.repository.find_existing_trial(
                     hospital_id=hospital_id,
@@ -138,18 +116,7 @@ class TrialService:
             )
 
             self.repository.create_trial(trial)
-
-            print(
-                "After add - trial session:",
-                id(self.repository.db),
-            )
-
             self.repository.flush()
-
-            print(
-                "After flush - trial ID:",
-                trial.id,
-            )
 
             trial_embedding_text = (
                 self._build_trial_embedding_text(
@@ -172,27 +139,8 @@ class TrialService:
                 ),
             )
 
-            print(
-                "Before commit - trial session:",
-                id(self.repository.db),
-            )
-
             self.repository.commit()
-
-            print(
-                "COMMIT COMPLETED"
-            )
-
             self.repository.refresh(trial)
-
-            print(
-                "After refresh - trial ID:",
-                trial.id,
-            )
-
-            print(
-                "============================================\n"
-            )
 
             return trial
 

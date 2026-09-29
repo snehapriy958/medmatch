@@ -41,15 +41,21 @@ class RedisClient:
         """
 
         if cls._client is None:
+            kwargs = {
+                "decode_responses": True,
+                "socket_connect_timeout": 5,
+                "socket_timeout": 5,
+                "socket_keepalive": True,
+                "health_check_interval": 30,
+                "max_connections": 50,
+                "retry_on_timeout": True,
+            }
+            if settings.REDIS_PASSWORD:
+                kwargs["password"] = settings.REDIS_PASSWORD
+
             cls._client = redis.from_url(
                 settings.REDIS_URL,
-                decode_responses=True,
-                socket_connect_timeout=5,
-                socket_timeout=5,
-                socket_keepalive=True,
-                health_check_interval=30,
-                max_connections=50,
-                retry_on_timeout=True,
+                **kwargs,
             )
 
             logger.info(
