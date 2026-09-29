@@ -1,0 +1,323 @@
+{
+  "phase": "13.2",
+  "audit_name": "Database & Migration Engineering Audit (Corrected Baseline)",
+  "checkpoint": "0d64976",
+  "branch": "capstone/phase-13-production-engineering",
+  "audit_timestamp": "2026-09-29T11:40:00Z",
+  "gate_status": "Phase 13.2 Audit Corrected — Implementation Not Started",
+  "summary": {
+    "total_findings": 15,
+    "by_severity": {
+      "critical": 3,
+      "high": 4,
+      "medium": 4,
+      "low": 3,
+      "informational": 1
+    },
+    "by_scope": {
+      "TRACKED_REPOSITORY": 4,
+      "LOCAL_WORKING_TREE": 6,
+      "CONFIGURATION": 2,
+      "DEPLOYMENT": 2,
+      "ARCHITECTURE": 1
+    }
+  },
+  "findings": [
+    {
+      "finding_id": "MIG-01",
+      "migration_system": "Flyway",
+      "service": "auth-service",
+      "database": "medmatch",
+      "schema": "public",
+      "severity": "CRITICAL",
+      "scope_classification": "LOCAL_WORKING_TREE",
+      "finding": "Duplicate Flyway version prefixes (V1__ to V4__) present in local working tree due to 16 untracked Lineage A files.",
+      "evidence": "Working tree contains 20 files on disk. Exactly 4 files are tracked in Git (V1-V4 Lineage B). 16 files are untracked and hidden by .git/info/exclude.",
+      "affected_files": [
+        "services/auth-service/src/main/resources/db/migration/V1__create_hospitals.sql",
+        "services/auth-service/src/main/resources/db/migration/V1__create_roles_table.sql",
+        "services/auth-service/src/main/resources/db/migration/V2__create_roles.sql",
+        "services/auth-service/src/main/resources/db/migration/V2__create_hospitals_table.sql",
+        "services/auth-service/src/main/resources/db/migration/V3__create_users.sql",
+        "services/auth-service/src/main/resources/db/migration/V3__create_users_table.sql",
+        "services/auth-service/src/main/resources/db/migration/V4__create_audit_logs.sql",
+        "services/auth-service/src/main/resources/db/migration/V4__create_audit_logs_table.sql"
+      ],
+      "current_behavior": "In local working tree, Docker Compose auth-migrate and local Docker builds crash on Flyway duplicate version 1. On a clean Git clone, only the 4 tracked files exist and no duplicate collision occurs.",
+      "risk": "Local environment stack startup failure and dirty container image builds.",
+      "remediation_phase": "Phase 13.2.1",
+      "status": "OPEN_AUDITED"
+    },
+    {
+      "finding_id": "MIG-02",
+      "migration_system": "Alembic",
+      "service": "ai-service",
+      "database": "medmatch",
+      "schema": "public",
+      "severity": "CRITICAL",
+      "scope_classification": "TRACKED_REPOSITORY",
+      "finding": "Git-tracked Alembic merge head 6f0604b23df6 references untracked parent revision 3f3884863f27, breaking clean clones.",
+      "evidence": "services/ai-service/alembic/versions/6f0604b23df6_merge_schema_heads.py is tracked in Git with down_revision = ('0008', '3f3884863f27'). 3f3884863f27 is untracked in Git and excluded by .git/info/exclude.",
+      "affected_files": [
+        "services/ai-service/alembic/versions/6f0604b23df6_merge_schema_heads.py",
+        "services/ai-service/alembic/versions/3f3884863f27_add_trial_embeddings.py",
+        ".git/info/exclude"
+      ],
+      "current_behavior": "Any clean git clone fails immediately on alembic upgrade head with alembic.util.exc.CommandError: Can't locate revision identified by '3f3884863f27'.",
+      "risk": "CI/CD pipeline failure, broken staging/production rollouts from clean clones, and disaster recovery failure.",
+      "remediation_phase": "Phase 13.2.1",
+      "status": "OPEN_AUDITED"
+    },
+    {
+      "finding_id": "MIG-03",
+      "migration_system": "Alembic",
+      "service": "ai-service",
+      "database": "medmatch",
+      "schema": "public",
+      "severity": "CRITICAL",
+      "scope_classification": "LOCAL_WORKING_TREE",
+      "finding": "Alembic Branch B migrations in local working tree duplicate DDL already executed in revisions 0001-0007.",
+      "evidence": "Untracked revision 2248598b8f7e creates uq_trials_hospital_title_condition_phase (already created by 0002). Untracked revision 3f3884863f27 creates trial_embeddings table (already created by 0007).",
+      "affected_files": [
+        "services/ai-service/alembic/versions/0002_create_trials_table.py",
+        "services/ai-service/alembic/versions/0007_create_trial_embeddings_table.py",
+        "services/ai-service/alembic/versions/2248598b8f7e_initial_schema.py",
+        "services/ai-service/alembic/versions/3f3884863f27_add_trial_embeddings.py"
+      ],
+      "current_behavior": "In the local working tree, upgrading a blank database with alembic upgrade head fails on PostgreSQL relation/constraint already exists errors.",
+      "risk": "Alembic cannot initialize a clean database from scratch in the current working tree.",
+      "remediation_phase": "Phase 13.2.1",
+      "status": "OPEN_AUDITED"
+    },
+    {
+      "finding_id": "MIG-04",
+      "migration_system": "Flyway / K8s",
+      "service": "auth-service",
+      "database": "medmatch",
+      "schema": "public",
+      "severity": "MEDIUM",
+      "scope_classification": "CONFIGURATION",
+      "finding": "Migration packaging mechanism inconsistency between Docker Compose dynamic mount and Kubernetes explicit enumeration, risking future staleness.",
+      "evidence": "kustomization.yaml lines 102-109 explicitly enumerate the 4 tracked Lineage B files into auth-migration-sql ConfigMap, while docker-compose.yml dynamically mounts the migration directory.",
+      "affected_files": [
+        "kustomization.yaml",
+        "docker-compose.yml",
+        "infra/kubernetes/auth-service/migrate-job.yaml"
+      ],
+      "current_behavior": "Docker Compose mounts the migration directory dynamically, while Kubernetes explicitly enumerates migration files in kustomization.yaml. They currently contain the same tracked four migrations on a clean clone, but the Kubernetes mechanism can become stale if future tracked migrations are added without updating kustomization.yaml.",
+      "risk": "Future tracked migrations (V5+) will automatically apply in Docker Compose but will be silently omitted from Kubernetes unless kustomization.yaml is manually updated.",
+      "remediation_phase": "Phase 13.2.1",
+      "status": "OPEN_AUDITED"
+    },
+    {
+      "finding_id": "MIG-05",
+      "migration_system": "Orchestration",
+      "service": "cross-service",
+      "database": "medmatch",
+      "schema": "public",
+      "severity": "HIGH",
+      "scope_classification": "DEPLOYMENT",
+      "finding": "Unsynchronized concurrent Job and Deployment rollout in Kubernetes.",
+      "evidence": "kustomization.yaml defines flat resource list. Running kubectl apply -k . starts auth-migrate, ai-migrate, auth-service, ai-service, and worker in parallel.",
+      "affected_files": [
+        "kustomization.yaml",
+        "infra/kubernetes/auth-service/migrate-job.yaml",
+        "infra/kubernetes/ai-service/migrate-job.yaml",
+        "infra/scripts/deploy.sh"
+      ],
+      "current_behavior": "ai-migrate races auth-migrate, failing on foreign key to hospitals table if auth-migrate has not finished creating it.",
+      "risk": "Cluster rollout failure when manifests are applied directly without deploy.sh procedural wait loops.",
+      "remediation_phase": "Phase 13.2.1",
+      "status": "OPEN_AUDITED"
+    },
+    {
+      "finding_id": "MIG-06",
+      "migration_system": "Flyway",
+      "service": "auth-service",
+      "database": "medmatch",
+      "schema": "public",
+      "severity": "HIGH",
+      "scope_classification": "CONFIGURATION",
+      "finding": "Multiple concurrent Flyway migration executions during Kubernetes rollout.",
+      "evidence": "auth-service/deployment.yaml specifies replicas: 2. application-production.yml sets spring.flyway.enabled: true. auth-migrate Job also runs Flyway.",
+      "affected_files": [
+        "infra/kubernetes/auth-service/deployment.yaml",
+        "services/auth-service/src/main/resources/application-production.yml",
+        "infra/kubernetes/auth-service/migrate-job.yaml"
+      ],
+      "current_behavior": "Three concurrent processes run Flyway migrate against the database on deployment.",
+      "risk": "Database lock contention and CrashLoopBackOff of application pods.",
+      "remediation_phase": "Phase 13.2.1",
+      "status": "OPEN_AUDITED"
+    },
+    {
+      "finding_id": "MIG-07",
+      "migration_system": "Alembic",
+      "service": "ai-service",
+      "database": "medmatch",
+      "schema": "public",
+      "severity": "HIGH",
+      "scope_classification": "LOCAL_WORKING_TREE",
+      "finding": "Untracked Alembic revision 01efd2b23442 executes DDL against auth-service tables (audit_logs, hospitals).",
+      "evidence": "services/ai-service/alembic/versions/01efd2b23442_schema_validation.py lines 24-34 add columns to audit_logs and index to hospitals.",
+      "affected_files": [
+        "services/ai-service/alembic/versions/01efd2b23442_schema_validation.py",
+        "services/ai-service/alembic/env.py"
+      ],
+      "current_behavior": "Alembic alters tables owned by another service in the local working tree graph.",
+      "risk": "Microservice encapsulation violation and schema drift.",
+      "remediation_phase": "Phase 13.2.1",
+      "status": "OPEN_AUDITED"
+    },
+    {
+      "finding_id": "MIG-08",
+      "migration_system": "PostgreSQL Schema",
+      "service": "cross-service",
+      "database": "medmatch",
+      "schema": "public",
+      "severity": "HIGH",
+      "scope_classification": "ARCHITECTURE",
+      "finding": "Shared public schema and cross-service physical foreign key dependencies without schema partitioning.",
+      "evidence": "Both services connect to postgresql://.../medmatch public schema. patients, trials, and matches have FK to hospitals.id.",
+      "affected_files": [
+        "services/ai-service/app/models/patient.py",
+        "services/ai-service/app/models/trial.py",
+        "services/ai-service/app/models/match.py",
+        "services/auth-service/src/main/resources/application.yml"
+      ],
+      "current_behavior": "Services share the same table namespace, preventing independent schema lifecycles.",
+      "risk": "Tight coupling, blast-radius expansion, and blocked horizontal scaling.",
+      "remediation_phase": "Phase 13.2.1",
+      "status": "OPEN_AUDITED"
+    },
+    {
+      "finding_id": "MIG-09",
+      "migration_system": "Flyway",
+      "service": "auth-service",
+      "database": "medmatch",
+      "schema": "public",
+      "severity": "MEDIUM",
+      "scope_classification": "LOCAL_WORKING_TREE",
+      "finding": "Unconditional table wipe (DELETE FROM roles;) in untracked local migration V10.",
+      "evidence": "V10__fix_role_seed_data.sql line 1 contains DELETE FROM roles;. File is untracked and absent from Git.",
+      "affected_files": [
+        "services/auth-service/src/main/resources/db/migration/V10__fix_role_seed_data.sql"
+      ],
+      "current_behavior": "Deletes all role rows if executed locally, aborting with foreign key violation if users exist.",
+      "risk": "Local migration failure and loss of critical role reference data.",
+      "remediation_phase": "Phase 13.2.1",
+      "status": "OPEN_AUDITED"
+    },
+    {
+      "finding_id": "MIG-10",
+      "migration_system": "Flyway",
+      "service": "auth-service",
+      "database": "medmatch",
+      "schema": "public",
+      "severity": "MEDIUM",
+      "scope_classification": "LOCAL_WORKING_TREE",
+      "finding": "Destructive column drops in untracked local Flyway migrations V15 and V16.",
+      "evidence": "Untracked file V15 drops user_id; untracked file V16 drops resource from audit_logs. Both files absent from Git.",
+      "affected_files": [
+        "services/auth-service/src/main/resources/db/migration/V15__fix_audit_user_id.sql",
+        "services/auth-service/src/main/resources/db/migration/V16__remove_audit_resource_column.sql"
+      ],
+      "current_behavior": "Drops columns and historical audit data if executed locally.",
+      "risk": "Data loss if untracked files are accidentally executed.",
+      "remediation_phase": "Phase 13.2.1",
+      "status": "OPEN_AUDITED"
+    },
+    {
+      "finding_id": "MIG-11",
+      "migration_system": "Testing",
+      "service": "cross-service",
+      "database": "medmatch",
+      "schema": "public",
+      "severity": "MEDIUM",
+      "scope_classification": "TRACKED_REPOSITORY",
+      "finding": "Zero integration test coverage for database migrations and clean-schema upgrades.",
+      "evidence": "tests/production_engineering/test_production_engineering_baseline.py contains only static file inspections.",
+      "affected_files": [
+        "tests/production_engineering/test_production_engineering_baseline.py"
+      ],
+      "current_behavior": "CI passes without ever executing a migration against a database.",
+      "risk": "Broken migrations and syntax errors escape to staging and production.",
+      "remediation_phase": "Phase 13.2.1",
+      "status": "OPEN_AUDITED"
+    },
+    {
+      "finding_id": "MIG-12",
+      "migration_system": "Repository Hygiene",
+      "service": "cross-service",
+      "database": "N/A",
+      "schema": "N/A",
+      "severity": "LOW",
+      "scope_classification": "LOCAL_WORKING_TREE",
+      "finding": "Local .git/info/exclude hides untracked migration files from git status.",
+      "evidence": ".git/info/exclude contains services/auth-service/src/main/resources/db/migration/ and services/ai-service/alembic/versions/.",
+      "affected_files": [
+        ".git/info/exclude"
+      ],
+      "current_behavior": "Developers see clean git status while disk contains 16 untracked SQL files and 3 untracked Alembic files.",
+      "risk": "Packaging drift and reproducible build failures.",
+      "remediation_phase": "Phase 13.2.1",
+      "status": "OPEN_AUDITED"
+    },
+    {
+      "finding_id": "MIG-13",
+      "migration_system": "Alembic",
+      "service": "repository-root",
+      "database": "N/A",
+      "schema": "N/A",
+      "severity": "LOW",
+      "scope_classification": "LOCAL_WORKING_TREE",
+      "finding": "Orphan partial alembic/versions directory at repository root without alembic.ini.",
+      "evidence": "Directory alembic/versions exists at root containing 3 files. Absent from Git (ignored by .git/info/exclude).",
+      "affected_files": [
+        "alembic/versions/01efd2b23442_schema_validation.py",
+        "alembic/versions/2248598b8f7e_initial_schema.py",
+        "alembic/versions/3f3884863f27_add_trial_embeddings.py"
+      ],
+      "current_behavior": "Orphan files remain in root working tree, ignored by .git/info/exclude.",
+      "risk": "Developer confusion and accidental execution from wrong working directory.",
+      "remediation_phase": "Phase 13.2.1",
+      "status": "OPEN_AUDITED"
+    },
+    {
+      "finding_id": "MIG-14",
+      "migration_system": "Alembic",
+      "service": "ai-service",
+      "database": "N/A",
+      "schema": "N/A",
+      "severity": "LOW",
+      "scope_classification": "LOCAL_WORKING_TREE",
+      "finding": "Untracked backup directory versions_backup_before_fix present in ai-service alembic.",
+      "evidence": "services/ai-service/alembic/versions_backup_before_fix contains 10 stale migration files. Absent from Git.",
+      "affected_files": [
+        "services/ai-service/alembic/versions_backup_before_fix"
+      ],
+      "current_behavior": "Untracked directory resides on disk, ignored by .git/info/exclude.",
+      "risk": "Repository clutter and accidental inclusion in container images.",
+      "remediation_phase": "Phase 13.2.1",
+      "status": "OPEN_AUDITED"
+    },
+    {
+      "finding_id": "MIG-15",
+      "migration_system": "Operational Tooling",
+      "service": "infra",
+      "database": "medmatch",
+      "schema": "public",
+      "severity": "INFORMATIONAL",
+      "scope_classification": "TRACKED_REPOSITORY",
+      "finding": "Operational database migration script infra/scripts/migrate.sh is 0 bytes.",
+      "evidence": "Tracked file infra/scripts/migrate.sh exists with length 0 bytes.",
+      "affected_files": [
+        "infra/scripts/migrate.sh"
+      ],
+      "current_behavior": "Executing migrate.sh does nothing.",
+      "risk": "Operators lack a standardized standalone CLI script to run database migrations outside of full deployment.",
+      "remediation_phase": "Phase 13.3",
+      "status": "OPEN_AUDITED"
+    }
+  ]
+}
