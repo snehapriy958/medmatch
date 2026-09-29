@@ -1,0 +1,13 @@
+experiment_scope,metric,baseline,optimized,reduction,pct_improvement,unit,evidence
+Frozen Phase 14.1 Reference,criteria_loading_mean,128.32,-,-,-,ms,FROZEN REFERENCE
+Frozen Phase 14.1 Reference,local_pipeline_mean,181.6,-,-,-,ms,FROZEN REFERENCE
+Controlled Same-Run Primary,criteria_loading_query_count,5,1,4,80.0%,queries,MEASURED
+Controlled Same-Run Primary,criteria_loading_mean_latency,121.545,25.338,96.21,79.15%,ms,MEASURED
+Controlled Same-Run Primary,criteria_loading_p50_latency,121.593,25.383,96.21,-,ms,MEASURED
+Controlled Same-Run Primary,criteria_loading_p95_latency,121.995,25.508,96.49,-,ms,MEASURED
+Controlled Same-Run Primary,local_pipeline_mean_latency,163.627,67.568,96.06,58.71%,ms,MEASURED
+Controlled Same-Run Primary,local_pipeline_p50_latency,163.545,67.454,96.09,-,ms,MEASURED
+Controlled Same-Run Primary,local_pipeline_p95_latency,164.42,68.474,95.95,-,ms,MEASURED
+Direct PostgreSQL Host Query,real_postgresql_5_trials_mean,118.51,2.79,115.72,97.65%,ms,MEASURED
+Scope Boundary,gemini_inference_latency,NOT MEASURED,NOT MEASURED,-,-,ms,NOT MEASURED
+Scope Boundary,real_http_service_latency,NOT MEASURED,NOT MEASURED,-,-,ms,NOT MEASURED

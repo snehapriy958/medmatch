@@ -256,37 +256,62 @@ class MatchingService:
     ) -> list[dict]:
         """
         Fetch every inclusion and exclusion criterion for the candidate
-        trials identified during semantic retrieval.
+        trials identified during semantic retrieval using a batched query.
 
         Semantic retrieval is used only to discover candidate trials.
         Eligibility evaluation must use the complete criterion set for
         each candidate trial.
         """
+        if not trial_ids:
+            return []
 
+        sorted_trial_ids = sorted(trial_ids)
+        uuids = [UUID(tid) for tid in sorted_trial_ids]
+
+        # Use set-based batched retrieval if available on repository
+        if hasattr(self.trial_criteria_repository, "list_by_trial_ids"):
+            criteria_records = (
+                self.trial_criteria_repository.list_by_trial_ids(uuids)
+            )
+
+            # Group criteria by trial_id to maintain deterministic trial ordering
+            criteria_by_trial: dict[str, list[dict]] = {
+                tid: [] for tid in sorted_trial_ids
+            }
+
+            for criterion in criteria_records:
+                crit_trial_id = str(criterion.trial_id)
+                if crit_trial_id in criteria_by_trial:
+                    criteria_by_trial[crit_trial_id].append(
+                        {
+                            "id": str(criterion.id),
+                            "trial_id": crit_trial_id,
+                            "criteria_type": criterion.criteria_type,
+                            "description": criterion.description,
+                        }
+                    )
+
+            complete_criteria: list[dict] = []
+            for trial_id in sorted_trial_ids:
+                complete_criteria.extend(criteria_by_trial[trial_id])
+
+            return complete_criteria
+
+        # Fallback for mock environments that only mock list_by_trial
         complete_criteria: list[dict] = []
-
-        for trial_id in sorted(trial_ids):
-
+        for trial_id in sorted_trial_ids:
             criteria = (
                 self.trial_criteria_repository.list_by_trial(
                     UUID(trial_id)
                 )
             )
-
             for criterion in criteria:
-
                 complete_criteria.append(
                     {
                         "id": str(criterion.id),
-                        "trial_id": str(
-                            criterion.trial_id
-                        ),
-                        "criteria_type": (
-                            criterion.criteria_type
-                        ),
-                        "description": (
-                            criterion.description
-                        ),
+                        "trial_id": str(criterion.trial_id),
+                        "criteria_type": criterion.criteria_type,
+                        "description": criterion.description,
                     }
                 )
 

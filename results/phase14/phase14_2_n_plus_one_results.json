@@ -1,0 +1,138 @@
+{
+  "phase": "14.2",
+  "optimization_id": "PERF-05-CRITERIA-N-PLUS-ONE",
+  "title": "Set-Based Criteria Loading Optimization",
+  "frozen_phase14_1_reference": {
+    "commit": "03cd93a",
+    "candidate_trials": 5,
+    "total_criteria": 77,
+    "criteria_loading_mean_ms": 128.32,
+    "local_pipeline_mean_ms": 181.6,
+    "criteria_loading_queries": 5,
+    "gemini_latency": "NOT MEASURED",
+    "real_http_latency": "NOT MEASURED",
+    "note": "Frozen Phase 14.1 baseline established at commit 03cd93a. Kept strictly intact as historical benchmark reference; not used as numerator/denominator in cross-run percentage calculations to avoid inter-run variance confounding."
+  },
+  "controlled_same_run_experiment": {
+    "workload": {
+      "candidate_trials": 5,
+      "total_criteria": 77,
+      "iterations": 15
+    },
+    "variance_explanation": "The fresh same-run sequential baseline (121.27 ms criteria loading, 163.19 ms local pipeline) differs from the frozen Phase 14.1 reference (128.32 ms criteria loading, 181.60 ms local pipeline) due to runtime CPU governor states, process memory cache alignment, and inter-run system scheduler variance. For rigorous scientific validity, the primary percentage improvement is calculated strictly within this same-run controlled execution.",
+    "primary_query_count": {
+      "headline": "5 candidate trials: 5 SQL queries -> 1 SQL query (4 queries reduced, 80.0% reduction)",
+      "baseline": 5,
+      "optimized": 1,
+      "reduction": 4,
+      "reduction_pct": 80.0
+    },
+    "secondary_orm_observation": "Under raw SQLAlchemy ORM execution without noload options, lazy='selectin' relationships on TrialCriteria triggered cascading selectin loads for child relationships (trials, embeddings, matches, patients), emitting 55 queries sequentially across 5 trials. Adding noload options alongside WHERE trial_id IN (...) collapsed this to exactly 1 query. This is noted as an ORM relationship loading insight; the primary N+1 production claim remains 5 queries -> 1 query.",
+    "criteria_loading_latency_ms": {
+      "baseline": {
+        "sample_count": 15,
+        "mean_ms": 121.545,
+        "stddev_ms": 0.322,
+        "min_ms": 120.864,
+        "max_ms": 122.005,
+        "p50_ms": 121.593,
+        "p90_ms": 121.942,
+        "p95_ms": 121.995,
+        "p99_ms": 122.003,
+        "throughput_items_per_sec": 8.23
+      },
+      "optimized": {
+        "sample_count": 15,
+        "mean_ms": 25.338,
+        "stddev_ms": 0.145,
+        "min_ms": 25.039,
+        "max_ms": 25.513,
+        "p50_ms": 25.383,
+        "p90_ms": 25.495,
+        "p95_ms": 25.508,
+        "p99_ms": 25.512,
+        "throughput_items_per_sec": 39.47
+      },
+      "absolute_reduction_ms": 96.21,
+      "percentage_improvement": 79.15
+    },
+    "local_pipeline_latency_ms": {
+      "baseline": {
+        "sample_count": 15,
+        "mean_ms": 163.627,
+        "stddev_ms": 0.429,
+        "min_ms": 163.077,
+        "max_ms": 164.595,
+        "p50_ms": 163.545,
+        "p90_ms": 164.237,
+        "p95_ms": 164.42,
+        "p99_ms": 164.56,
+        "throughput_items_per_sec": 6.11
+      },
+      "optimized": {
+        "sample_count": 15,
+        "mean_ms": 67.568,
+        "stddev_ms": 0.445,
+        "min_ms": 67.044,
+        "max_ms": 68.624,
+        "p50_ms": 67.454,
+        "p90_ms": 68.15,
+        "p95_ms": 68.474,
+        "p99_ms": 68.594,
+        "throughput_items_per_sec": 14.8
+      },
+      "absolute_reduction_ms": 96.06,
+      "percentage_improvement": 58.71
+    }
+  },
+  "real_postgresql_measurement": {
+    "available": true,
+    "sequential_5_trials_mean_ms": 118.51,
+    "batched_5_trials_mean_ms": 2.79,
+    "real_db_reduction_ms": 115.72,
+    "real_db_pct_improvement": 97.65
+  },
+  "evidence_classification": {
+    "criteria_loading_latency": "MEASURED",
+    "local_pipeline_latency": "MEASURED",
+    "query_count": "MEASURED",
+    "gemini_latency": "NOT MEASURED",
+    "real_http_latency": "NOT MEASURED",
+    "production_scale_retrieval": "NOT MEASURED"
+  },
+  "environment": {
+    "timestamp_utc": "2026-09-29T19:16:08.155296+00:00",
+    "git_commit": "03cd93ab9f855fa54b2d0a0d78b1001a132dbb2d",
+    "git_branch": "capstone/phase-13-production-engineering",
+    "python_version": "3.13.14",
+    "python_compiler": "MSC v.1944 64 bit (AMD64)",
+    "os_platform": "Windows-11-10.0.26200-SP0",
+    "os_system": "Windows",
+    "os_release": "11",
+    "processor": "AMD64 Family 25 Model 68 Stepping 1, AuthenticAMD",
+    "cpu_count": 16,
+    "initial_rss_mb": 31.41,
+    "database": {
+      "default_url": "postgresql+psycopg2://postgres:postgres@localhost:5434/medmatch",
+      "docker_container": "medmatch-postgres",
+      "pgvector_version": "0.8.5",
+      "postgres_version": "17.10"
+    },
+    "redis": {
+      "default_url": "redis://localhost:6380/0",
+      "docker_container": "medmatch-redis",
+      "redis_version": "8-alpine"
+    },
+    "models": {
+      "embedding_model": "all-MiniLM-L6-v2",
+      "embedding_dimension": 384,
+      "llm_model": "gemini-2.5-flash"
+    }
+  },
+  "memory_profile_mb": {
+    "initial_rss": 31.67,
+    "post_rss": 429.43,
+    "peak_rss": 430.13
+  },
+  "acceptance_recommendation": "ACCEPTED"
+}
