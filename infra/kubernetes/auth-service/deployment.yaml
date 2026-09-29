@@ -229,7 +229,7 @@ spec:
 
             httpGet:
 
-              path: /actuator/health
+              path: /actuator/health/liveness
 
               port: 8081
 
@@ -251,7 +251,7 @@ spec:
 
             httpGet:
 
-              path: /actuator/health
+              path: /actuator/health/readiness
 
               port: 8081
 

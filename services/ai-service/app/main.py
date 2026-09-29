@@ -28,19 +28,34 @@ from app.exceptions.handlers import (
     validation_exception_handler,
 )
 
-from app.middleware.request_id import RequestIDMiddleware
+from app.middleware.request_id import RequestIDLogFilter, RequestIDMiddleware
 from app.middleware.request_logging import RequestLoggingMiddleware
 
 
+log_filter = RequestIDLogFilter()
+log_formatter = logging.Formatter(
+    "%(asctime)s | "
+    "%(levelname)s | "
+    "[%(name)s] | "
+    "[%(request_id)s] | "
+    "%(message)s"
+)
+
+log_handler = logging.StreamHandler()
+log_handler.addFilter(log_filter)
+log_handler.setFormatter(log_formatter)
+
 logging.basicConfig(
     level=settings.LOG_LEVEL,
-    format=(
-        "%(asctime)s | "
-        "%(levelname)s | "
-        "[%(name)s] | "
-        "%(message)s"
-    ),
+    handlers=[log_handler],
 )
+
+root_logger = logging.getLogger()
+root_logger.setLevel(settings.LOG_LEVEL)
+root_logger.addFilter(log_filter)
+for h in root_logger.handlers:
+    h.addFilter(log_filter)
+    h.setFormatter(log_formatter)
 
 logger = logging.getLogger(__name__)
 

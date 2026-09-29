@@ -1,0 +1,85 @@
+{
+  "phase": "13.5",
+  "name": "Observability & Runtime Reliability Implementation",
+  "checkpoint": "92f615c",
+  "status": "COMPLETED",
+  "timestamp": "2026-09-29T20:56:00Z",
+  "approved_boundary_implemented": [
+    "Gemini timeout enforcement (60 seconds via HttpOptions in Google GenAI client and GenerateContentConfig)",
+    "Celery worker lightweight process-level liveness probe (/bin/sh -c 'kill -0 1') and removal of redundant readiness probe",
+    "Auth-service probe separation (/actuator/health/liveness and /actuator/health/readiness)",
+    "Spring Prometheus registry integration (io.micrometer:micrometer-registry-prometheus)",
+    "Prometheus and Alertmanager configuration matching exposed metrics without invented signals",
+    "AI readiness non-destructive filesystem check (os.access W_OK without file write/unlink churn)",
+    "Request-ID context propagation using Python contextvars and logging filter enrichment"
+  ],
+  "files_modified": [
+    "infra/kubernetes/auth-service/deployment.yaml",
+    "infra/kubernetes/worker/deployment.yaml",
+    "infra/monitoring/alertmanager/alertmanager.yaml",
+    "infra/monitoring/prometheus/alerts.yaml",
+    "infra/monitoring/prometheus/prometheus.yaml",
+    "services/ai-service/app/api/routes/health.py",
+    "services/ai-service/app/config/llm.py",
+    "services/ai-service/app/main.py",
+    "services/ai-service/app/middleware/request_id.py",
+    "services/ai-service/app/middleware/request_logging.py",
+    "services/ai-service/app/services/llm_service.py",
+    "services/auth-service/pom.xml",
+    "services/auth-service/src/main/resources/application.yml",
+    "services/auth-service/src/main/resources/application-production.yml"
+  ],
+  "files_created": [
+    "docs/capstone/phase13_observability_reliability_audit.md",
+    "docs/capstone/phase13_observability_reliability_implementation.md",
+    "results/phase13/observability_reliability_audit_summary.json",
+    "results/phase13/observability_reliability_implementation_summary.json",
+    "services/ai-service/tests/test_health_readiness.py",
+    "services/ai-service/tests/test_llm_timeout.py",
+    "services/ai-service/tests/test_request_id_propagation.py",
+    "services/auth-service/src/test/java/com/medmatch/auth/controller/ActuatorEndpointsTest.java"
+  ],
+  "verification_results": {
+    "ai_service_tests": {
+      "command": "services\\ai-service\\.venv\\Scripts\\python.exe -m pytest -q services/ai-service/tests -o pythonpath=services/ai-service",
+      "total_run": 78,
+      "passed": 78,
+      "failed": 0,
+      "skipped": 0,
+      "duration_seconds": 68.62
+    },
+    "auth_service_tests": {
+      "command": "cd services\\auth-service && mvnw.cmd test",
+      "total_run": 85,
+      "passed": 85,
+      "failed": 0,
+      "skipped": 0,
+      "duration_seconds": 24.77
+    },
+    "frontend_validation": {
+      "lint": "PASS (0 errors)",
+      "build": "PASS (built in 1.22s)"
+    },
+    "infrastructure_validation": {
+      "docker_compose_config": "PASS (exit code 0)",
+      "kubectl_kustomize": "PASS (exit code 0)",
+      "kubectl_apply_dry_run": "PASS (exit code 0 for core resources)",
+      "monitoring_yaml_syntax": "PASS (valid YAML for prometheus.yaml, alerts.yaml, alertmanager.yaml)",
+      "git_diff_check": "PASS (exit code 0)"
+    }
+  },
+  "deferred_items": [
+    "Celery task request ID correlation across Redis boundaries deferred to dedicated task contract refactor",
+    "Celery queue depth Prometheus metrics/alerts deferred until dedicated metrics exporter is added",
+    "Grafana dashboard deployment",
+    "PostgreSQL HA / Patroni clustering"
+  ],
+  "explicitly_unchanged_clinical_behavior": [
+    "Database schemas and Flyway/Alembic migrations remain untouched",
+    "Clinical matching rules and algorithms remain untouched",
+    "Eligibility reasoning logic remains untouched",
+    "Retrieval and RAG pipelines remain untouched",
+    "LLM model selection and prompts remain untouched",
+    "Phase 13.4 storage permissions and volume architecture remain untouched"
+  ]
+}

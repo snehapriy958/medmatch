@@ -320,42 +320,13 @@ spec:
           livenessProbe:
             exec:
               command:
-                - celery
-                - -A
-                - app.celery.celery_app
-                - inspect
-                - ping
-            initialDelaySeconds: 120
-            periodSeconds: 60
-            timeoutSeconds: 30
-            failureThreshold: 5
-
-
-
-          readinessProbe:
-
-            exec:
-
-              command:
-
-                - celery
-
-                - -A
-
-                - app.celery.celery_app
-
-                - inspect
-
-                - ping
-
-
-            initialDelaySeconds: 60
-
-            periodSeconds: 60
-
-            timeoutSeconds: 30
-
-            failureThreshold: 5
+                - /bin/sh
+                - -c
+                - "kill -0 1"
+            initialDelaySeconds: 15
+            periodSeconds: 15
+            timeoutSeconds: 5
+            failureThreshold: 3
 
 
 

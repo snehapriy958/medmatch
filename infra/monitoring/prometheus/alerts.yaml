@@ -1,0 +1,29 @@
+groups:
+  - name: medmatch-operational-alerts
+    rules:
+      - alert: ServiceDown
+        expr: up == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "MedMatch service {{ $labels.component }} is down"
+          description: "Instance {{ $labels.instance }} of component {{ $labels.component }} has been unreachable for more than 1 minute."
+
+      - alert: HighHttp5xxRate
+        expr: sum(rate(http_requests_total{status=~"5.."}[5m])) / sum(rate(http_requests_total[5m])) > 0.05
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High HTTP 5xx error rate detected (>5%)"
+          description: "Service {{ $labels.component }} is returning elevated 5xx responses (greater than 5% of total requests over 5 minutes)."
+
+      - alert: HighMatchFailureRate
+        expr: sum(rate(medmatch_ai_match_failure_total[5m])) / sum(rate(medmatch_ai_match_requests_total[5m])) > 0.10
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Elevated clinical matching failure rate (>10%)"
+          description: "Clinical trial matching failure rate has exceeded 10% over the last 5 minutes on {{ $labels.component }}."

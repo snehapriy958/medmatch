@@ -5,6 +5,8 @@ from typing import Any
 from fastapi import Request
 from starlette.middleware.base import BaseHTTPMiddleware
 
+from app.middleware.request_id import get_current_request_id
+
 logger = logging.getLogger("medmatch")
 
 
@@ -32,7 +34,7 @@ class RequestLoggingMiddleware(BaseHTTPMiddleware):
 
             logger.exception(
                 "[%s] Unhandled exception while processing %s %s",
-                getattr(request.state, "request_id", "-"),
+                get_current_request_id() or getattr(request.state, "request_id", "-"),
                 request.method,
                 request.url.path,
             )
@@ -45,7 +47,7 @@ class RequestLoggingMiddleware(BaseHTTPMiddleware):
 
             logger.info(
                 "[%s] %s %s | %s | %.2f ms | %s",
-                getattr(request.state, "request_id", "-"),
+                get_current_request_id() or getattr(request.state, "request_id", "-"),
                 request.method,
                 request.url.path,
                 status_code,

@@ -1,0 +1,192 @@
+{
+  "phase": "13.5",
+  "title": "Observability & Runtime Reliability Audit",
+  "checkpoint": "92f615c",
+  "timestamp": "2026-09-29T14:32:00Z",
+  "audit_scope": {
+    "observability": true,
+    "logging": true,
+    "metrics": true,
+    "health_probes": true,
+    "external_ai_resilience": true,
+    "celery_reliability": true,
+    "database_redis_observability": true,
+    "kubernetes_observability": true
+  },
+  "findings_summary": {
+    "external_ai": {
+      "gemini_request_timeout_configured": false,
+      "gemini_connection_timeout_configured": false,
+      "gemini_read_timeout_configured": false,
+      "declared_timeout_seconds": 60,
+      "declared_timeout_referenced_in_code": false,
+      "circuit_breaker_implemented": false,
+      "fallback_model_implemented": false,
+      "retry_policy": "tenacity: stop_after_attempt(3), wait_exponential(1, 1, 8)",
+      "compounding_celery_retries": "3 tenacity * 3 celery = 9 max attempts",
+      "worker_thread_blocking_risk": "CRITICAL"
+    },
+    "health_probes": {
+      "ai_service": {
+        "startup_probe_verifies_model_warmup": false,
+        "startup_probe_window_seconds": 160,
+        "readiness_probe_disk_churn": true,
+        "readiness_probe_disk_churn_file": "/app/uploads/.readiness_check.tmp",
+        "readiness_probe_disk_churn_interval_seconds": 10,
+        "liveness_probe_isolated_from_dependencies": true
+      },
+      "worker": {
+        "probe_command": ["celery", "-A", "app.celery.celery_app", "inspect", "ping"],
+        "worker_pool": "solo",
+        "worker_concurrency": 1,
+        "liveness_probe_timeout_seconds": 30,
+        "liveness_probe_failure_threshold": 5,
+        "blocking_task_causes_false_liveness_kill": true,
+        "readiness_probe_meaningful_for_worker": false,
+        "cont_10_status": "OPEN"
+      },
+      "auth_service": {
+        "startup_probe_configured": false,
+        "liveness_probe_endpoint": "/actuator/health",
+        "readiness_probe_endpoint": "/actuator/health",
+        "liveness_probe_checks_database": true,
+        "cascading_restart_on_db_outage": true
+      }
+    },
+    "metrics": {
+      "prometheus_server_in_compose": false,
+      "prometheus_server_in_k8s": false,
+      "prometheus_yaml_size_bytes": 0,
+      "alerts_yaml_size_bytes": 0,
+      "alertmanager_yaml_size_bytes": 0,
+      "grafana_dashboards_present": false,
+      "servicemonitor_crds": 2,
+      "auth_service_micrometer_prometheus_dependency": false,
+      "auth_service_actuator_prometheus_working": false,
+      "ai_service_custom_metrics_count": 14,
+      "ai_service_custom_metrics_actively_used": 7,
+      "celery_metrics_instrumented": false,
+      "llm_latency_histogram_present": false
+    },
+    "logging": {
+      "ai_service_format": "plaintext_pipe_delimited",
+      "ai_service_structured_json": false,
+      "request_id_middleware_present": true,
+      "request_id_propagated_to_internal_logs": false,
+      "celery_logs_correlated_to_http_request": false,
+      "passwords_in_logs": false,
+      "jwt_tokens_in_logs": false,
+      "uploaded_pdf_path_contains_phi": false
+    },
+    "celery_task_reliability": {
+      "task_time_limit_seconds": 300,
+      "task_soft_time_limit_seconds": null,
+      "task_acks_late": true,
+      "task_reject_on_worker_lost": true,
+      "task_states": ["PENDING", "STARTED", "SUCCESS", "FAILURE", "RETRY"],
+      "queue_depth_metric": null,
+      "task_tenant_isolation_enforced": true
+    }
+  },
+  "finding_classifications": {
+    "CRITICAL": [
+      {
+        "id": "OBS-01",
+        "title": "Unbounded External Gemini Invocation",
+        "impact": "Stalled API call blocks the single solo Celery worker thread indefinitely, halting all asynchronous PDF processing."
+      },
+      {
+        "id": "OBS-02",
+        "title": "Worker Liveness Probe Deadlock (CONT-10)",
+        "impact": "Heavy CPU/embedding tasks block celery inspect ping, triggering false liveness failures and worker restarts."
+      },
+      {
+        "id": "OBS-03",
+        "title": "Auth-Service Liveness Probe Cascade",
+        "impact": "Liveness probe targeting /actuator/health restarts the JVM pod on transient database disconnects."
+      }
+    ],
+    "HIGH": [
+      {
+        "id": "OBS-04",
+        "title": "Observability Stack Vacuum",
+        "impact": "0-byte Prometheus/Alertmanager configs and absent Grafana leave system with zero operational alerting."
+      },
+      {
+        "id": "OBS-05",
+        "title": "Broken Auth-Service Prometheus Scrape Endpoint",
+        "impact": "Missing micrometer-registry-prometheus leaves /actuator/prometheus returning 404."
+      },
+      {
+        "id": "OBS-06",
+        "title": "Unstructured Logs & Missing Context Propagation",
+        "impact": "Lack of JSON format and request correlation IDs impedes production troubleshooting and log indexing."
+      },
+      {
+        "id": "OBS-07",
+        "title": "Uninstrumented Celery & Upload Pipeline",
+        "impact": "No queue backlog metrics or task duration histograms available to operators or HPA."
+      }
+    ],
+    "MEDIUM": [
+      {
+        "id": "OBS-08",
+        "title": "AI Service Readiness Disk Churn",
+        "impact": "Physical write/unlink of .readiness_check.tmp every 10s causes continuous storage I/O churn."
+      },
+      {
+        "id": "OBS-09",
+        "title": "Missing Embedding Model Lifespan Pre-warming",
+        "impact": "Lazy model loading on first request introduces up to 73s latency spike."
+      },
+      {
+        "id": "OBS-10",
+        "title": "Missing Celery Soft Time Limit",
+        "impact": "Hard SIGKILL after 300s prevents graceful task failure handling and upload cleanup."
+      }
+    ],
+    "LOW": [
+      {
+        "id": "OBS-11",
+        "title": "Redundant Worker Readiness Probe",
+        "impact": "Worker has no Service backend; readiness probe consumes resources without routing benefit."
+      },
+      {
+        "id": "OBS-12",
+        "title": "Frontend InitContainer Root Chown",
+        "impact": "nginx-temp-init runs as root to chown emptyDirs; does not affect persistent storage."
+      }
+    ],
+    "INFORMATIONAL": [
+      {
+        "id": "OBS-13",
+        "title": "PostgreSQL Single-Replica & Cloud HA",
+        "impact": "Cloud-scale multi-AZ replication deferred to production cloud migration."
+      },
+      {
+        "id": "OBS-14",
+        "title": "Mutable Image Tags (CONT-06)",
+        "impact": "Image digest pinning deferred to release engineering milestone."
+      }
+    ]
+  },
+  "phase13_5_implementation_boundary": {
+    "proposed_items": [
+      "1. Explicit Gemini API request/connection timeout (pass settings.LLM_TIMEOUT_SECONDS)",
+      "2. Remediate Celery worker liveness probe (replace celery inspect ping with lightweight check; drop readiness probe)",
+      "3. Separate Auth-service liveness (/actuator/health/liveness) and readiness (/actuator/health/readiness)",
+      "4. Add micrometer-registry-prometheus to services/auth-service/pom.xml",
+      "5. Populate infra/monitoring configs (prometheus.yaml, alerts.yaml, alertmanager.yaml)",
+      "6. Eliminate AI service readiness disk churn (replace file write with os.access check)",
+      "7. Inject contextual correlation ID into logging pipeline via contextvars"
+    ],
+    "deferred_items": [
+      "Full Grafana dashboard deployment and visualization server",
+      "PostgreSQL managed clustering and Patroni replication",
+      "Automated object-storage backup cron jobs",
+      "LLM circuit breaker with degraded keyword fallback (requires clinical safety evaluation)",
+      "Container image digest pinning (CONT-06)"
+    ]
+  },
+  "overall_status": "Phase 13.5 Observability & Runtime Reliability Audit Complete — Implementation Pending"
+}

@@ -1,4 +1,5 @@
 from datetime import UTC, datetime
+import os
 from pathlib import Path
 from typing import Any
 
@@ -155,17 +156,10 @@ def readiness() -> dict[str, Any]:
                 "Upload path is not a directory."
             )
 
-        test_file = (
-            upload_dir
-            / ".readiness_check.tmp"
-        )
-
-        test_file.write_text(
-            "MedMatch readiness check",
-            encoding="utf-8",
-        )
-
-        test_file.unlink()
+        if not os.access(upload_dir, os.W_OK):
+            raise PermissionError(
+                f"Upload directory '{upload_dir}' is not writable."
+            )
 
         checks["uploads"] = "UP"
 

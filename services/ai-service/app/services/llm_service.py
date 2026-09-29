@@ -4,7 +4,7 @@ from typing import Any, TypeVar
 
 import httpx
 from google.genai.errors import APIError, ClientError, ServerError
-from google.genai.types import GenerateContentConfig
+from google.genai.types import GenerateContentConfig, HttpOptions
 from pydantic import BaseModel, ValidationError
 from tenacity import (
     before_log,
@@ -231,6 +231,9 @@ class LLMService:
                 config=GenerateContentConfig(
                     temperature=0.0,
                     response_mime_type="application/json",
+                    http_options=HttpOptions(
+                        timeout=settings.LLM_TIMEOUT_SECONDS * 1000,
+                    ),
                 ),
             )
 
