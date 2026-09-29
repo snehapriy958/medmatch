@@ -1,0 +1,212 @@
+{
+  "phase": "14.0",
+  "name": "Performance Engineering Audit & Design",
+  "checkpoint": "9e8662a",
+  "status": "COMPLETED",
+  "timestamp": "2026-09-29T21:18:00Z",
+  "evidence_classification_tiers": [
+    "MEASURED",
+    "OBSERVED FROM EXISTING DOCUMENTED MEASUREMENT",
+    "DERIVED FROM CONFIGURATION",
+    "ESTIMATED",
+    "NOT MEASURED"
+  ],
+  "performance_evidence_table": [
+    {
+      "id": "PERF-01",
+      "finding": "SentenceTransformer Lazy Loading Cold-Start",
+      "evidence_type": "OBSERVED FROM EXISTING DOCUMENTED MEASUREMENT",
+      "measured": false,
+      "source": "services/ai-service/app/embeddings/model.py; docs/capstone/phase13_production_readiness_matrix.md (L32)",
+      "confidence": "HIGH",
+      "severity": "HIGH",
+      "impact": "First client request requiring embeddings absorbs model loading delay (~73s documented on CPU container)"
+    },
+    {
+      "id": "PERF-02",
+      "finding": "Unindexed Sequential Vector Scans",
+      "evidence_type": "DERIVED FROM CONFIGURATION",
+      "measured": false,
+      "source": "services/ai-service/alembic/versions/0005, 0007",
+      "confidence": "HIGH",
+      "severity": "HIGH",
+      "impact": "pgvector distance queries <=> perform unindexed Seq Scan across tenant rows; runtime EXPLAIN unmeasured"
+    },
+    {
+      "id": "PERF-03",
+      "finding": "Celery Solo Worker Strict Task Serialization",
+      "evidence_type": "DERIVED FROM CONFIGURATION",
+      "measured": false,
+      "source": "infra/kubernetes/worker/deployment.yaml (L320)",
+      "confidence": "HIGH",
+      "severity": "HIGH",
+      "impact": "--pool=solo --concurrency=1 serializes PDF ingestion to one task at a time; worker thread blocks on Gemini network I/O"
+    },
+    {
+      "id": "PERF-04",
+      "finding": "Theoretical Connection Capacity Exceeds Postgres Default",
+      "evidence_type": "DERIVED FROM CONFIGURATION",
+      "measured": false,
+      "source": "services/ai-service/app/db/database.py; services/auth-service/src/main/resources/application.yml",
+      "confidence": "HIGH",
+      "severity": "MEDIUM",
+      "impact": "Configuration-based risk (80 base / 140 HPA max connections vs 100 Postgres default); no observed runtime exhaustion"
+    },
+    {
+      "id": "PERF-05",
+      "finding": "N+1 Criteria Query Pattern in Candidate Retrieval",
+      "evidence_type": "DERIVED FROM CONFIGURATION / CODE-PATH VERIFIED",
+      "measured": false,
+      "source": "services/ai-service/app/services/matching_service.py (L268-275)",
+      "confidence": "HIGH",
+      "severity": "MEDIUM",
+      "impact": "Code path executes sequential list_by_trial queries in a loop; exact runtime latency unmeasured"
+    },
+    {
+      "id": "PERF-06",
+      "finding": "Unbatched Criteria Embedding and DB Flush Loops",
+      "evidence_type": "DERIVED FROM CONFIGURATION / CODE-PATH VERIFIED",
+      "measured": false,
+      "source": "services/ai-service/app/services/trial_service.py (L431-436)",
+      "confidence": "HIGH",
+      "severity": "MEDIUM",
+      "impact": "Code path executes single-text embeddings and single-row flushes in a loop; exact runtime latency unmeasured"
+    },
+    {
+      "id": "PERF-07",
+      "finding": "RWO Upload PVC Constrains Multi-Node Worker Scale",
+      "evidence_type": "DERIVED FROM CONFIGURATION",
+      "measured": false,
+      "source": "infra/kubernetes/worker/deployment.yaml; infra/kubernetes/storage/uploads-pvc.yaml",
+      "confidence": "HIGH",
+      "severity": "MEDIUM",
+      "impact": "ReadWriteOnce local-path volume binds worker replicas via podAffinity to the single node hosting ai-service"
+    },
+    {
+      "id": "PERF-08",
+      "finding": "Missing Indexes on audit_logs(created_at, action)",
+      "evidence_type": "DERIVED FROM CONFIGURATION / CODE-PATH VERIFIED",
+      "measured": false,
+      "source": "services/auth-service/src/main/resources/db/migration/V4__create_audit_logs_table.sql",
+      "confidence": "HIGH",
+      "severity": "LOW",
+      "impact": "Queries ordering by created_at DESC or filtering by action trigger full table scans as logs accumulate"
+    },
+    {
+      "id": "PERF-09",
+      "finding": "Celery Broker and App Cache Share Redis DB 0",
+      "evidence_type": "DERIVED FROM CONFIGURATION",
+      "measured": false,
+      "source": "services/ai-service/app/config/settings.py (L208, L236)",
+      "confidence": "HIGH",
+      "severity": "LOW",
+      "impact": "Shared database poses key namespace and memory eviction risks under heavy caching"
+    },
+    {
+      "id": "PERF-10",
+      "finding": "Gemini Latency Dominates Total Request Latency",
+      "evidence_type": "ESTIMATED",
+      "measured": false,
+      "source": "services/ai-service/app/services/llm_service.py",
+      "confidence": "MEDIUM",
+      "severity": "INFORMATIONAL",
+      "impact": "Estimated ~1.5s-6.0s matching latency and ~3s-12s extraction latency based on SaaS roundtrips; unmeasured in repo"
+    }
+  ],
+  "questions_investigated": {
+    "1_pgvector_sequential_scan": {
+      "result": true,
+      "classification": "DERIVED FROM CONFIGURATION",
+      "summary": "No HNSW/IVFFlat index exists in production migrations; pgvector <=> queries perform Seq Scan. Runtime EXPLAIN is unmeasured."
+    },
+    "2_hnsw_absence_reason": {
+      "result": true,
+      "classification": "OBSERVED FROM EXISTING DOCUMENTED MEASUREMENT",
+      "summary": "HNSW was evaluated in research phase E4 (reproducibility_specification.md) but was never applied to production schema migrations."
+    },
+    "3_top_k_constrains_work": {
+      "result": "PARTIALLY",
+      "classification": "DERIVED FROM CONFIGURATION",
+      "summary": "Does not constrain the vector distance computation across tenant rows, but strictly limits downstream criteria queries, prompt token size, and Gemini reasoning duration."
+    },
+    "4_solo_worker_serializes_work": {
+      "result": true,
+      "classification": "DERIVED FROM CONFIGURATION",
+      "summary": "--pool=solo --concurrency=1 forces all ingestion tasks to execute sequentially in a single process."
+    },
+    "5_gemini_dominates_matching_latency": {
+      "result": "ESTIMATED",
+      "classification": "ESTIMATED",
+      "summary": "Estimated to represent 90% to 98% of total response latency on cache miss based on typical SaaS roundtrips; empirical latency histograms are unmeasured."
+    },
+    "6_gemini_dominates_ingestion_latency": {
+      "result": "ESTIMATED",
+      "classification": "ESTIMATED",
+      "summary": "Protocol extraction via Gemini is estimated to represent 65% to 85% of total task duration; empirical latency histograms are unmeasured."
+    },
+    "7_embedding_cpu_bottleneck": {
+      "result": true,
+      "classification": "DERIVED FROM CONFIGURATION",
+      "summary": "SentenceTransformer runs CPU inference within tight cgroup limits (1 core in AI, 0.5 core in worker), causing CFS throttling under concurrency."
+    },
+    "8_rwo_limits_worker_scaling": {
+      "result": true,
+      "classification": "DERIVED FROM CONFIGURATION",
+      "summary": "ReadWriteOnce local-path volume binds worker replicas to the single node hosting ai-service via podAffinity."
+    },
+    "9_connection_pool_bottleneck": {
+      "result": "CONFIGURATION-BASED RISK",
+      "classification": "DERIVED FROM CONFIGURATION",
+      "summary": "Configured client pool capacity (80 base / 140 HPA) exceeds default PostgreSQL max_connections (100). No runtime connection exhaustion has been observed."
+    },
+    "10_n_plus_one_queries": {
+      "result": true,
+      "classification": "CODE-PATH VERIFIED",
+      "summary": "Code-path verified N+1 in MatchingService criteria retrieval and repeated sequential flushes in trial ingestion; exact runtime latency impact is unmeasured."
+    }
+  },
+  "benchmark_gap_phase14_1_requirements": [
+    "Embedding model P50/P95/P99 latency for single text and batch sizes (1, 4, 8, 16, 32)",
+    "Retrieval P50/P95/P99 query latency across corpora (100, 1k, 10k, 50k trials) with EXPLAIN (ANALYZE, BUFFERS)",
+    "Gemini API P50/P95/P99 roundtrip latency and token throughput distributions",
+    "End-to-end matching evaluation P50/P95/P99 under cold and warm cache at concurrency 1, 5, 10, 25",
+    "Trial ingestion duration and stage breakdown profiling on standardized protocol PDFs",
+    "Celery queue wait time, execution duration, and throughput under concurrent uploads",
+    "CPU utilization and CFS throttling tracking against Kubernetes cgroup limits",
+    "Peak RSS memory profiling to assess OOM risk against 1Gi limits",
+    "Database connection pool active vs idle connection utilization under load"
+  ],
+  "candidate_optimization_hypotheses": [
+    {
+      "hypothesis": "Hypothesis 1 — Startup Pre-Warming (PERF-01)",
+      "target": "services/ai-service/app/main.py",
+      "expected_mechanism": "Eliminate cold-start latency spike on first client request by initializing SentenceTransformer during lifespan"
+    },
+    {
+      "hypothesis": "Hypothesis 2 — Criteria Batch Querying (PERF-05)",
+      "target": "services/ai-service/app/services/matching_service.py",
+      "expected_mechanism": "Reduce criteria database round-trips from N to 1 using WHERE trial_id IN (...)"
+    },
+    {
+      "hypothesis": "Hypothesis 3 — Bulk Persistence for Ingested Criteria (PERF-06)",
+      "target": "services/ai-service/app/services/trial_service.py",
+      "expected_mechanism": "Reduce database round-trips during PDF ingestion from M to 1 by batching criteria embeddings"
+    },
+    {
+      "hypothesis": "Hypothesis 4 — Audit Log Indexing (PERF-08)",
+      "target": "services/auth-service/src/main/resources/db/migration/",
+      "expected_mechanism": "Prevent sequential table scans on audit_logs(created_at, action) via b-tree indexes"
+    },
+    {
+      "hypothesis": "Hypothesis 5 — Connection Pool Configuration (PERF-04)",
+      "target": "services/ai-service/app/config/settings.py",
+      "expected_mechanism": "Bound peak connections per AI pod to 10 (pool_size=5, max_overflow=5) to prevent connection exhaustion"
+    }
+  ],
+  "explicitly_deferred_items": [
+    "HNSW vector index migration (requires clinical recall benchmarking)",
+    "Celery multi-process concurrency (requires memory profiling)",
+    "Object storage migration for uploads (requires architectural change)",
+    "Redis database splitting (requires infrastructure hardening)"
+  ]
+}
