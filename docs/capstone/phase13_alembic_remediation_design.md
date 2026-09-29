@@ -395,6 +395,101 @@ No other files in `services/`, `scripts/`, `docs/`, or infrastructure require ch
 
 ---
 
-## L. Mandatory Verification Statement
+## L. Mandatory Verification Statement (Step 1)
 
 **Phase 13.2.1 Step 1 Complete — No Migration Files Modified**
+
+---
+
+## M. Step 2 Implementation & Verification Results
+
+### 1. Minimal Implementation Scope
+In accordance with Strategy A, exactly one file was modified:
+- `services/ai-service/alembic/versions/6f0604b23df6_merge_schema_heads.py`
+  ```diff
+  -down_revision: Union[str, Sequence[str], None] = ('0008', '3f3884863f27')
+  +down_revision: Union[str, Sequence[str], None] = '0008'
+  ```
+Zero other lines, comments, revision IDs, or migration files were touched.
+
+### 2. Exact Migration Graph After Fix (Clean Clone / Git-Tracked State)
+```
+0001 (patients)
+  ↓
+0002 (trials)
+  ↓
+0003 (patient_notes)
+  ↓
+0004 (trial_criteria)
+  ↓
+0005 (criteria_embeddings)
+  ↓
+0006 (patient_note_embeddings)
+  ↓
+0007 (trial_embeddings)
+  ↓
+0008 (matches)
+  ↓
+6f0604b23df6 (HEAD, merge schema heads - no-op)
+```
+- **Total Revisions:** 9
+- **Alembic Head:** `6f0604b23df6` (exactly 1 head)
+- **Branch Points:** 0
+- **Missing Revisions:** 0
+
+### 3. Fresh Database Upgrade Verification
+Tested against an isolated PostgreSQL database (`medmatch_temp_test_phase13`):
+- Flyway baseline applied (`roles`, `hospitals`, `users`, `audit_logs`).
+- `alembic upgrade head` executed sequentially:
+  ```
+  Running upgrade -> 0001, create patients table
+  Running upgrade 0001 -> 0002, create trials table
+  Running upgrade 0002 -> 0003, create patient_notes table
+  Running upgrade 0003 -> 0004, create trial_criteria table
+  Running upgrade 0004 -> 0005, create criteria_embeddings table
+  Running upgrade 0005 -> 0006, create patient_note_embeddings table
+  Running upgrade 0006 -> 0007, create trial_embeddings table
+  Running upgrade 0007 -> 0008, create matches table
+  Running upgrade 0008 -> 6f0604b23df6, merge schema heads
+  ```
+- **Exit Status:** 0 (Clean Success)
+- **Final Version in `alembic_version`:** `6f0604b23df6`
+
+### 4. Schema Verification
+- **All 8 AI-service tables created:** `patients`, `trials`, `patient_notes`, `trial_criteria`, `criteria_embeddings`, `patient_note_embeddings`, `trial_embeddings`, `matches`.
+- **`trial_embeddings` exists exactly once.**
+- **`matches` exists with JSONB criteria columns and RESTRICT foreign keys.**
+- **Constraints on `trials`:** `trials_pkey`, `uq_trials_hospital_title_condition_phase`, `trials_hospital_id_fkey` (no duplicates).
+- **Constraints on `matches`:** `matches_pkey`, `matches_patient_id_fkey`, `matches_trial_id_fkey`, `matches_hospital_id_fkey` (no duplicates).
+- **Flyway Auth-service tables untouched:** `audit_logs` retained its exact 12-column schema with no Alembic alterations.
+
+### 5. Existing Development Database State
+- Existing database `medmatch` queried: `version_num = '6f0604b23df6'`.
+- `alembic current` reports: `6f0604b23df6 (head)`.
+- Because the existing development database was already stamped at `6f0604b23df6`, Strategy A requires **zero database migrations or schema mutations** against the running environment.
+
+### 6. Downgrade & Repeatability Verification
+- On isolated fresh database: `alembic downgrade 0008` rolled back `6f0604b23df6` to `0008`.
+  - `alembic_version` recorded `0008`.
+  - `matches` table remained intact.
+- Re-upgrade to head: `alembic upgrade head` executed `0008 -> 6f0604b23df6`, returning `alembic_version` to `6f0604b23df6`.
+- Determinism proved across both directions. Temporary test database was subsequently dropped cleanly.
+
+### 7. Regression Test Results
+- Ran full test suite in `services/ai-service`:
+  - 61 passed, 1 pre-existing failure (`test_redis_config_without_password` fails because local `services/ai-service/.env` specifies `REDIS_URL=redis://localhost:6379/0`, overriding Pydantic's default compute from `REDIS_HOST="redis"`).
+  - All repository, security, health, matching, and tenant isolation tests passed.
+  - Zero regressions introduced by migration fix.
+
+### 8. Limitations & Scope Enforcement
+- No migration files deleted.
+- No untracked files added.
+- No source or infrastructure modifications.
+- Ready for review.
+
+### 11. Remaining Risks
+
+- No known regression was identified for the tested Alembic migration path.
+- The existing development database was already at `6f0604b23df6`, so no in-place migration was required.
+- Broader Phase 13.2 database/migration architecture risks remain outside this Step 2 scope, including Flyway execution architecture and migration packaging consistency.
+- The single failing AI-service test is a pre-existing Redis configuration test failure caused by the local `.env`; it is unrelated to the Alembic change.
