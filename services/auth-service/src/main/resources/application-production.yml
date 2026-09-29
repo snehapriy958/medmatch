@@ -20,7 +20,7 @@ spring:
 
 
   flyway:
-    enabled: true
+    enabled: false
 
 
 jwt:

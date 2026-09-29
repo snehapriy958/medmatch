@@ -31,6 +31,86 @@ spec:
     spec:
       serviceAccountName: ai-service-sa
 
+      initContainers:
+        - name: wait-for-ai-migrations
+          image: ghcr.io/snehapriy958/medmatch-ai-service:phase2-migrations
+          imagePullPolicy: Always
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false
+            capabilities:
+              drop:
+                - ALL
+          resources:
+            requests:
+              cpu: "50m"
+              memory: "64Mi"
+            limits:
+              cpu: "250m"
+              memory: "256Mi"
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: medmatch-secrets
+                  key: DATABASE_URL
+          command:
+            - /bin/sh
+            - -c
+            - |
+              python - << 'EOF'
+              import os
+              import sys
+              import time
+              import psycopg2
+
+              TARGET_REVISION = "6f0604b23df6"
+              MAX_ATTEMPTS = 60
+              RETRY_INTERVAL_SECONDS = 2
+
+              db_url = os.environ.get("DATABASE_URL")
+              if not db_url:
+                  print("FATAL: DATABASE_URL environment variable is missing", file=sys.stderr)
+                  sys.exit(1)
+
+              print(f"Waiting for database migration to reach target Alembic head: {TARGET_REVISION}")
+
+              for attempt in range(1, MAX_ATTEMPTS + 1):
+                  try:
+                      conn = psycopg2.connect(db_url, connect_timeout=5)
+                      with conn.cursor() as cur:
+                          cur.execute("""
+                              SELECT EXISTS (
+                                  SELECT FROM information_schema.tables
+                                  WHERE table_schema = 'public'
+                                  AND table_name = 'alembic_version'
+                              );
+                          """)
+                          table_exists = cur.fetchone()[0]
+                          if not table_exists:
+                              print(f"[{attempt}/{MAX_ATTEMPTS}] Table 'alembic_version' does not exist yet. Waiting...")
+                          else:
+                              cur.execute("SELECT version_num FROM alembic_version LIMIT 1;")
+                              row = cur.fetchone()
+                              current_rev = row[0] if row else None
+                              if current_rev == TARGET_REVISION:
+                                  print(f"SUCCESS: Target Alembic head '{TARGET_REVISION}' confirmed. Database schema is ready.")
+                                  conn.close()
+                                  sys.exit(0)
+                              else:
+                                  print(f"[{attempt}/{MAX_ATTEMPTS}] Alembic version is '{current_rev}' (target: '{TARGET_REVISION}'). Waiting...")
+                      conn.close()
+                  except Exception as exc:
+                      print(f"[{attempt}/{MAX_ATTEMPTS}] Database check failed: {exc}. Retrying...")
+
+                  time.sleep(RETRY_INTERVAL_SECONDS)
+
+              print(f"FATAL: Migration gate timed out after {MAX_ATTEMPTS * RETRY_INTERVAL_SECONDS}s waiting for Alembic head '{TARGET_REVISION}'.", file=sys.stderr)
+              sys.exit(1)
+              EOF
+
       containers:
 
         - name: medmatch-ai

@@ -107,13 +107,24 @@ def readiness() -> dict[str, Any]:
     checks: dict[str, str] = {}
 
     #
-    # PostgreSQL
+    # PostgreSQL & Migration Schema
     #
     try:
         with engine.connect() as connection:
             connection.execute(
                 text("SELECT 1")
             )
+
+            # Secondary readiness check: verify database schema is at expected Alembic head
+            version = connection.execute(
+                text("SELECT version_num FROM alembic_version LIMIT 1")
+            ).scalar_one_or_none()
+
+            expected_head = "6f0604b23df6"
+            if version != expected_head:
+                raise RuntimeError(
+                    f"Alembic migration version mismatch: expected {expected_head}, found {version}"
+                )
 
         checks["database"] = "UP"
 
