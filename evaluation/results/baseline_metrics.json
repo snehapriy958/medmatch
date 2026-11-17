@@ -1,0 +1,211 @@
+{
+  "model_version": "baseline_semantic_similarity_v1",
+  "retrieval": {
+    "recall_at_5": 1.0,
+    "precision_at_5": 0.2,
+    "mrr": 0.9167,
+    "ndcg_at_5": 0.9385
+  },
+  "eligibility": {
+    "accuracy": 0.4167,
+    "macro_precision": 0.2593,
+    "macro_recall": 0.3333,
+    "macro_f1": 0.2889,
+    "false_positive_eligibility_rate": 0.2222,
+    "false_negative_eligibility_rate": 0.6667,
+    "unknown_classification_rate": 0.0,
+    "per_class": {
+      "ELIGIBLE": {
+        "precision": 0.3333,
+        "recall": 0.3333,
+        "f1": 0.3333,
+        "support": 3
+      },
+      "INELIGIBLE": {
+        "precision": 0.4444,
+        "recall": 0.6667,
+        "f1": 0.5333,
+        "support": 6
+      },
+      "NEEDS_REVIEW": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 3
+      }
+    },
+    "confusion_matrix": {
+      "ELIGIBLE": {
+        "ELIGIBLE": 1,
+        "INELIGIBLE": 2,
+        "NEEDS_REVIEW": 0
+      },
+      "INELIGIBLE": {
+        "ELIGIBLE": 2,
+        "INELIGIBLE": 4,
+        "NEEDS_REVIEW": 0
+      },
+      "NEEDS_REVIEW": {
+        "ELIGIBLE": 0,
+        "INELIGIBLE": 3,
+        "NEEDS_REVIEW": 0
+      }
+    }
+  },
+  "explanation": {
+    "evidence_citation_coverage": 0.0,
+    "unsupported_claim_rate": 0.0,
+    "contradictory_explanation_rate": 0.1667,
+    "missing_criterion_detection_rate": 0.0
+  },
+  "reliability": {
+    "invalid_json_rate": 0.0,
+    "model_timeout_rate": 0.0,
+    "empty_response_rate": 0.0,
+    "retry_success_rate": 1.0
+  },
+  "predictions": [
+    {
+      "scenario_id": "EVAL-01",
+      "similarity": 0.7623,
+      "predicted_verdict": "ELIGIBLE",
+      "gold_verdict": "ELIGIBLE",
+      "criteria_evaluations": {
+        "C01": "MET",
+        "C02": "MET",
+        "C03": "MET",
+        "C04": "MET",
+        "C05": "MET",
+        "C06": "MET",
+        "C07": "MET"
+      },
+      "citations": [
+        "patient:clinical_summary"
+      ]
+    },
+    {
+      "scenario_id": "EVAL-02",
+      "similarity": 0.5595,
+      "predicted_verdict": "INELIGIBLE",
+      "gold_verdict": "INELIGIBLE",
+      "criteria_evaluations": {
+        "C01": "NOT_MET",
+        "C02": "NOT_MET",
+        "C03": "NOT_MET",
+        "C06": "NOT_MET"
+      },
+      "citations": []
+    },
+    {
+      "scenario_id": "EVAL-03",
+      "similarity": 0.5007,
+      "predicted_verdict": "INELIGIBLE",
+      "gold_verdict": "NEEDS_REVIEW",
+      "criteria_evaluations": {
+        "C01": "NOT_MET",
+        "C03": "NOT_MET",
+        "C07": "NOT_MET"
+      },
+      "citations": []
+    },
+    {
+      "scenario_id": "EVAL-04",
+      "similarity": 0.5073,
+      "predicted_verdict": "INELIGIBLE",
+      "gold_verdict": "NEEDS_REVIEW",
+      "criteria_evaluations": {
+        "C03": "NOT_MET"
+      },
+      "citations": []
+    },
+    {
+      "scenario_id": "EVAL-05",
+      "similarity": 0.7324,
+      "predicted_verdict": "ELIGIBLE",
+      "gold_verdict": "INELIGIBLE",
+      "criteria_evaluations": {
+        "C04": "MET",
+        "C08": "MET",
+        "C09": "MET"
+      },
+      "citations": [
+        "patient:clinical_summary"
+      ]
+    },
+    {
+      "scenario_id": "EVAL-06",
+      "similarity": 0.4455,
+      "predicted_verdict": "INELIGIBLE",
+      "gold_verdict": "INELIGIBLE",
+      "criteria_evaluations": {
+        "C01": "NOT_MET"
+      },
+      "citations": []
+    },
+    {
+      "scenario_id": "EVAL-07",
+      "similarity": 0.5828,
+      "predicted_verdict": "INELIGIBLE",
+      "gold_verdict": "INELIGIBLE",
+      "criteria_evaluations": {
+        "C10": "NOT_MET",
+        "C11": "NOT_MET"
+      },
+      "citations": []
+    },
+    {
+      "scenario_id": "EVAL-08",
+      "similarity": 0.5652,
+      "predicted_verdict": "INELIGIBLE",
+      "gold_verdict": "ELIGIBLE",
+      "criteria_evaluations": {
+        "C12": "NOT_MET",
+        "C13": "NOT_MET"
+      },
+      "citations": []
+    },
+    {
+      "scenario_id": "EVAL-09",
+      "similarity": 0.725,
+      "predicted_verdict": "ELIGIBLE",
+      "gold_verdict": "INELIGIBLE",
+      "criteria_evaluations": {
+        "C14": "MET"
+      },
+      "citations": [
+        "patient:clinical_summary"
+      ]
+    },
+    {
+      "scenario_id": "EVAL-10",
+      "similarity": 0.6364,
+      "predicted_verdict": "INELIGIBLE",
+      "gold_verdict": "INELIGIBLE",
+      "criteria_evaluations": {
+        "C15": "NOT_MET"
+      },
+      "citations": []
+    },
+    {
+      "scenario_id": "EVAL-11",
+      "similarity": 0.2079,
+      "predicted_verdict": "INELIGIBLE",
+      "gold_verdict": "ELIGIBLE",
+      "criteria_evaluations": {
+        "C02": "NOT_MET",
+        "C03": "NOT_MET"
+      },
+      "citations": []
+    },
+    {
+      "scenario_id": "EVAL-12",
+      "similarity": 0.6812,
+      "predicted_verdict": "INELIGIBLE",
+      "gold_verdict": "NEEDS_REVIEW",
+      "criteria_evaluations": {
+        "C16": "NOT_MET"
+      },
+      "citations": []
+    }
+  ]
+}

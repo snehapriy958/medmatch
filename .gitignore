@@ -130,7 +130,8 @@ docker-data/
 # Test Reports
 # =========================
 
-reports/
+reports/*
+!reports/*.md
 test-output/
 surefire-reports/
 

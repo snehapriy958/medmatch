@@ -1,0 +1,35 @@
+{
+  "metric": [
+    "Classification Accuracy",
+    "Macro F1-Score",
+    "False-Positive Eligibility Rate (Patient Harm Risk)",
+    "False-Negative Eligibility Rate",
+    "Unknown Classification Rate (Open-World Safety)",
+    "Evidence Citation Coverage",
+    "Contradictory Explanation Rate",
+    "Missing Criterion Detection Rate",
+    "Hard Exclusion Gate Violation Rate"
+  ],
+  "baseline_semantic": [
+    "41.67%",
+    "0.2889",
+    "22.22%",
+    "66.67%",
+    "0.00%",
+    "0.00%",
+    "16.67%",
+    "0.00%",
+    "44.4% (Hard exclusions bypassed by similarity)"
+  ],
+  "improved_deterministic": [
+    "100.00%",
+    "1.0000",
+    "0.00%",
+    "0.00%",
+    "25.00%",
+    "23.61%",
+    "0.00%",
+    "100.00%",
+    "0.0% (Zero hard exclusions bypassed)"
+  ]
+}

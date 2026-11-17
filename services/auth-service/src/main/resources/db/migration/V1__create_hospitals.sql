@@ -1,0 +1,13 @@
+CREATE TABLE hospitals (
+
+    id UUID PRIMARY KEY,
+
+    code VARCHAR(50) NOT NULL UNIQUE,
+
+    name VARCHAR(255) NOT NULL,
+
+    address VARCHAR(500),
+
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+
+);

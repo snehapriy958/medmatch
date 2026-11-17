@@ -1,0 +1,113 @@
+{
+  "dataset_size": 30,
+  "trials_count": 6,
+  "class_distribution": {
+    "ELIGIBLE": 9,
+    "INELIGIBLE": 12,
+    "NEEDS_REVIEW": 9
+  },
+  "retrieval": {
+    "recall_at_5": 1.0,
+    "precision_at_5": 0.2,
+    "mrr": 0.8883,
+    "ndcg_at_5": 0.9155
+  },
+  "baseline": {
+    "accuracy": 0.3667,
+    "macro_precision": 0.1264,
+    "macro_recall": 0.3056,
+    "macro_f1": 0.1789,
+    "false_positive_eligibility_rate": 0.0476,
+    "false_negative_rate": 1.0,
+    "abstention_rate": 0.0,
+    "confusion_matrix": {
+      "ELIGIBLE": {
+        "ELIGIBLE": 0,
+        "INELIGIBLE": 9,
+        "NEEDS_REVIEW": 0
+      },
+      "INELIGIBLE": {
+        "ELIGIBLE": 1,
+        "INELIGIBLE": 11,
+        "NEEDS_REVIEW": 0
+      },
+      "NEEDS_REVIEW": {
+        "ELIGIBLE": 0,
+        "INELIGIBLE": 9,
+        "NEEDS_REVIEW": 0
+      }
+    },
+    "per_class": {
+      "ELIGIBLE": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 9
+      },
+      "INELIGIBLE": {
+        "precision": 0.3793,
+        "recall": 0.9167,
+        "f1": 0.5366,
+        "support": 12
+      },
+      "NEEDS_REVIEW": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "support": 9
+      }
+    }
+  },
+  "improved": {
+    "accuracy": 1.0,
+    "macro_precision": 1.0,
+    "macro_recall": 1.0,
+    "macro_f1": 1.0,
+    "false_positive_eligibility_rate": 0.0,
+    "false_negative_rate": 0.0,
+    "abstention_rate": 0.3,
+    "confusion_matrix": {
+      "ELIGIBLE": {
+        "ELIGIBLE": 9,
+        "INELIGIBLE": 0,
+        "NEEDS_REVIEW": 0
+      },
+      "INELIGIBLE": {
+        "ELIGIBLE": 0,
+        "INELIGIBLE": 12,
+        "NEEDS_REVIEW": 0
+      },
+      "NEEDS_REVIEW": {
+        "ELIGIBLE": 0,
+        "INELIGIBLE": 0,
+        "NEEDS_REVIEW": 9
+      }
+    },
+    "per_class": {
+      "ELIGIBLE": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 9
+      },
+      "INELIGIBLE": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 12
+      },
+      "NEEDS_REVIEW": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 9
+      }
+    }
+  },
+  "explanation": {
+    "citation_coverage": 1.0,
+    "unsupported_claim_rate": 0.0,
+    "contradictory_claim_rate": 0.0,
+    "missing_criterion_detection_rate": 1.0
+  }
+}

@@ -168,6 +168,8 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/medmatch
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgres
+      JWT_PRIVATE_KEY_PATH: file:/app/keys/private.pem
+      JWT_PUBLIC_KEY_PATH: file:/app/keys/public.pem
 
     volumes:
       - ./services/auth-service/src/main/resources/keys:/app/keys:ro

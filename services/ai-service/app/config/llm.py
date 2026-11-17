@@ -30,6 +30,7 @@ def get_llm() -> genai.Client:
     _client = genai.Client(
         api_key=settings.GOOGLE_API_KEY,
         http_options=types.HttpOptions(
+            api_version="v1beta",
             timeout=settings.LLM_TIMEOUT_SECONDS * 1000,
         ),
     )

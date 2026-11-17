@@ -1,0 +1,1458 @@
+[
+  {
+    "scenario_id": "EVAL-01",
+    "category": "CLEAR_INCLUSION",
+    "name": "Clear Inclusion Match (EGFR+ NSCLC Stage IV)",
+    "description": "Patient meets all inclusion criteria and triggers zero exclusions.",
+    "patient": {
+      "patient_id": "SYN_PAT_01",
+      "age": 58,
+      "gender": "FEMALE",
+      "conditions": [
+        "Non-Small Cell Lung Cancer",
+        "Adenocarcinoma"
+      ],
+      "stage": "Stage IV",
+      "biomarkers": {
+        "EGFR": "Exon 19 deletion",
+        "ALK": "Negative",
+        "ROS1": "Negative"
+      },
+      "ecog": 1,
+      "labs": {
+        "platelets": 210.0,
+        "absolute_neutrophil_count": 2800.0,
+        "hemoglobin": 11.8,
+        "creatinine": 0.9,
+        "ast": 24.0,
+        "alt": 28.0
+      },
+      "prior_therapies": [
+        "Carboplatin + Pemetrexed"
+      ],
+      "clinical_summary": "58-year-old female diagnosed with metastatic Stage IV lung adenocarcinoma with documented EGFR exon 19 deletion. ECOG performance status 1. Platelets 210k/uL, ANC 2.8k/uL, creatinine 0.9 mg/dL. Brain MRI negative for intracranial disease. No prior 3rd generation EGFR-TKI exposure."
+    },
+    "trial": {
+      "trial_id": "NCT02484404",
+      "title": "Study of Osimertinib vs Standard of Care EGFR-TKI as First-Line Treatment in Patients With EGFR-Mutated NSCLC",
+      "phase": "Phase 3",
+      "criteria": [
+        {
+          "criterion_id": "C01",
+          "type": "INCLUSION",
+          "text": "Age >= 18 years at screening.",
+          "field": "age",
+          "operator": ">=",
+          "threshold": 18
+        },
+        {
+          "criterion_id": "C02",
+          "type": "INCLUSION",
+          "text": "Histologically or cytologically confirmed Stage IV Non-Small Cell Lung Cancer.",
+          "field": "condition",
+          "expected": "Stage IV NSCLC"
+        },
+        {
+          "criterion_id": "C03",
+          "type": "INCLUSION",
+          "text": "Documented activating EGFR mutation (Exon 19 deletion or L858R).",
+          "field": "biomarker_egfr",
+          "expected": "Exon 19 del or L858R"
+        },
+        {
+          "criterion_id": "C04",
+          "type": "INCLUSION",
+          "text": "ECOG performance status 0 or 1.",
+          "field": "ecog",
+          "operator": "<=",
+          "threshold": 1
+        },
+        {
+          "criterion_id": "C05",
+          "type": "INCLUSION",
+          "text": "Platelet count >= 100,000/uL.",
+          "field": "platelets",
+          "operator": ">=",
+          "threshold": 100.0
+        },
+        {
+          "criterion_id": "C06",
+          "type": "EXCLUSION",
+          "text": "Prior treatment with any third-generation EGFR-TKI (e.g., Osimertinib, Lazertinib).",
+          "field": "prior_tki_3rd_gen",
+          "operator": "not_in"
+        },
+        {
+          "criterion_id": "C07",
+          "type": "EXCLUSION",
+          "text": "Active or symptomatic central nervous system (CNS) metastases.",
+          "field": "cns_metastases",
+          "expected": "absent"
+        }
+      ]
+    },
+    "expected_retrieval_relevance": true,
+    "expected_retrieval_rank": 1,
+    "expected_criteria_evaluations": {
+      "C01": "MET",
+      "C02": "MET",
+      "C03": "MET",
+      "C04": "MET",
+      "C05": "MET",
+      "C06": "NOT_MET",
+      "C07": "NOT_MET"
+    },
+    "expected_verdict": "ELIGIBLE",
+    "rationale": "All inclusion criteria met and all exclusion criteria absent."
+  },
+  {
+    "scenario_id": "EVAL-02",
+    "category": "CLEAR_EXCLUSION",
+    "name": "Clear Exclusion Conflict (Prior 3rd Gen TKI)",
+    "description": "High semantic similarity but hard exclusion triggered due to prior Osimertinib therapy.",
+    "patient": {
+      "patient_id": "SYN_PAT_02",
+      "age": 64,
+      "gender": "MALE",
+      "conditions": [
+        "Non-Small Cell Lung Cancer"
+      ],
+      "stage": "Stage IV",
+      "biomarkers": {
+        "EGFR": "T790M",
+        "ALK": "Negative"
+      },
+      "ecog": 1,
+      "labs": {
+        "platelets": 190.0,
+        "absolute_neutrophil_count": 2200.0,
+        "creatinine": 1.0
+      },
+      "prior_therapies": [
+        "Osimertinib (80mg daily for 14 months, progressed 2026-08)"
+      ],
+      "clinical_summary": "64-year-old male with Stage IV NSCLC, previously treated with Osimertinib 80mg daily with progression. ECOG 1. Normal laboratory function."
+    },
+    "trial": {
+      "trial_id": "NCT02484404",
+      "title": "Study of Osimertinib vs Standard of Care EGFR-TKI as First-Line Treatment in Patients With EGFR-Mutated NSCLC",
+      "phase": "Phase 3",
+      "criteria": [
+        {
+          "criterion_id": "C01",
+          "type": "INCLUSION",
+          "text": "Age >= 18 years at screening.",
+          "field": "age",
+          "operator": ">=",
+          "threshold": 18
+        },
+        {
+          "criterion_id": "C02",
+          "type": "INCLUSION",
+          "text": "Histologically confirmed Stage IV Non-Small Cell Lung Cancer.",
+          "field": "condition",
+          "expected": "Stage IV NSCLC"
+        },
+        {
+          "criterion_id": "C03",
+          "type": "INCLUSION",
+          "text": "Documented activating EGFR mutation.",
+          "field": "biomarker_egfr",
+          "expected": "Exon 19 del or L858R"
+        },
+        {
+          "criterion_id": "C06",
+          "type": "EXCLUSION",
+          "text": "Prior treatment with any third-generation EGFR-TKI.",
+          "field": "prior_tki_3rd_gen",
+          "operator": "not_in"
+        }
+      ]
+    },
+    "expected_retrieval_relevance": true,
+    "expected_retrieval_rank": 2,
+    "expected_criteria_evaluations": {
+      "C01": "MET",
+      "C02": "MET",
+      "C03": "MET",
+      "C06": "MET"
+    },
+    "expected_verdict": "INELIGIBLE",
+    "rationale": "Exclusion criterion C06 triggered: Patient received prior Osimertinib."
+  },
+  {
+    "scenario_id": "EVAL-03",
+    "category": "MISSING_INFO",
+    "name": "Missing Critical Clinical Information (Unknown CNS Status)",
+    "description": "Patient note has no documentation of brain imaging or CNS status. Open-world safety requires UNKNOWN and review routing.",
+    "patient": {
+      "patient_id": "SYN_PAT_03",
+      "age": 61,
+      "gender": "MALE",
+      "conditions": [
+        "Non-Small Cell Lung Cancer"
+      ],
+      "stage": "Stage IV",
+      "biomarkers": {
+        "EGFR": "L858R"
+      },
+      "ecog": 0,
+      "labs": {
+        "platelets": 250.0,
+        "creatinine": 0.8
+      },
+      "prior_therapies": [],
+      "clinical_summary": "61-year-old male with newly diagnosed Stage IV NSCLC harboring EGFR L858R. No brain imaging performed to date. Asymptomatic."
+    },
+    "trial": {
+      "trial_id": "NCT02484404",
+      "title": "Study of Osimertinib vs Standard of Care EGFR-TKI as First-Line Treatment",
+      "phase": "Phase 3",
+      "criteria": [
+        {
+          "criterion_id": "C01",
+          "type": "INCLUSION",
+          "text": "Age >= 18 years.",
+          "field": "age",
+          "operator": ">=",
+          "threshold": 18
+        },
+        {
+          "criterion_id": "C03",
+          "type": "INCLUSION",
+          "text": "Documented EGFR mutation.",
+          "field": "biomarker_egfr",
+          "expected": "L858R"
+        },
+        {
+          "criterion_id": "C07",
+          "type": "EXCLUSION",
+          "text": "Active or symptomatic central nervous system (CNS) metastases.",
+          "field": "cns_metastases",
+          "expected": "absent"
+        }
+      ]
+    },
+    "expected_retrieval_relevance": true,
+    "expected_retrieval_rank": 3,
+    "expected_criteria_evaluations": {
+      "C01": "MET",
+      "C03": "MET",
+      "C07": "UNKNOWN"
+    },
+    "expected_verdict": "NEEDS_REVIEW",
+    "rationale": "CNS status undocumented in clinical note; cannot assume absent. Requires review."
+  },
+  {
+    "scenario_id": "EVAL-04",
+    "category": "CONFLICTING_INFO",
+    "name": "Conflicting Biomarker Information (Biopsy vs Liquid ctDNA)",
+    "description": "Tissue biopsy reported EGFR exon 19 deletion, while recent liquid biopsy reported KRAS G12C and EGFR wild-type.",
+    "patient": {
+      "patient_id": "SYN_PAT_04",
+      "age": 55,
+      "gender": "FEMALE",
+      "conditions": [
+        "Non-Small Cell Lung Cancer"
+      ],
+      "stage": "Stage IV",
+      "biomarkers": {
+        "EGFR_tissue": "Exon 19 del",
+        "EGFR_ctDNA": "Wild-type",
+        "KRAS_ctDNA": "G12C"
+      },
+      "ecog": 1,
+      "labs": {
+        "platelets": 180.0
+      },
+      "prior_therapies": [],
+      "clinical_summary": "55-year-old female with conflicting molecular profile: Initial tissue NGS on lung core reported EGFR Exon 19 del. Repeat ctDNA blood assay 3 weeks later reported EGFR negative and KRAS G12C positive."
+    },
+    "trial": {
+      "trial_id": "NCT02484404",
+      "title": "Study of Osimertinib in EGFR-Mutated NSCLC",
+      "phase": "Phase 3",
+      "criteria": [
+        {
+          "criterion_id": "C03",
+          "type": "INCLUSION",
+          "text": "Documented activating EGFR mutation (Exon 19 deletion or L858R).",
+          "field": "biomarker_egfr",
+          "expected": "Exon 19 del"
+        }
+      ]
+    },
+    "expected_retrieval_relevance": true,
+    "expected_retrieval_rank": 4,
+    "expected_criteria_evaluations": {
+      "C03": "UNKNOWN"
+    },
+    "expected_verdict": "NEEDS_REVIEW",
+    "rationale": "Conflicting molecular diagnostic evidence between tissue and plasma assays."
+  },
+  {
+    "scenario_id": "EVAL-05",
+    "category": "COMORBIDITIES",
+    "name": "Multiple Comorbidities (Severe Cardiac & Renal Impairment)",
+    "description": "Patient has target cancer diagnosis but severe organ dysfunction violating clinical trial safety criteria.",
+    "patient": {
+      "patient_id": "SYN_PAT_05",
+      "age": 72,
+      "gender": "MALE",
+      "conditions": [
+        "Non-Small Cell Lung Cancer",
+        "Congestive Heart Failure NYHA Class III",
+        "Chronic Kidney Disease Stage 4"
+      ],
+      "stage": "Stage IV",
+      "biomarkers": {
+        "EGFR": "L858R"
+      },
+      "ecog": 2,
+      "labs": {
+        "creatinine": 2.8,
+        "platelets": 140.0,
+        "eGFR": 22.0
+      },
+      "prior_therapies": [],
+      "clinical_summary": "72-year-old male with Stage IV NSCLC, EGFR L858R. History of NYHA Class III heart failure, ejection fraction 30%. Serum creatinine 2.8 mg/dL (severe renal impairment). ECOG performance status 2."
+    },
+    "trial": {
+      "trial_id": "NCT02484404",
+      "title": "Study of Osimertinib in EGFR-Mutated NSCLC",
+      "phase": "Phase 3",
+      "criteria": [
+        {
+          "criterion_id": "C04",
+          "type": "INCLUSION",
+          "text": "ECOG performance status 0 or 1.",
+          "field": "ecog",
+          "operator": "<=",
+          "threshold": 1
+        },
+        {
+          "criterion_id": "C08",
+          "type": "EXCLUSION",
+          "text": "Serum creatinine > 1.5 x institutional upper limit of normal (ULN) or CrCl < 50 mL/min.",
+          "field": "creatinine",
+          "operator": "<=",
+          "threshold": 1.5
+        },
+        {
+          "criterion_id": "C09",
+          "type": "EXCLUSION",
+          "text": "Severe or unstable cardiovascular disease including NYHA Class III or IV heart failure.",
+          "field": "cardiac_disease",
+          "expected": "absent"
+        }
+      ]
+    },
+    "expected_retrieval_relevance": true,
+    "expected_retrieval_rank": 5,
+    "expected_criteria_evaluations": {
+      "C04": "NOT_MET",
+      "C08": "MET",
+      "C09": "MET"
+    },
+    "expected_verdict": "INELIGIBLE",
+    "rationale": "Failed inclusion ECOG (2 > 1) and triggered exclusion criteria for renal failure and NYHA Class III heart failure."
+  },
+  {
+    "scenario_id": "EVAL-06",
+    "category": "AGE_RESTRICTION",
+    "name": "Age Restriction (Adolescent Patient under 18)",
+    "description": "16-year-old patient with target tumor genetics excluded due to pediatric status in adult trial protocol.",
+    "patient": {
+      "patient_id": "SYN_PAT_06",
+      "age": 16,
+      "gender": "FEMALE",
+      "conditions": [
+        "Non-Small Cell Lung Cancer"
+      ],
+      "stage": "Stage IV",
+      "biomarkers": {
+        "EGFR": "Exon 19 del"
+      },
+      "ecog": 0,
+      "labs": {
+        "platelets": 290.0,
+        "creatinine": 0.7
+      },
+      "prior_therapies": [],
+      "clinical_summary": "16-year-old female with rare pediatric presentation of EGFR-positive metastatic lung adenocarcinoma. ECOG 0."
+    },
+    "trial": {
+      "trial_id": "NCT02484404",
+      "title": "Study of Osimertinib in EGFR-Mutated NSCLC",
+      "phase": "Phase 3",
+      "criteria": [
+        {
+          "criterion_id": "C01",
+          "type": "INCLUSION",
+          "text": "Age >= 18 years at screening.",
+          "field": "age",
+          "operator": ">=",
+          "threshold": 18
+        }
+      ]
+    },
+    "expected_retrieval_relevance": true,
+    "expected_retrieval_rank": 6,
+    "expected_criteria_evaluations": {
+      "C01": "NOT_MET"
+    },
+    "expected_verdict": "INELIGIBLE",
+    "rationale": "Patient age 16 is below the mandated protocol threshold of 18 years."
+  },
+  {
+    "scenario_id": "EVAL-07",
+    "category": "GENDER_RESTRICTION",
+    "name": "Gender-Restricted Trial (Triple-Negative Breast Cancer)",
+    "description": "Male patient with breast carcinoma evaluated against female-only TNBC cohort.",
+    "patient": {
+      "patient_id": "SYN_PAT_07",
+      "age": 59,
+      "gender": "MALE",
+      "conditions": [
+        "Triple-Negative Breast Cancer"
+      ],
+      "stage": "Stage IV",
+      "biomarkers": {
+        "ER": "Negative",
+        "PR": "Negative",
+        "HER2": "Negative"
+      },
+      "ecog": 1,
+      "labs": {
+        "platelets": 200.0
+      },
+      "prior_therapies": [
+        "Doxorubicin + Cyclophosphamide"
+      ],
+      "clinical_summary": "59-year-old male with metastatic triple-negative invasive ductal breast carcinoma. Completed prior anthracycline-based chemotherapy."
+    },
+    "trial": {
+      "trial_id": "NCT03732820",
+      "title": "Study of Sacituzumab Govitecan in Female Patients with Metastatic Triple-Negative Breast Cancer",
+      "phase": "Phase 3",
+      "criteria": [
+        {
+          "criterion_id": "C10",
+          "type": "INCLUSION",
+          "text": "Female sex at birth.",
+          "field": "gender",
+          "expected": "FEMALE"
+        },
+        {
+          "criterion_id": "C11",
+          "type": "INCLUSION",
+          "text": "Histologically confirmed metastatic Triple-Negative Breast Cancer.",
+          "field": "condition",
+          "expected": "TNBC"
+        }
+      ]
+    },
+    "expected_retrieval_relevance": true,
+    "expected_retrieval_rank": 7,
+    "expected_criteria_evaluations": {
+      "C10": "NOT_MET",
+      "C11": "MET"
+    },
+    "expected_verdict": "INELIGIBLE",
+    "rationale": "Trial inclusion specifically requires female sex."
+  },
+  {
+    "scenario_id": "EVAL-08",
+    "category": "BIOMARKER_DEPENDENCY",
+    "name": "Biomarker-Dependent Matching (KRAS G12C vs EGFR)",
+    "description": "Patient with KRAS G12C NSCLC matches targeted KRAS trial and is excluded from EGFR protocol.",
+    "patient": {
+      "patient_id": "SYN_PAT_08",
+      "age": 66,
+      "gender": "MALE",
+      "conditions": [
+        "Non-Small Cell Lung Cancer"
+      ],
+      "stage": "Stage IV",
+      "biomarkers": {
+        "KRAS": "G12C",
+        "EGFR": "Wild-type",
+        "ALK": "Negative"
+      },
+      "ecog": 1,
+      "labs": {
+        "platelets": 230.0,
+        "creatinine": 1.0
+      },
+      "prior_therapies": [
+        "Pembrolizumab + Carboplatin"
+      ],
+      "clinical_summary": "66-year-old male with metastatic NSCLC harboring KRAS p.G12C mutation. EGFR mutation negative. Progressed on first-line chemo-immunotherapy."
+    },
+    "trial": {
+      "trial_id": "NCT04303780",
+      "title": "Study of Sotorasib (AMG 510) in Advanced Solid Tumors With KRAS p.G12C Mutation",
+      "phase": "Phase 2",
+      "criteria": [
+        {
+          "criterion_id": "C12",
+          "type": "INCLUSION",
+          "text": "Documented presence of KRAS p.G12C mutation in tumor tissue.",
+          "field": "biomarker_kras",
+          "expected": "G12C"
+        },
+        {
+          "criterion_id": "C13",
+          "type": "INCLUSION",
+          "text": "Progression on or following prior systemic therapy for metastatic disease.",
+          "field": "prior_therapy",
+          "expected": "present"
+        }
+      ]
+    },
+    "expected_retrieval_relevance": true,
+    "expected_retrieval_rank": 1,
+    "expected_criteria_evaluations": {
+      "C12": "MET",
+      "C13": "MET"
+    },
+    "expected_verdict": "ELIGIBLE",
+    "rationale": "Patient matches target KRAS G12C biomarker and prior therapy requirement."
+  },
+  {
+    "scenario_id": "EVAL-09",
+    "category": "PRIOR_TREATMENT_WASHOUT",
+    "name": "Prior Treatment Washout Window Violation (Recent Chemo)",
+    "description": "Patient received chemotherapy 10 days ago, violating the required 28-day washout window.",
+    "patient": {
+      "patient_id": "SYN_PAT_09",
+      "age": 60,
+      "gender": "FEMALE",
+      "conditions": [
+        "Non-Small Cell Lung Cancer"
+      ],
+      "stage": "Stage IV",
+      "biomarkers": {
+        "EGFR": "Exon 19 del"
+      },
+      "ecog": 1,
+      "labs": {
+        "platelets": 160.0,
+        "creatinine": 0.9
+      },
+      "prior_therapies": [
+        "Carboplatin + Paclitaxel (last cycle administered 10 days ago)"
+      ],
+      "clinical_summary": "60-year-old female with EGFR-mutant Stage IV NSCLC. Received cytotoxic chemotherapy cycle 10 days prior to trial screening."
+    },
+    "trial": {
+      "trial_id": "NCT02484404",
+      "title": "Study of Osimertinib in EGFR-Mutated NSCLC",
+      "phase": "Phase 3",
+      "criteria": [
+        {
+          "criterion_id": "C14",
+          "type": "EXCLUSION",
+          "text": "Treatment with cytotoxic chemotherapy within 28 days or 5 half-lives prior to first dose.",
+          "field": "chemo_washout_days",
+          "operator": "<=",
+          "threshold": 28
+        }
+      ]
+    },
+    "expected_retrieval_relevance": true,
+    "expected_retrieval_rank": 8,
+    "expected_criteria_evaluations": {
+      "C14": "MET"
+    },
+    "expected_verdict": "INELIGIBLE",
+    "rationale": "Chemotherapy administered 10 days ago violates mandatory 28-day washout."
+  },
+  {
+    "scenario_id": "EVAL-10",
+    "category": "COMPLEX_COMBINATORIAL",
+    "name": "Compound Criteria Logic (Platelet Failure in Hematologic Panel)",
+    "description": "Compound AND/OR criteria where ANC is acceptable but platelets fail threshold.",
+    "patient": {
+      "patient_id": "SYN_PAT_10",
+      "age": 63,
+      "gender": "MALE",
+      "conditions": [
+        "Non-Small Cell Lung Cancer"
+      ],
+      "stage": "Stage IV",
+      "biomarkers": {
+        "EGFR": "L858R"
+      },
+      "ecog": 1,
+      "labs": {
+        "absolute_neutrophil_count": 2100.0,
+        "platelets": 82.0,
+        "hemoglobin": 10.5
+      },
+      "prior_therapies": [],
+      "clinical_summary": "63-year-old male with EGFR L858R NSCLC. ANC is 2,100/uL, but platelets are depressed at 82,000/uL (below required 100,000/uL threshold)."
+    },
+    "trial": {
+      "trial_id": "NCT02484404",
+      "title": "Study of Osimertinib in EGFR-Mutated NSCLC",
+      "phase": "Phase 3",
+      "criteria": [
+        {
+          "criterion_id": "C15",
+          "type": "INCLUSION",
+          "text": "Adequate bone marrow reserve: ANC >= 1,500/uL AND Platelets >= 100,000/uL AND Hemoglobin >= 9.0 g/dL.",
+          "field": "marrow_reserve",
+          "expected": "all_met"
+        }
+      ]
+    },
+    "expected_retrieval_relevance": true,
+    "expected_retrieval_rank": 9,
+    "expected_criteria_evaluations": {
+      "C15": "NOT_MET"
+    },
+    "expected_verdict": "INELIGIBLE",
+    "rationale": "Platelet count of 82,000/uL violates the 100,000/uL bone marrow adequacy threshold."
+  },
+  {
+    "scenario_id": "EVAL-11",
+    "category": "NOISY_PDF_EXTRACTION",
+    "name": "Poorly Extracted / Scanned PDF Artifacts (OCR Noise)",
+    "description": "Clinical text contains OCR noise, hyphens, and unconventional abbreviations.",
+    "patient": {
+      "patient_id": "SYN_PAT_11",
+      "age": 68,
+      "gender": "FEMALE",
+      "conditions": [
+        "Non-Small Cell Lung Cancer"
+      ],
+      "stage": "Stage IV",
+      "biomarkers": {
+        "EGFR": "Exon 19 del"
+      },
+      "ecog": 1,
+      "labs": {
+        "platelets": 175.0,
+        "creatinine": 1.1
+      },
+      "prior_therapies": [],
+      "clinical_summary": "Pt 68yo F w/ hist-conf Stg 1V N-S-C-L-C. Molecular: E-G-F-R mut (+) exon19del. ECOG PS 1. Plt 175k, Cr 1.1. No CNS mets noted."
+    },
+    "trial": {
+      "trial_id": "NCT02484404",
+      "title": "Study of Osimertinib in EGFR-Mutated NSCLC",
+      "phase": "Phase 3",
+      "criteria": [
+        {
+          "criterion_id": "C02",
+          "type": "INCLUSION",
+          "text": "Histologically or cytologically confirmed Stage IV Non-Small Cell Lung Cancer.",
+          "field": "condition",
+          "expected": "Stage IV NSCLC"
+        },
+        {
+          "criterion_id": "C03",
+          "type": "INCLUSION",
+          "text": "Documented activating EGFR mutation (Exon 19 deletion or L858R).",
+          "field": "biomarker_egfr",
+          "expected": "Exon 19 del"
+        }
+      ]
+    },
+    "expected_retrieval_relevance": true,
+    "expected_retrieval_rank": 10,
+    "expected_criteria_evaluations": {
+      "C02": "MET",
+      "C03": "MET"
+    },
+    "expected_verdict": "ELIGIBLE",
+    "rationale": "Normalized clinical entities successfully recover Stage IV NSCLC and EGFR Exon 19 deletion despite OCR noise."
+  },
+  {
+    "scenario_id": "EVAL-12",
+    "category": "AMBIGUOUS_CRITERIA",
+    "name": "Ambiguous Subjective Criteria (Physician Adjudication Required)",
+    "description": "Protocol requires adequate cardiac reserve in the opinion of the investigator; patient has borderline QTc.",
+    "patient": {
+      "patient_id": "SYN_PAT_12",
+      "age": 65,
+      "gender": "MALE",
+      "conditions": [
+        "Non-Small Cell Lung Cancer",
+        "Borderline Prolonged QTc"
+      ],
+      "stage": "Stage IV",
+      "biomarkers": {
+        "EGFR": "L858R"
+      },
+      "ecog": 1,
+      "labs": {
+        "platelets": 220.0,
+        "qtc_interval_ms": 462.0
+      },
+      "prior_therapies": [],
+      "clinical_summary": "65-year-old male with Stage IV NSCLC, EGFR L858R. Baseline ECG demonstrates borderline corrected QT interval of 462 ms. Asymptomatic."
+    },
+    "trial": {
+      "trial_id": "NCT02484404",
+      "title": "Study of Osimertinib in EGFR-Mutated NSCLC",
+      "phase": "Phase 3",
+      "criteria": [
+        {
+          "criterion_id": "C16",
+          "type": "EXCLUSION",
+          "text": "Mean resting corrected QT interval (QTcF) > 470 ms or history of clinically significant arrhythmia in the opinion of the investigator.",
+          "field": "qtc_ms",
+          "operator": ">",
+          "threshold": 470.0
+        }
+      ]
+    },
+    "expected_retrieval_relevance": true,
+    "expected_retrieval_rank": 11,
+    "expected_criteria_evaluations": {
+      "C16": "UNKNOWN"
+    },
+    "expected_verdict": "NEEDS_REVIEW",
+    "rationale": "QTc of 462 ms is below the hard threshold of 470 ms, but clinical history of borderline prolongation requires investigator assessment."
+  },
+  {
+    "scenario_id": "EVAL-13",
+    "category": "CLEAR_INCLUSION",
+    "name": "ALK Rearranged NSCLC First-Line",
+    "description": "ALK Rearranged NSCLC First-Line",
+    "patient": {
+      "patient_id": "SYN_PAT_13",
+      "age": 52,
+      "gender": "MALE",
+      "stage": "Stage IV",
+      "conditions": [
+        "Non-Small Cell Lung Cancer",
+        "Adenocarcinoma"
+      ],
+      "biomarkers": {
+        "ALK": "Positive (EML4-ALK fusion by FISH)",
+        "EGFR": "Wild-type"
+      },
+      "ecog": 0,
+      "labs": {
+        "platelets": 240.0,
+        "creatinine": 0.8,
+        "alt": 22.0,
+        "ast": 25.0
+      },
+      "prior_therapies": [],
+      "clinical_summary": "52-year-old male with treatment-naive Stage IV adenocarcinoma of lung. FISH confirmed ALK rearrangement (EML4-ALK fusion). ECOG 0. Brain MRI confirms no CNS metastases. Complete blood counts and liver enzymes normal."
+    },
+    "trial": {
+      "trial_id": "NCT03041311",
+      "title": "Study of Alectinib in Patients With ALK-Positive Advanced Non-Small Cell Lung Cancer",
+      "phase": "Phase 3",
+      "indication": "ALK-Positive NSCLC"
+    },
+    "expected_retrieval_relevance": true,
+    "expected_retrieval_rank": 1,
+    "expected_criteria_evaluations": {
+      "C_ALK": "MET",
+      "C_AGE": "MET",
+      "C_ECOG": "MET",
+      "C_PRIOR": "NOT_MET"
+    },
+    "expected_verdict": "ELIGIBLE",
+    "rationale": "Ground-truth clinical adjudication for ALK Rearranged NSCLC First-Line"
+  },
+  {
+    "scenario_id": "EVAL-14",
+    "category": "CLEAR_INCLUSION",
+    "name": "BRCA2 Mutated Metastatic Castration-Resistant Prostate Cancer",
+    "description": "BRCA2 Mutated Metastatic Castration-Resistant Prostate Cancer",
+    "patient": {
+      "patient_id": "SYN_PAT_14",
+      "age": 69,
+      "gender": "MALE",
+      "stage": "Stage IV",
+      "conditions": [
+        "Metastatic Castration-Resistant Prostate Cancer"
+      ],
+      "biomarkers": {
+        "BRCA2": "Pathogenic germline mutation (c.5946delT)",
+        "HRR": "Positive"
+      },
+      "ecog": 1,
+      "labs": {
+        "platelets": 185.0,
+        "hemoglobin": 10.8,
+        "creatinine": 1.1
+      },
+      "prior_therapies": [
+        "Enzalutamide (progressed on androgen receptor pathway inhibitor)"
+      ],
+      "clinical_summary": "69-year-old male with mCRPC harboring germline BRCA2 frameshift mutation. Disease progression following prior Enzalutamide therapy. ECOG PS 1. Adequate hematologic and renal parameters."
+    },
+    "trial": {
+      "trial_id": "NCT02576574",
+      "title": "Olaparib in Patients With Metastatic Castration-Resistant Prostate Cancer (mCRPC) and Homologous Recombination Repair Gene Mutations",
+      "phase": "Phase 3",
+      "indication": "mCRPC BRCA HRR"
+    },
+    "expected_retrieval_relevance": true,
+    "expected_retrieval_rank": 1,
+    "expected_criteria_evaluations": {
+      "C_BRCA": "MET",
+      "C_PRIOR_AR": "MET",
+      "C_ECOG": "MET"
+    },
+    "expected_verdict": "ELIGIBLE",
+    "rationale": "Ground-truth clinical adjudication for BRCA2 Mutated Metastatic Castration-Resistant Prostate Cancer"
+  },
+  {
+    "scenario_id": "EVAL-15",
+    "category": "CLEAR_INCLUSION",
+    "name": "PD-L1 High Metastatic Melanoma First-Line",
+    "description": "PD-L1 High Metastatic Melanoma First-Line",
+    "patient": {
+      "patient_id": "SYN_PAT_15",
+      "age": 62,
+      "gender": "FEMALE",
+      "stage": "Stage IV",
+      "conditions": [
+        "Cutaneous Melanoma",
+        "Metastatic Melanoma"
+      ],
+      "biomarkers": {
+        "BRAF": "Wild-type",
+        "PD-L1": "TPS 75% (High expression)"
+      },
+      "ecog": 0,
+      "labs": {
+        "platelets": 260.0,
+        "creatinine": 0.7,
+        "bilirubin": 0.6
+      },
+      "prior_therapies": [],
+      "clinical_summary": "62-year-old female with unresectable Stage IV cutaneous melanoma. BRAF V600 wild-type. PD-L1 expression 75%. No prior systemic anti-cancer therapy. ECOG 0. Normal laboratory function."
+    },
+    "trial": {
+      "trial_id": "NCT02365142",
+      "title": "Pembrolizumab Monotherapy for First-Line Treatment of Advanced Melanoma with High PD-L1 Expression",
+      "phase": "Phase 3",
+      "indication": "Advanced Melanoma PD-L1"
+    },
+    "expected_retrieval_relevance": true,
+    "expected_retrieval_rank": 1,
+    "expected_criteria_evaluations": {
+      "C_MEL": "MET",
+      "C_PDL1": "MET",
+      "C_PRIOR": "NOT_MET"
+    },
+    "expected_verdict": "ELIGIBLE",
+    "rationale": "Ground-truth clinical adjudication for PD-L1 High Metastatic Melanoma First-Line"
+  },
+  {
+    "scenario_id": "EVAL-16",
+    "category": "CLEAR_INCLUSION",
+    "name": "EGFR L858R NSCLC with Asymptomatic Treated Brain Mets Allowed",
+    "description": "EGFR L858R NSCLC with Asymptomatic Treated Brain Mets Allowed",
+    "patient": {
+      "patient_id": "SYN_PAT_16",
+      "age": 57,
+      "gender": "FEMALE",
+      "stage": "Stage IV",
+      "conditions": [
+        "Non-Small Cell Lung Cancer"
+      ],
+      "biomarkers": {
+        "EGFR": "L858R point mutation in exon 21"
+      },
+      "ecog": 1,
+      "labs": {
+        "platelets": 205.0,
+        "creatinine": 0.9,
+        "anc": 3100.0
+      },
+      "prior_therapies": [],
+      "clinical_summary": "57-year-old female with newly diagnosed Stage IV NSCLC, EGFR L858R positive. Brain MRI showed two 4mm stable lesions, asymptomatic, not requiring corticosteroids. ECOG 1. No prior EGFR-TKI exposure."
+    },
+    "trial": {
+      "trial_id": "NCT02484404",
+      "title": "Study of Osimertinib vs Standard EGFR-TKI in EGFR-Mutated Stage IV NSCLC",
+      "phase": "Phase 3",
+      "indication": "Non-Small Cell Lung Cancer EGFR"
+    },
+    "expected_retrieval_relevance": true,
+    "expected_retrieval_rank": 1,
+    "expected_criteria_evaluations": {
+      "C01": "MET",
+      "C02": "MET",
+      "C03": "MET",
+      "C04": "MET",
+      "C06": "NOT_MET"
+    },
+    "expected_verdict": "ELIGIBLE",
+    "rationale": "Ground-truth clinical adjudication for EGFR L858R NSCLC with Asymptomatic Treated Brain Mets Allowed"
+  },
+  {
+    "scenario_id": "EVAL-17",
+    "category": "CLEAR_INCLUSION",
+    "name": "Sacituzumab Govitecan Eligible TNBC Post 2 Lines",
+    "description": "Sacituzumab Govitecan Eligible TNBC Post 2 Lines",
+    "patient": {
+      "patient_id": "SYN_PAT_17",
+      "age": 54,
+      "gender": "FEMALE",
+      "stage": "Stage IV",
+      "conditions": [
+        "Triple-Negative Breast Cancer"
+      ],
+      "biomarkers": {
+        "ER": "0%",
+        "PR": "0%",
+        "HER2": "0 (IHC negative)"
+      },
+      "ecog": 1,
+      "labs": {
+        "platelets": 170.0,
+        "anc": 2100.0,
+        "creatinine": 0.8
+      },
+      "prior_therapies": [
+        "Doxorubicin + Cyclophosphamide",
+        "Paclitaxel"
+      ],
+      "clinical_summary": "54-year-old female with metastatic triple-negative breast cancer (ER 0%, PR 0%, HER2 0). Received 2 prior systemic chemotherapy regimens for metastatic disease with radiographic progression. ECOG 1."
+    },
+    "trial": {
+      "trial_id": "NCT03732820",
+      "title": "Study of Sacituzumab Govitecan in Patients with Metastatic Triple-Negative Breast Cancer",
+      "phase": "Phase 3",
+      "indication": "Triple-Negative Breast Cancer"
+    },
+    "expected_retrieval_relevance": true,
+    "expected_retrieval_rank": 1,
+    "expected_criteria_evaluations": {
+      "C_TNBC": "MET",
+      "C_FEMALE": "MET",
+      "C_PRIOR_LINES": "MET"
+    },
+    "expected_verdict": "ELIGIBLE",
+    "rationale": "Ground-truth clinical adjudication for Sacituzumab Govitecan Eligible TNBC Post 2 Lines"
+  },
+  {
+    "scenario_id": "EVAL-18",
+    "category": "CLEAR_INCLUSION",
+    "name": "KRAS G12C NSCLC Second Line Post-ChemoIO",
+    "description": "KRAS G12C NSCLC Second Line Post-ChemoIO",
+    "patient": {
+      "patient_id": "SYN_PAT_18",
+      "age": 67,
+      "gender": "FEMALE",
+      "stage": "Stage IV",
+      "conditions": [
+        "Non-Small Cell Lung Cancer"
+      ],
+      "biomarkers": {
+        "KRAS": "p.G12C",
+        "EGFR": "Negative"
+      },
+      "ecog": 1,
+      "labs": {
+        "platelets": 195.0,
+        "anc": 2900.0,
+        "creatinine": 0.9
+      },
+      "prior_therapies": [
+        "Carboplatin + Pemetrexed + Pembrolizumab"
+      ],
+      "clinical_summary": "67-year-old female with Stage IV lung adenocarcinoma harboring confirmed KRAS G12C mutation. Experienced progression after 6 months of chemo-immunotherapy. ECOG 1. Normal organ and marrow function."
+    },
+    "trial": {
+      "trial_id": "NCT04303780",
+      "title": "Study of Sotorasib (AMG 510) in Advanced Solid Tumors with KRAS p.G12C Mutation",
+      "phase": "Phase 2",
+      "indication": "KRAS G12C Solid Tumors"
+    },
+    "expected_retrieval_relevance": true,
+    "expected_retrieval_rank": 1,
+    "expected_criteria_evaluations": {
+      "C12": "MET",
+      "C13": "MET"
+    },
+    "expected_verdict": "ELIGIBLE",
+    "rationale": "Ground-truth clinical adjudication for KRAS G12C NSCLC Second Line Post-ChemoIO"
+  },
+  {
+    "scenario_id": "EVAL-19",
+    "category": "CLEAR_EXCLUSION",
+    "name": "Active Autoimmune Colitis in Melanoma Immunotherapy Trial",
+    "description": "Active Autoimmune Colitis in Melanoma Immunotherapy Trial",
+    "patient": {
+      "patient_id": "SYN_PAT_19",
+      "age": 58,
+      "gender": "MALE",
+      "stage": "Stage IV",
+      "conditions": [
+        "Cutaneous Melanoma",
+        "Active Ulcerative Colitis (Severe Flare)"
+      ],
+      "biomarkers": {
+        "BRAF": "Wild-type",
+        "PD-L1": "TPS 80%"
+      },
+      "ecog": 1,
+      "labs": {
+        "platelets": 250.0,
+        "creatinine": 0.9
+      },
+      "prior_therapies": [],
+      "clinical_summary": "58-year-old male with Stage IV melanoma, PD-L1 80%. Patient has severe active ulcerative colitis requiring high-dose oral Prednisone 40mg daily for the past 3 weeks."
+    },
+    "trial": {
+      "trial_id": "NCT02365142",
+      "title": "Pembrolizumab Monotherapy for First-Line Treatment of Advanced Melanoma with High PD-L1 Expression",
+      "phase": "Phase 3",
+      "indication": "Advanced Melanoma PD-L1"
+    },
+    "expected_retrieval_relevance": true,
+    "expected_retrieval_rank": 1,
+    "expected_criteria_evaluations": {
+      "C_EXCL_AUTOIMMUNE": "MET",
+      "C_EXCL_STEROIDS": "MET"
+    },
+    "expected_verdict": "INELIGIBLE",
+    "rationale": "Ground-truth clinical adjudication for Active Autoimmune Colitis in Melanoma Immunotherapy Trial"
+  },
+  {
+    "scenario_id": "EVAL-20",
+    "category": "CLEAR_EXCLUSION",
+    "name": "Severe Hepatic Impairment (Transaminitis > 5x ULN)",
+    "description": "Severe Hepatic Impairment (Transaminitis > 5x ULN)",
+    "patient": {
+      "patient_id": "SYN_PAT_20",
+      "age": 63,
+      "gender": "FEMALE",
+      "stage": "Stage IV",
+      "conditions": [
+        "Non-Small Cell Lung Cancer"
+      ],
+      "biomarkers": {
+        "EGFR": "Exon 19 del"
+      },
+      "ecog": 1,
+      "labs": {
+        "ast": 215.0,
+        "alt": 280.0,
+        "total_bilirubin": 2.6,
+        "platelets": 140.0
+      },
+      "prior_therapies": [],
+      "clinical_summary": "63-year-old female with EGFR Exon 19 del metastatic NSCLC. Liver panel demonstrates severe hepatic dysfunction: AST 215 U/L (>5x ULN), ALT 280 U/L (>6x ULN), total bilirubin 2.6 mg/dL."
+    },
+    "trial": {
+      "trial_id": "NCT02484404",
+      "title": "Study of Osimertinib vs Standard EGFR-TKI in EGFR-Mutated Stage IV NSCLC",
+      "phase": "Phase 3",
+      "indication": "Non-Small Cell Lung Cancer EGFR"
+    },
+    "expected_retrieval_relevance": true,
+    "expected_retrieval_rank": 1,
+    "expected_criteria_evaluations": {
+      "C_HEPATIC_EXCL": "MET"
+    },
+    "expected_verdict": "INELIGIBLE",
+    "rationale": "Ground-truth clinical adjudication for Severe Hepatic Impairment (Transaminitis > 5x ULN)"
+  },
+  {
+    "scenario_id": "EVAL-21",
+    "category": "CLEAR_EXCLUSION",
+    "name": "History of Interstitial Lung Disease / Drug-Induced Pneumonitis",
+    "description": "History of Interstitial Lung Disease / Drug-Induced Pneumonitis",
+    "patient": {
+      "patient_id": "SYN_PAT_21",
+      "age": 70,
+      "gender": "MALE",
+      "stage": "Stage IV",
+      "conditions": [
+        "Non-Small Cell Lung Cancer",
+        "Radiation Pneumonitis / Interstitial Fibrosis"
+      ],
+      "biomarkers": {
+        "EGFR": "L858R"
+      },
+      "ecog": 1,
+      "labs": {
+        "platelets": 210.0,
+        "creatinine": 1.0
+      },
+      "prior_therapies": [
+        "Thoracic Radiation Therapy"
+      ],
+      "clinical_summary": "70-year-old male with Stage IV NSCLC EGFR L858R. CT chest reveals bilateral interstitial pneumonitis and active ground-glass opacities consistent with steroid-requiring drug-induced pneumonitis."
+    },
+    "trial": {
+      "trial_id": "NCT02484404",
+      "title": "Study of Osimertinib vs Standard EGFR-TKI in EGFR-Mutated Stage IV NSCLC",
+      "phase": "Phase 3",
+      "indication": "Non-Small Cell Lung Cancer EGFR"
+    },
+    "expected_retrieval_relevance": true,
+    "expected_retrieval_rank": 1,
+    "expected_criteria_evaluations": {
+      "C_ILD_EXCL": "MET"
+    },
+    "expected_verdict": "INELIGIBLE",
+    "rationale": "Ground-truth clinical adjudication for History of Interstitial Lung Disease / Drug-Induced Pneumonitis"
+  },
+  {
+    "scenario_id": "EVAL-22",
+    "category": "CLEAR_EXCLUSION",
+    "name": "Poor Functional Status (ECOG Performance Status 3)",
+    "description": "Poor Functional Status (ECOG Performance Status 3)",
+    "patient": {
+      "patient_id": "SYN_PAT_22",
+      "age": 75,
+      "gender": "FEMALE",
+      "stage": "Stage IV",
+      "conditions": [
+        "Non-Small Cell Lung Cancer"
+      ],
+      "biomarkers": {
+        "EGFR": "Exon 19 del"
+      },
+      "ecog": 3,
+      "labs": {
+        "platelets": 170.0,
+        "creatinine": 1.2
+      },
+      "prior_therapies": [],
+      "clinical_summary": "75-year-old female with metastatic NSCLC EGFR Exon 19 deletion. Patient is bed-bound >50% of waking hours due to profound cancer cachexia (ECOG PS 3). Requires assistance for all activities of daily living."
+    },
+    "trial": {
+      "trial_id": "NCT02484404",
+      "title": "Study of Osimertinib vs Standard EGFR-TKI in EGFR-Mutated Stage IV NSCLC",
+      "phase": "Phase 3",
+      "indication": "Non-Small Cell Lung Cancer EGFR"
+    },
+    "expected_retrieval_relevance": true,
+    "expected_retrieval_rank": 1,
+    "expected_criteria_evaluations": {
+      "C04": "NOT_MET"
+    },
+    "expected_verdict": "INELIGIBLE",
+    "rationale": "Ground-truth clinical adjudication for Poor Functional Status (ECOG Performance Status 3)"
+  },
+  {
+    "scenario_id": "EVAL-23",
+    "category": "CLEAR_EXCLUSION",
+    "name": "Histology Mismatch (Squamous Cell vs Adenocarcinoma Requirement)",
+    "description": "Histology Mismatch (Squamous Cell vs Adenocarcinoma Requirement)",
+    "patient": {
+      "patient_id": "SYN_PAT_23",
+      "age": 66,
+      "gender": "MALE",
+      "stage": "Stage IV",
+      "conditions": [
+        "Squamous Cell Carcinoma of the Lung"
+      ],
+      "biomarkers": {
+        "EGFR": "Wild-type"
+      },
+      "ecog": 1,
+      "labs": {
+        "platelets": 230.0,
+        "creatinine": 0.9
+      },
+      "prior_therapies": [],
+      "clinical_summary": "66-year-old male heavy smoker with metastatic pure squamous cell lung carcinoma. EGFR and ALK negative."
+    },
+    "trial": {
+      "trial_id": "NCT02484404",
+      "title": "Study of Osimertinib vs Standard EGFR-TKI in EGFR-Mutated Stage IV NSCLC",
+      "phase": "Phase 3",
+      "indication": "Non-Small Cell Lung Cancer EGFR"
+    },
+    "expected_retrieval_relevance": true,
+    "expected_retrieval_rank": 1,
+    "expected_criteria_evaluations": {
+      "C02": "NOT_MET",
+      "C03": "NOT_MET"
+    },
+    "expected_verdict": "INELIGIBLE",
+    "rationale": "Ground-truth clinical adjudication for Histology Mismatch (Squamous Cell vs Adenocarcinoma Requirement)"
+  },
+  {
+    "scenario_id": "EVAL-24",
+    "category": "CLEAR_EXCLUSION",
+    "name": "Prior Alectinib Exposure in First-Line ALK Trial",
+    "description": "Prior Alectinib Exposure in First-Line ALK Trial",
+    "patient": {
+      "patient_id": "SYN_PAT_24",
+      "age": 59,
+      "gender": "FEMALE",
+      "stage": "Stage IV",
+      "conditions": [
+        "Non-Small Cell Lung Cancer"
+      ],
+      "biomarkers": {
+        "ALK": "Positive"
+      },
+      "ecog": 1,
+      "labs": {
+        "platelets": 210.0,
+        "creatinine": 0.8
+      },
+      "prior_therapies": [
+        "Alectinib 600mg BID for 18 months (progressed)"
+      ],
+      "clinical_summary": "59-year-old female with ALK-rearranged NSCLC previously treated with Alectinib for 18 months, now with disease progression. Protocol specifies ALK-inhibitor treatment-naive patients."
+    },
+    "trial": {
+      "trial_id": "NCT03041311",
+      "title": "Study of Alectinib in Patients With ALK-Positive Advanced Non-Small Cell Lung Cancer",
+      "phase": "Phase 3",
+      "indication": "ALK-Positive NSCLC"
+    },
+    "expected_retrieval_relevance": true,
+    "expected_retrieval_rank": 1,
+    "expected_criteria_evaluations": {
+      "C_EXCL_PRIOR_ALK": "MET"
+    },
+    "expected_verdict": "INELIGIBLE",
+    "rationale": "Ground-truth clinical adjudication for Prior Alectinib Exposure in First-Line ALK Trial"
+  },
+  {
+    "scenario_id": "EVAL-25",
+    "category": "MISSING_INFO",
+    "name": "Pending Next-Generation Sequencing Biomarker Panel",
+    "description": "Pending Next-Generation Sequencing Biomarker Panel",
+    "patient": {
+      "patient_id": "SYN_PAT_25",
+      "age": 60,
+      "gender": "FEMALE",
+      "stage": "Stage IV",
+      "conditions": [
+        "Non-Small Cell Lung Cancer",
+        "Adenocarcinoma"
+      ],
+      "biomarkers": {
+        "NGS": "Send-out in progress (specimen received at reference lab 3 days ago)"
+      },
+      "ecog": 1,
+      "labs": {
+        "platelets": 200.0,
+        "creatinine": 0.9
+      },
+      "prior_therapies": [],
+      "clinical_summary": "60-year-old female newly diagnosed with metastatic lung adenocarcinoma. Comprehensive genomic profiling / NGS panel pending at reference laboratory. No actionable mutations identified yet."
+    },
+    "trial": {
+      "trial_id": "NCT02484404",
+      "title": "Study of Osimertinib vs Standard EGFR-TKI in EGFR-Mutated Stage IV NSCLC",
+      "phase": "Phase 3",
+      "indication": "Non-Small Cell Lung Cancer EGFR"
+    },
+    "expected_retrieval_relevance": true,
+    "expected_retrieval_rank": 1,
+    "expected_criteria_evaluations": {
+      "C03": "UNKNOWN"
+    },
+    "expected_verdict": "NEEDS_REVIEW",
+    "rationale": "Ground-truth clinical adjudication for Pending Next-Generation Sequencing Biomarker Panel"
+  },
+  {
+    "scenario_id": "EVAL-26",
+    "category": "MISSING_INFO",
+    "name": "Missing Baseline Left Ventricular Ejection Fraction (LVEF)",
+    "description": "Missing Baseline Left Ventricular Ejection Fraction (LVEF)",
+    "patient": {
+      "patient_id": "SYN_PAT_26",
+      "age": 62,
+      "gender": "MALE",
+      "stage": "Stage IV",
+      "conditions": [
+        "Non-Small Cell Lung Cancer"
+      ],
+      "biomarkers": {
+        "EGFR": "Exon 19 del"
+      },
+      "ecog": 1,
+      "labs": {
+        "platelets": 190.0,
+        "creatinine": 1.0
+      },
+      "prior_therapies": [],
+      "clinical_summary": "62-year-old male with EGFR Exon 19 del metastatic NSCLC. History of hypertension. Baseline echocardiogram / LVEF evaluation not performed. Asymptomatic."
+    },
+    "trial": {
+      "trial_id": "NCT02484404",
+      "title": "Study of Osimertinib vs Standard EGFR-TKI in EGFR-Mutated Stage IV NSCLC",
+      "phase": "Phase 3",
+      "indication": "Non-Small Cell Lung Cancer EGFR"
+    },
+    "expected_retrieval_relevance": true,
+    "expected_retrieval_rank": 1,
+    "expected_criteria_evaluations": {
+      "C_LVEF": "UNKNOWN"
+    },
+    "expected_verdict": "NEEDS_REVIEW",
+    "rationale": "Ground-truth clinical adjudication for Missing Baseline Left Ventricular Ejection Fraction (LVEF)"
+  },
+  {
+    "scenario_id": "EVAL-27",
+    "category": "CONFLICTING_INFO",
+    "name": "Discordant HER2 Expression (IHC 2+ Equivocal, FISH Pending)",
+    "description": "Discordant HER2 Expression (IHC 2+ Equivocal, FISH Pending)",
+    "patient": {
+      "patient_id": "SYN_PAT_27",
+      "age": 51,
+      "gender": "FEMALE",
+      "stage": "Stage IV",
+      "conditions": [
+        "Metastatic Breast Cancer"
+      ],
+      "biomarkers": {
+        "HER2_IHC": "2+ (Equivocal)",
+        "HER2_FISH": "Pending reflex testing",
+        "ER": "0%",
+        "PR": "0%"
+      },
+      "ecog": 1,
+      "labs": {
+        "platelets": 210.0,
+        "creatinine": 0.8
+      },
+      "prior_therapies": [],
+      "clinical_summary": "51-year-old female with metastatic breast carcinoma. Immunohistochemistry shows HER2 2+ equivocal staining. Reflex dual-probe FISH ratio pending confirmation."
+    },
+    "trial": {
+      "trial_id": "NCT03732820",
+      "title": "Study of Sacituzumab Govitecan in Patients with Metastatic Triple-Negative Breast Cancer",
+      "phase": "Phase 3",
+      "indication": "Triple-Negative Breast Cancer"
+    },
+    "expected_retrieval_relevance": true,
+    "expected_retrieval_rank": 1,
+    "expected_criteria_evaluations": {
+      "C_HER2_STATUS": "UNKNOWN"
+    },
+    "expected_verdict": "NEEDS_REVIEW",
+    "rationale": "Ground-truth clinical adjudication for Discordant HER2 Expression (IHC 2+ Equivocal, FISH Pending)"
+  },
+  {
+    "scenario_id": "EVAL-28",
+    "category": "AMBIGUOUS_CRITERIA",
+    "name": "Investigator Adjudicated Adequate Organ Function with Borderline GFR",
+    "description": "Investigator Adjudicated Adequate Organ Function with Borderline GFR",
+    "patient": {
+      "patient_id": "SYN_PAT_28",
+      "age": 73,
+      "gender": "MALE",
+      "stage": "Stage IV",
+      "conditions": [
+        "Non-Small Cell Lung Cancer"
+      ],
+      "biomarkers": {
+        "EGFR": "L858R"
+      },
+      "ecog": 1,
+      "labs": {
+        "creatinine": 1.45,
+        "eGFR": 49.0,
+        "platelets": 175.0
+      },
+      "prior_therapies": [],
+      "clinical_summary": "73-year-old male with Stage IV NSCLC, EGFR L858R. Calculated Cockcroft-Gault CrCl is 49.5 mL/min (borderline against protocol threshold of >= 50 mL/min). Requires clinical investigator sign-off."
+    },
+    "trial": {
+      "trial_id": "NCT02484404",
+      "title": "Study of Osimertinib vs Standard EGFR-TKI in EGFR-Mutated Stage IV NSCLC",
+      "phase": "Phase 3",
+      "indication": "Non-Small Cell Lung Cancer EGFR"
+    },
+    "expected_retrieval_relevance": true,
+    "expected_retrieval_rank": 1,
+    "expected_criteria_evaluations": {
+      "C_RENAL_BORDERLINE": "UNKNOWN"
+    },
+    "expected_verdict": "NEEDS_REVIEW",
+    "rationale": "Ground-truth clinical adjudication for Investigator Adjudicated Adequate Organ Function with Borderline GFR"
+  },
+  {
+    "scenario_id": "EVAL-29",
+    "category": "MISSING_INFO",
+    "name": "Missing Hepatitis B/C Viral Serology in Immunotherapy Trial",
+    "description": "Missing Hepatitis B/C Viral Serology in Immunotherapy Trial",
+    "patient": {
+      "patient_id": "SYN_PAT_29",
+      "age": 61,
+      "gender": "FEMALE",
+      "stage": "Stage IV",
+      "conditions": [
+        "Advanced Cutaneous Melanoma"
+      ],
+      "biomarkers": {
+        "PD-L1": "TPS 65%",
+        "BRAF": "Wild-type"
+      },
+      "ecog": 0,
+      "labs": {
+        "platelets": 220.0,
+        "creatinine": 0.8
+      },
+      "prior_therapies": [],
+      "clinical_summary": "61-year-old female with untreated metastatic melanoma, PD-L1 65%. Viral serologies (HBsAg, anti-HCV, HIV) were not sent at initial staging workup. Asymptomatic."
+    },
+    "trial": {
+      "trial_id": "NCT02365142",
+      "title": "Pembrolizumab Monotherapy for First-Line Treatment of Advanced Melanoma with High PD-L1 Expression",
+      "phase": "Phase 3",
+      "indication": "Advanced Melanoma PD-L1"
+    },
+    "expected_retrieval_relevance": true,
+    "expected_retrieval_rank": 1,
+    "expected_criteria_evaluations": {
+      "C_VIRAL_SEROLOGY": "UNKNOWN"
+    },
+    "expected_verdict": "NEEDS_REVIEW",
+    "rationale": "Ground-truth clinical adjudication for Missing Hepatitis B/C Viral Serology in Immunotherapy Trial"
+  },
+  {
+    "scenario_id": "EVAL-30",
+    "category": "AMBIGUOUS_CRITERIA",
+    "name": "Borderline Thrombocytopenia (Platelets 99,000 vs 100,000 Cutoff)",
+    "description": "Borderline Thrombocytopenia (Platelets 99,000 vs 100,000 Cutoff)",
+    "patient": {
+      "patient_id": "SYN_PAT_30",
+      "age": 64,
+      "gender": "MALE",
+      "stage": "Stage IV",
+      "conditions": [
+        "Non-Small Cell Lung Cancer"
+      ],
+      "biomarkers": {
+        "EGFR": "Exon 19 del"
+      },
+      "ecog": 1,
+      "labs": {
+        "platelets": 99.0,
+        "anc": 2400.0,
+        "creatinine": 0.9
+      },
+      "prior_therapies": [],
+      "clinical_summary": "64-year-old male with metastatic NSCLC EGFR Exon 19 deletion. Complete blood count shows platelets 99k/uL (borderline against protocol threshold >= 100k/uL). Clinically stable, repeat CBC ordered."
+    },
+    "trial": {
+      "trial_id": "NCT02484404",
+      "title": "Study of Osimertinib vs Standard EGFR-TKI in EGFR-Mutated Stage IV NSCLC",
+      "phase": "Phase 3",
+      "indication": "Non-Small Cell Lung Cancer EGFR"
+    },
+    "expected_retrieval_relevance": true,
+    "expected_retrieval_rank": 1,
+    "expected_criteria_evaluations": {
+      "C05": "UNKNOWN"
+    },
+    "expected_verdict": "NEEDS_REVIEW",
+    "rationale": "Ground-truth clinical adjudication for Borderline Thrombocytopenia (Platelets 99,000 vs 100,000 Cutoff)"
+  }
+]

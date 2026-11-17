@@ -1,0 +1,131 @@
+{
+  "version": "1.0.0",
+  "generated_at": "2026-11-17T08:00:00Z",
+  "total_scenarios": 12,
+  "scenarios": {
+    "EVAL-01": {
+      "gold_retrieval_ids": ["NCT02484404"],
+      "gold_eligibility": "ELIGIBLE",
+      "gold_criteria_statuses": {
+        "C01": "MET",
+        "C02": "MET",
+        "C03": "MET",
+        "C04": "MET",
+        "C05": "MET",
+        "C06": "NOT_MET",
+        "C07": "NOT_MET"
+      },
+      "gold_citations": ["clinical_summary:age 58", "clinical_summary:EGFR exon 19 deletion", "clinical_summary:Platelets 210k"],
+      "hard_exclusion_triggered": false
+    },
+    "EVAL-02": {
+      "gold_retrieval_ids": ["NCT02484404"],
+      "gold_eligibility": "INELIGIBLE",
+      "gold_criteria_statuses": {
+        "C01": "MET",
+        "C02": "MET",
+        "C03": "MET",
+        "C06": "MET"
+      },
+      "gold_citations": ["prior_therapies:Osimertinib (80mg daily for 14 months)"],
+      "hard_exclusion_triggered": true
+    },
+    "EVAL-03": {
+      "gold_retrieval_ids": ["NCT02484404"],
+      "gold_eligibility": "NEEDS_REVIEW",
+      "gold_criteria_statuses": {
+        "C01": "MET",
+        "C03": "MET",
+        "C07": "UNKNOWN"
+      },
+      "gold_citations": ["clinical_summary:No brain imaging performed to date"],
+      "hard_exclusion_triggered": false
+    },
+    "EVAL-04": {
+      "gold_retrieval_ids": ["NCT02484404"],
+      "gold_eligibility": "NEEDS_REVIEW",
+      "gold_criteria_statuses": {
+        "C03": "UNKNOWN"
+      },
+      "gold_citations": ["clinical_summary:Initial tissue NGS EGFR Exon 19 del vs repeat ctDNA EGFR negative"],
+      "hard_exclusion_triggered": false
+    },
+    "EVAL-05": {
+      "gold_retrieval_ids": ["NCT02484404"],
+      "gold_eligibility": "INELIGIBLE",
+      "gold_criteria_statuses": {
+        "C04": "NOT_MET",
+        "C08": "MET",
+        "C09": "MET"
+      },
+      "gold_citations": ["labs:creatinine 2.8", "conditions:Congestive Heart Failure NYHA Class III", "ecog:2"],
+      "hard_exclusion_triggered": true
+    },
+    "EVAL-06": {
+      "gold_retrieval_ids": ["NCT02484404"],
+      "gold_eligibility": "INELIGIBLE",
+      "gold_criteria_statuses": {
+        "C01": "NOT_MET"
+      },
+      "gold_citations": ["patient:age 16"],
+      "hard_exclusion_triggered": false
+    },
+    "EVAL-07": {
+      "gold_retrieval_ids": ["NCT03732820"],
+      "gold_eligibility": "INELIGIBLE",
+      "gold_criteria_statuses": {
+        "C10": "NOT_MET",
+        "C11": "MET"
+      },
+      "gold_citations": ["patient:gender MALE"],
+      "hard_exclusion_triggered": false
+    },
+    "EVAL-08": {
+      "gold_retrieval_ids": ["NCT04303780"],
+      "gold_eligibility": "ELIGIBLE",
+      "gold_criteria_statuses": {
+        "C12": "MET",
+        "C13": "MET"
+      },
+      "gold_citations": ["biomarkers:KRAS G12C", "prior_therapies:Pembrolizumab + Carboplatin"],
+      "hard_exclusion_triggered": false
+    },
+    "EVAL-09": {
+      "gold_retrieval_ids": ["NCT02484404"],
+      "gold_eligibility": "INELIGIBLE",
+      "gold_criteria_statuses": {
+        "C14": "MET"
+      },
+      "gold_citations": ["prior_therapies:last cycle administered 10 days ago"],
+      "hard_exclusion_triggered": true
+    },
+    "EVAL-10": {
+      "gold_retrieval_ids": ["NCT02484404"],
+      "gold_eligibility": "INELIGIBLE",
+      "gold_criteria_statuses": {
+        "C15": "NOT_MET"
+      },
+      "gold_citations": ["labs:platelets 82.0k"],
+      "hard_exclusion_triggered": false
+    },
+    "EVAL-11": {
+      "gold_retrieval_ids": ["NCT02484404"],
+      "gold_eligibility": "ELIGIBLE",
+      "gold_criteria_statuses": {
+        "C02": "MET",
+        "C03": "MET"
+      },
+      "gold_citations": ["clinical_summary:hist-conf Stg 1V N-S-C-L-C", "clinical_summary:E-G-F-R mut (+) exon19del"],
+      "hard_exclusion_triggered": false
+    },
+    "EVAL-12": {
+      "gold_retrieval_ids": ["NCT02484404"],
+      "gold_eligibility": "NEEDS_REVIEW",
+      "gold_criteria_statuses": {
+        "C16": "UNKNOWN"
+      },
+      "gold_citations": ["labs:qtc_interval_ms 462.0"],
+      "hard_exclusion_triggered": false
+    }
+  }
+}

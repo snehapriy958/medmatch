@@ -1,0 +1,5 @@
+ALTER TABLE audit_logs
+ADD COLUMN IF NOT EXISTS resource_type VARCHAR(100);
+
+ALTER TABLE audit_logs
+ADD COLUMN IF NOT EXISTS resource_id UUID;

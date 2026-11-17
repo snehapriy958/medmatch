@@ -1,0 +1,294 @@
+{
+  "model_version": "improved_deterministic_clinical_reasoner_v2",
+  "retrieval": {
+    "recall_at_5": 1.0,
+    "precision_at_5": 0.2,
+    "mrr": 0.9167,
+    "ndcg_at_5": 0.9385
+  },
+  "eligibility": {
+    "accuracy": 1.0,
+    "macro_precision": 1.0,
+    "macro_recall": 1.0,
+    "macro_f1": 1.0,
+    "false_positive_eligibility_rate": 0.0,
+    "false_negative_eligibility_rate": 0.0,
+    "unknown_classification_rate": 0.25,
+    "per_class": {
+      "ELIGIBLE": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 3
+      },
+      "INELIGIBLE": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 6
+      },
+      "NEEDS_REVIEW": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "support": 3
+      }
+    },
+    "confusion_matrix": {
+      "ELIGIBLE": {
+        "ELIGIBLE": 3,
+        "INELIGIBLE": 0,
+        "NEEDS_REVIEW": 0
+      },
+      "INELIGIBLE": {
+        "ELIGIBLE": 0,
+        "INELIGIBLE": 6,
+        "NEEDS_REVIEW": 0
+      },
+      "NEEDS_REVIEW": {
+        "ELIGIBLE": 0,
+        "INELIGIBLE": 0,
+        "NEEDS_REVIEW": 3
+      }
+    }
+  },
+  "explanation": {
+    "evidence_citation_coverage": 0.2361,
+    "unsupported_claim_rate": 0.0,
+    "contradictory_explanation_rate": 0.0,
+    "missing_criterion_detection_rate": 1.0
+  },
+  "reliability": {
+    "invalid_json_rate": 0.0,
+    "model_timeout_rate": 0.0,
+    "empty_response_rate": 0.0,
+    "retry_success_rate": 1.0
+  },
+  "predictions": [
+    {
+      "scenario_id": "EVAL-01",
+      "predicted_verdict": "ELIGIBLE",
+      "gold_verdict": "ELIGIBLE",
+      "criteria_evaluations": {
+        "C01": "MET",
+        "C02": "MET",
+        "C03": "MET",
+        "C04": "MET",
+        "C05": "MET",
+        "C06": "NOT_MET",
+        "C07": "NOT_MET"
+      },
+      "citations": [
+        "patient:age 58",
+        "conditions:['Non-Small Cell Lung Cancer', 'Adenocarcinoma'], stage:Stage IV",
+        "biomarkers:EGFR Exon 19 deletion",
+        "ecog:1",
+        "labs:platelets 210.0k",
+        "clinical_summary:Brain MRI negative"
+      ],
+      "explanations": [
+        "Patient age 58 satisfies age requirement.",
+        "Histologically confirmed metastatic target disease.",
+        "Documented activating EGFR mutation (Exon 19 deletion).",
+        "ECOG performance status 1 satisfies protocol threshold.",
+        "Platelet count 210.0k meets threshold 100.0k.",
+        "No documented exposure to 3rd generation EGFR-TKI.",
+        "No evidence of active CNS metastases."
+      ],
+      "hard_exclusion_enforced": false
+    },
+    {
+      "scenario_id": "EVAL-02",
+      "predicted_verdict": "INELIGIBLE",
+      "gold_verdict": "INELIGIBLE",
+      "criteria_evaluations": {
+        "C01": "MET",
+        "C02": "MET",
+        "C03": "UNKNOWN",
+        "C06": "MET"
+      },
+      "citations": [
+        "patient:age 64",
+        "conditions:['Non-Small Cell Lung Cancer'], stage:Stage IV",
+        "prior_therapies:Osimertinib (80mg daily for 14 months, progressed 2026-08)"
+      ],
+      "explanations": [
+        "Patient age 64 satisfies age requirement.",
+        "Histologically confirmed metastatic target disease.",
+        "EGFR mutation status is not documented.",
+        "Patient received prior 3rd generation EGFR-TKI (Osimertinib)."
+      ],
+      "hard_exclusion_enforced": true
+    },
+    {
+      "scenario_id": "EVAL-03",
+      "predicted_verdict": "NEEDS_REVIEW",
+      "gold_verdict": "NEEDS_REVIEW",
+      "criteria_evaluations": {
+        "C01": "MET",
+        "C03": "MET",
+        "C07": "UNKNOWN"
+      },
+      "citations": [
+        "patient:age 61",
+        "biomarkers:EGFR L858R",
+        "clinical_summary:No brain imaging performed"
+      ],
+      "explanations": [
+        "Patient age 61 satisfies age requirement.",
+        "Documented activating EGFR mutation (L858R).",
+        "Brain imaging has not been performed; CNS status unknown."
+      ],
+      "hard_exclusion_enforced": false
+    },
+    {
+      "scenario_id": "EVAL-04",
+      "predicted_verdict": "NEEDS_REVIEW",
+      "gold_verdict": "NEEDS_REVIEW",
+      "criteria_evaluations": {
+        "C03": "UNKNOWN"
+      },
+      "citations": [
+        "biomarkers:tissue(Exon 19 del) vs ctDNA(Wild-type)"
+      ],
+      "explanations": [
+        "Conflicting molecular diagnostic evidence between tissue and plasma assays."
+      ],
+      "hard_exclusion_enforced": false
+    },
+    {
+      "scenario_id": "EVAL-05",
+      "predicted_verdict": "INELIGIBLE",
+      "gold_verdict": "INELIGIBLE",
+      "criteria_evaluations": {
+        "C04": "NOT_MET",
+        "C08": "MET",
+        "C09": "MET"
+      },
+      "citations": [
+        "ecog:2",
+        "labs:creatinine 2.8 mg/dL",
+        "conditions:NYHA Class III Heart Failure"
+      ],
+      "explanations": [
+        "ECOG performance status 2 exceeds protocol threshold (1).",
+        "Serum creatinine 2.8 mg/dL exceeds normal limit.",
+        "Severe heart failure violates safety exclusion."
+      ],
+      "hard_exclusion_enforced": true
+    },
+    {
+      "scenario_id": "EVAL-06",
+      "predicted_verdict": "INELIGIBLE",
+      "gold_verdict": "INELIGIBLE",
+      "criteria_evaluations": {
+        "C01": "NOT_MET"
+      },
+      "citations": [
+        "patient:age 16"
+      ],
+      "explanations": [
+        "Patient age 16 is below minimum 18."
+      ],
+      "hard_exclusion_enforced": false
+    },
+    {
+      "scenario_id": "EVAL-07",
+      "predicted_verdict": "INELIGIBLE",
+      "gold_verdict": "INELIGIBLE",
+      "criteria_evaluations": {
+        "C10": "NOT_MET",
+        "C11": "MET"
+      },
+      "citations": [
+        "patient:gender MALE",
+        "conditions:['Triple-Negative Breast Cancer'], stage:Stage IV"
+      ],
+      "explanations": [
+        "Patient gender MALE does not match required FEMALE.",
+        "Histologically confirmed metastatic target disease."
+      ],
+      "hard_exclusion_enforced": false
+    },
+    {
+      "scenario_id": "EVAL-08",
+      "predicted_verdict": "ELIGIBLE",
+      "gold_verdict": "ELIGIBLE",
+      "criteria_evaluations": {
+        "C12": "MET",
+        "C13": "MET"
+      },
+      "citations": [
+        "biomarkers:KRAS G12C",
+        "prior_therapies:['Pembrolizumab + Carboplatin']"
+      ],
+      "explanations": [
+        "Documented presence of KRAS p.G12C mutation."
+      ],
+      "hard_exclusion_enforced": false
+    },
+    {
+      "scenario_id": "EVAL-09",
+      "predicted_verdict": "INELIGIBLE",
+      "gold_verdict": "INELIGIBLE",
+      "criteria_evaluations": {
+        "C14": "MET"
+      },
+      "citations": [
+        "prior_therapies:administered 10 days ago"
+      ],
+      "explanations": [
+        "Chemotherapy administered 10 days ago violates mandatory 28-day washout."
+      ],
+      "hard_exclusion_enforced": true
+    },
+    {
+      "scenario_id": "EVAL-10",
+      "predicted_verdict": "INELIGIBLE",
+      "gold_verdict": "INELIGIBLE",
+      "criteria_evaluations": {
+        "C15": "NOT_MET"
+      },
+      "citations": [
+        "labs:ANC=2100.0, PLT=82.0, Hb=10.5"
+      ],
+      "explanations": [
+        "Bone marrow reserve inadequate: ANC=2100.0, PLT=82.0, Hb=10.5."
+      ],
+      "hard_exclusion_enforced": false
+    },
+    {
+      "scenario_id": "EVAL-11",
+      "predicted_verdict": "ELIGIBLE",
+      "gold_verdict": "ELIGIBLE",
+      "criteria_evaluations": {
+        "C02": "MET",
+        "C03": "MET"
+      },
+      "citations": [
+        "conditions:['Non-Small Cell Lung Cancer'], stage:Stage IV",
+        "biomarkers:EGFR Exon 19 del"
+      ],
+      "explanations": [
+        "Histologically confirmed metastatic target disease.",
+        "Documented activating EGFR mutation (Exon 19 del)."
+      ],
+      "hard_exclusion_enforced": false
+    },
+    {
+      "scenario_id": "EVAL-12",
+      "predicted_verdict": "NEEDS_REVIEW",
+      "gold_verdict": "NEEDS_REVIEW",
+      "criteria_evaluations": {
+        "C16": "UNKNOWN"
+      },
+      "citations": [
+        "labs:qtc 462.0 ms"
+      ],
+      "explanations": [
+        "Resting QTc 462 ms is borderline; requires investigator clinical adjudication."
+      ],
+      "hard_exclusion_enforced": false
+    }
+  ]
+}

@@ -34,3 +34,4 @@ huggingface-hub==1.27.0
 
 # Database migrations
 alembic
+psycopg[binary]

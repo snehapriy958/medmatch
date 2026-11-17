@@ -232,18 +232,13 @@ class LLMService:
                     temperature=0.0,
                     response_mime_type="application/json",
                     http_options=HttpOptions(
+                        api_version="v1beta",
                         timeout=settings.LLM_TIMEOUT_SECONDS * 1000,
                     ),
                 ),
             )
 
-        except (
-            TimeoutError,
-            httpx.HTTPError,
-            APIError,
-            ClientError,
-            ServerError,
-        ) as exc:
+        except Exception as exc:
             classified_error = self._classify_llm_error(
                 exc
             )

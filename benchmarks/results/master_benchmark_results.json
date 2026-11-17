@@ -1,0 +1,142 @@
+{
+  "benchmark_timestamp": "2026-11-17T08:29:41Z",
+  "embedding_benchmark": {
+    "single_inference": {
+      "p50": 14.375,
+      "p90": 18.688,
+      "p95": 21.637,
+      "p99": 33.051,
+      "mean": 15.784,
+      "min": 11.629,
+      "max": 80.975
+    },
+    "single_throughput_texts_per_sec": 63.36,
+    "batches": {
+      "batch_4": {
+        "batch_size": 4,
+        "latency_ms": {
+          "p50": 19.166,
+          "p90": 21.062,
+          "p95": 21.446,
+          "p99": 21.446,
+          "mean": 19.212,
+          "min": 17.081,
+          "max": 21.446
+        },
+        "throughput_texts_per_sec": 208.2
+      },
+      "batch_8": {
+        "batch_size": 8,
+        "latency_ms": {
+          "p50": 28.0,
+          "p90": 29.653,
+          "p95": 31.284,
+          "p99": 31.284,
+          "mean": 27.961,
+          "min": 26.038,
+          "max": 31.284
+        },
+        "throughput_texts_per_sec": 286.11
+      },
+      "batch_16": {
+        "batch_size": 16,
+        "latency_ms": {
+          "p50": 49.976,
+          "p90": 53.387,
+          "p95": 54.625,
+          "p99": 54.625,
+          "mean": 50.664,
+          "min": 47.968,
+          "max": 54.625
+        },
+        "throughput_texts_per_sec": 315.81
+      },
+      "batch_32": {
+        "batch_size": 32,
+        "latency_ms": {
+          "p50": 100.059,
+          "p90": 126.986,
+          "p95": 139.311,
+          "p99": 139.311,
+          "mean": 105.003,
+          "min": 89.17,
+          "max": 139.311
+        },
+        "throughput_texts_per_sec": 304.75
+      }
+    }
+  },
+  "vector_search_benchmark": {
+    "corpus_size": 2000,
+    "search_latencies_ms": {
+      "p50": 104.687,
+      "p90": 113.853,
+      "p95": 117.396,
+      "p99": 121.551,
+      "mean": 106.212,
+      "min": 100.176,
+      "max": 121.551
+    },
+    "queries_per_second": 9.42
+  },
+  "clinical_reasoner_benchmark": {
+    "batch_eval_latencies_ms": {
+      "p50": 0.028,
+      "p90": 0.031,
+      "p95": 0.038,
+      "p99": 0.091,
+      "mean": 0.03,
+      "min": 0.026,
+      "max": 0.091
+    },
+    "scenarios_evaluated_per_run": 12,
+    "evaluations_per_second": 400000.0
+  },
+  "jwt_cryptography_benchmark": {
+    "signing_rs256": {
+      "latencies_ms": {
+        "p50": 35.286,
+        "p90": 37.629,
+        "p95": 38.864,
+        "p99": 42.46,
+        "mean": 35.737,
+        "min": 33.605,
+        "max": 43.438
+      },
+      "tokens_per_second": 27.98
+    },
+    "verification_rs256": {
+      "latencies_ms": {
+        "p50": 0.073,
+        "p90": 0.1,
+        "p95": 0.112,
+        "p99": 0.156,
+        "mean": 0.08,
+        "min": 0.064,
+        "max": 0.266
+      },
+      "verifications_per_second": 12500.0
+    }
+  },
+  "cache_impact_benchmark": {
+    "cache_miss_latency_ms": {
+      "p50": 13.219,
+      "p90": 16.268,
+      "p95": 26.959,
+      "p99": 42.359,
+      "mean": 15.013,
+      "min": 10.931,
+      "max": 42.359
+    },
+    "cache_hit_latency_ms": {
+      "p50": 0.188,
+      "p90": 0.234,
+      "p95": 0.262,
+      "p99": 0.428,
+      "mean": 0.2,
+      "min": 0.118,
+      "max": 10.531
+    },
+    "speedup_factor": "75.06x"
+  }
+}

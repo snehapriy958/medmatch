@@ -2,10 +2,27 @@ import pytest
 from app.config.settings import Settings
 
 
+def test_redis_config_local_development():
+    """Verify local development Redis URL configuration."""
+    settings = Settings(
+        REDIS_HOST="localhost",
+        REDIS_PORT=6379,
+        REDIS_URL="redis://localhost:6379/0",
+        REDIS_PASSWORD=None,
+        CELERY_BROKER_URL="redis://localhost:6379/0",
+        CELERY_RESULT_BACKEND="redis://localhost:6379/1",
+    )
+    assert settings.REDIS_URL == "redis://localhost:6379/0"
+    assert settings.CELERY_BROKER_URL == "redis://localhost:6379/0"
+    assert settings.CELERY_RESULT_BACKEND == "redis://localhost:6379/1"
+
+
 def test_redis_config_without_password():
+    """Verify Docker Compose Redis URL configuration without password."""
     settings = Settings(
         REDIS_HOST="redis",
         REDIS_PORT=6379,
+        REDIS_URL="redis://redis:6379/0",
         REDIS_PASSWORD=None,
         CELERY_BROKER_URL="redis://redis:6379/0",
         CELERY_RESULT_BACKEND="redis://redis:6379/1",
@@ -19,6 +36,7 @@ def test_redis_config_with_password():
     settings = Settings(
         REDIS_HOST="redis",
         REDIS_PORT=6379,
+        REDIS_URL="redis://redis:6379/0",
         REDIS_PASSWORD="secret_password_123!",
         CELERY_BROKER_URL="redis://redis:6379/0",
         CELERY_RESULT_BACKEND="redis://redis:6379/1",
@@ -78,3 +96,30 @@ def test_redis_config_production_with_valid_password_succeeds():
     assert settings.REDIS_PASSWORD == "strong_prod_password_#42"
     assert ":strong_prod_password_%2342@" in settings.REDIS_URL
     assert ":strong_prod_password_%2342@" in settings.CELERY_BROKER_URL
+
+
+def test_redis_config_isolation_from_developer_env(monkeypatch):
+    """
+    Regression test: prove that developer environment settings (.env or os.environ)
+    cannot contaminate isolated configuration tests when isolated via explicit kwargs or _env_file=None.
+    """
+    # Simulate developer .env or dirty shell with custom localhost override
+    monkeypatch.setenv("REDIS_URL", "redis://developer-custom-host:6379/9")
+
+    # 1. Explicit keyword argument takes precedence over environment variable
+    isolated_settings = Settings(
+        REDIS_HOST="redis",
+        REDIS_PORT=6379,
+        REDIS_URL="redis://redis:6379/0",
+    )
+    assert isolated_settings.REDIS_URL == "redis://redis:6379/0"
+
+    # 2. When environment variable is cleared and _env_file=None, class default is preserved
+    monkeypatch.delenv("REDIS_URL", raising=False)
+    clean_settings = Settings(
+        _env_file=None,
+        DATABASE_URL="postgresql+psycopg2://postgres:postgres@localhost:5434/medmatch",
+        REDIS_HOST="redis",
+        REDIS_PORT=6379,
+    )
+    assert clean_settings.REDIS_URL == "redis://redis:6379/0"

@@ -1,0 +1,447 @@
+{
+  "version": "2.0.0",
+  "total_scenarios": 30,
+  "scenarios": {
+    "EVAL-01": {
+      "gold_retrieval_ids": [
+        "NCT02484404"
+      ],
+      "gold_eligibility": "ELIGIBLE",
+      "gold_criteria_statuses": {
+        "C01": "MET",
+        "C02": "MET",
+        "C03": "MET",
+        "C04": "MET",
+        "C05": "MET",
+        "C06": "NOT_MET",
+        "C07": "NOT_MET"
+      },
+      "gold_citations": [
+        "clinical_summary:age 58",
+        "clinical_summary:EGFR exon 19 deletion",
+        "clinical_summary:Platelets 210k"
+      ],
+      "hard_exclusion_triggered": false
+    },
+    "EVAL-02": {
+      "gold_retrieval_ids": [
+        "NCT02484404"
+      ],
+      "gold_eligibility": "INELIGIBLE",
+      "gold_criteria_statuses": {
+        "C01": "MET",
+        "C02": "MET",
+        "C03": "MET",
+        "C06": "MET"
+      },
+      "gold_citations": [
+        "prior_therapies:Osimertinib (80mg daily for 14 months)"
+      ],
+      "hard_exclusion_triggered": true
+    },
+    "EVAL-03": {
+      "gold_retrieval_ids": [
+        "NCT02484404"
+      ],
+      "gold_eligibility": "NEEDS_REVIEW",
+      "gold_criteria_statuses": {
+        "C01": "MET",
+        "C03": "MET",
+        "C07": "UNKNOWN"
+      },
+      "gold_citations": [
+        "clinical_summary:No brain imaging performed to date"
+      ],
+      "hard_exclusion_triggered": false
+    },
+    "EVAL-04": {
+      "gold_retrieval_ids": [
+        "NCT02484404"
+      ],
+      "gold_eligibility": "NEEDS_REVIEW",
+      "gold_criteria_statuses": {
+        "C03": "UNKNOWN"
+      },
+      "gold_citations": [
+        "clinical_summary:Initial tissue NGS EGFR Exon 19 del vs repeat ctDNA EGFR negative"
+      ],
+      "hard_exclusion_triggered": false
+    },
+    "EVAL-05": {
+      "gold_retrieval_ids": [
+        "NCT02484404"
+      ],
+      "gold_eligibility": "INELIGIBLE",
+      "gold_criteria_statuses": {
+        "C04": "NOT_MET",
+        "C08": "MET",
+        "C09": "MET"
+      },
+      "gold_citations": [
+        "labs:creatinine 2.8",
+        "conditions:Congestive Heart Failure NYHA Class III",
+        "ecog:2"
+      ],
+      "hard_exclusion_triggered": true
+    },
+    "EVAL-06": {
+      "gold_retrieval_ids": [
+        "NCT02484404"
+      ],
+      "gold_eligibility": "INELIGIBLE",
+      "gold_criteria_statuses": {
+        "C01": "NOT_MET"
+      },
+      "gold_citations": [
+        "patient:age 16"
+      ],
+      "hard_exclusion_triggered": false
+    },
+    "EVAL-07": {
+      "gold_retrieval_ids": [
+        "NCT03732820"
+      ],
+      "gold_eligibility": "INELIGIBLE",
+      "gold_criteria_statuses": {
+        "C10": "NOT_MET",
+        "C11": "MET"
+      },
+      "gold_citations": [
+        "patient:gender MALE"
+      ],
+      "hard_exclusion_triggered": false
+    },
+    "EVAL-08": {
+      "gold_retrieval_ids": [
+        "NCT04303780"
+      ],
+      "gold_eligibility": "ELIGIBLE",
+      "gold_criteria_statuses": {
+        "C12": "MET",
+        "C13": "MET"
+      },
+      "gold_citations": [
+        "biomarkers:KRAS G12C",
+        "prior_therapies:Pembrolizumab + Carboplatin"
+      ],
+      "hard_exclusion_triggered": false
+    },
+    "EVAL-09": {
+      "gold_retrieval_ids": [
+        "NCT02484404"
+      ],
+      "gold_eligibility": "INELIGIBLE",
+      "gold_criteria_statuses": {
+        "C14": "MET"
+      },
+      "gold_citations": [
+        "prior_therapies:last cycle administered 10 days ago"
+      ],
+      "hard_exclusion_triggered": true
+    },
+    "EVAL-10": {
+      "gold_retrieval_ids": [
+        "NCT02484404"
+      ],
+      "gold_eligibility": "INELIGIBLE",
+      "gold_criteria_statuses": {
+        "C15": "NOT_MET"
+      },
+      "gold_citations": [
+        "labs:platelets 82.0k"
+      ],
+      "hard_exclusion_triggered": false
+    },
+    "EVAL-11": {
+      "gold_retrieval_ids": [
+        "NCT02484404"
+      ],
+      "gold_eligibility": "ELIGIBLE",
+      "gold_criteria_statuses": {
+        "C02": "MET",
+        "C03": "MET"
+      },
+      "gold_citations": [
+        "clinical_summary:hist-conf Stg 1V N-S-C-L-C",
+        "clinical_summary:E-G-F-R mut (+) exon19del"
+      ],
+      "hard_exclusion_triggered": false
+    },
+    "EVAL-12": {
+      "gold_retrieval_ids": [
+        "NCT02484404"
+      ],
+      "gold_eligibility": "NEEDS_REVIEW",
+      "gold_criteria_statuses": {
+        "C16": "UNKNOWN"
+      },
+      "gold_citations": [
+        "labs:qtc_interval_ms 462.0"
+      ],
+      "hard_exclusion_triggered": false
+    },
+    "EVAL-13": {
+      "gold_retrieval_ids": [
+        "NCT03041311"
+      ],
+      "gold_eligibility": "ELIGIBLE",
+      "gold_criteria_statuses": {
+        "C_ALK": "MET",
+        "C_AGE": "MET",
+        "C_ECOG": "MET",
+        "C_PRIOR": "NOT_MET"
+      },
+      "gold_citations": [
+        "clinical_summary:ALK rearrangement (EML4-ALK fusion)",
+        "clinical_summary:ECOG 0",
+        "clinical_summary:Brain MRI confirms no CNS metastases"
+      ],
+      "hard_exclusion_triggered": false
+    },
+    "EVAL-14": {
+      "gold_retrieval_ids": [
+        "NCT02576574"
+      ],
+      "gold_eligibility": "ELIGIBLE",
+      "gold_criteria_statuses": {
+        "C_BRCA": "MET",
+        "C_PRIOR_AR": "MET",
+        "C_ECOG": "MET"
+      },
+      "gold_citations": [
+        "clinical_summary:germline BRCA2 frameshift mutation",
+        "clinical_summary:progression following prior Enzalutamide"
+      ],
+      "hard_exclusion_triggered": false
+    },
+    "EVAL-15": {
+      "gold_retrieval_ids": [
+        "NCT02365142"
+      ],
+      "gold_eligibility": "ELIGIBLE",
+      "gold_criteria_statuses": {
+        "C_MEL": "MET",
+        "C_PDL1": "MET",
+        "C_PRIOR": "NOT_MET"
+      },
+      "gold_citations": [
+        "clinical_summary:cutaneous melanoma",
+        "clinical_summary:PD-L1 expression 75%"
+      ],
+      "hard_exclusion_triggered": false
+    },
+    "EVAL-16": {
+      "gold_retrieval_ids": [
+        "NCT02484404"
+      ],
+      "gold_eligibility": "ELIGIBLE",
+      "gold_criteria_statuses": {
+        "C01": "MET",
+        "C02": "MET",
+        "C03": "MET",
+        "C04": "MET",
+        "C06": "NOT_MET"
+      },
+      "gold_citations": [
+        "clinical_summary:EGFR L858R positive",
+        "clinical_summary:asymptomatic, not requiring corticosteroids"
+      ],
+      "hard_exclusion_triggered": false
+    },
+    "EVAL-17": {
+      "gold_retrieval_ids": [
+        "NCT03732820"
+      ],
+      "gold_eligibility": "ELIGIBLE",
+      "gold_criteria_statuses": {
+        "C_TNBC": "MET",
+        "C_FEMALE": "MET",
+        "C_PRIOR_LINES": "MET"
+      },
+      "gold_citations": [
+        "clinical_summary:triple-negative breast cancer",
+        "clinical_summary:Received 2 prior systemic chemotherapy regimens"
+      ],
+      "hard_exclusion_triggered": false
+    },
+    "EVAL-18": {
+      "gold_retrieval_ids": [
+        "NCT04303780"
+      ],
+      "gold_eligibility": "ELIGIBLE",
+      "gold_criteria_statuses": {
+        "C12": "MET",
+        "C13": "MET"
+      },
+      "gold_citations": [
+        "clinical_summary:confirmed KRAS G12C mutation",
+        "clinical_summary:progression after 6 months of chemo-immunotherapy"
+      ],
+      "hard_exclusion_triggered": false
+    },
+    "EVAL-19": {
+      "gold_retrieval_ids": [
+        "NCT02365142"
+      ],
+      "gold_eligibility": "INELIGIBLE",
+      "gold_criteria_statuses": {
+        "C_EXCL_AUTOIMMUNE": "MET",
+        "C_EXCL_STEROIDS": "MET"
+      },
+      "gold_citations": [
+        "clinical_summary:severe active ulcerative colitis",
+        "clinical_summary:oral Prednisone 40mg daily"
+      ],
+      "hard_exclusion_triggered": true
+    },
+    "EVAL-20": {
+      "gold_retrieval_ids": [
+        "NCT02484404"
+      ],
+      "gold_eligibility": "INELIGIBLE",
+      "gold_criteria_statuses": {
+        "C_HEPATIC_EXCL": "MET"
+      },
+      "gold_citations": [
+        "labs:AST 215 U/L (>5x ULN)",
+        "labs:ALT 280 U/L (>6x ULN)",
+        "labs:total bilirubin 2.6 mg/dL"
+      ],
+      "hard_exclusion_triggered": true
+    },
+    "EVAL-21": {
+      "gold_retrieval_ids": [
+        "NCT02484404"
+      ],
+      "gold_eligibility": "INELIGIBLE",
+      "gold_criteria_statuses": {
+        "C_ILD_EXCL": "MET"
+      },
+      "gold_citations": [
+        "clinical_summary:bilateral interstitial pneumonitis and active ground-glass opacities"
+      ],
+      "hard_exclusion_triggered": true
+    },
+    "EVAL-22": {
+      "gold_retrieval_ids": [
+        "NCT02484404"
+      ],
+      "gold_eligibility": "INELIGIBLE",
+      "gold_criteria_statuses": {
+        "C04": "NOT_MET"
+      },
+      "gold_citations": [
+        "clinical_summary:ECOG PS 3",
+        "clinical_summary:bed-bound >50% of waking hours"
+      ],
+      "hard_exclusion_triggered": true
+    },
+    "EVAL-23": {
+      "gold_retrieval_ids": [
+        "NCT02484404"
+      ],
+      "gold_eligibility": "INELIGIBLE",
+      "gold_criteria_statuses": {
+        "C02": "NOT_MET",
+        "C03": "NOT_MET"
+      },
+      "gold_citations": [
+        "clinical_summary:pure squamous cell lung carcinoma",
+        "clinical_summary:EGFR and ALK negative"
+      ],
+      "hard_exclusion_triggered": false
+    },
+    "EVAL-24": {
+      "gold_retrieval_ids": [
+        "NCT03041311"
+      ],
+      "gold_eligibility": "INELIGIBLE",
+      "gold_criteria_statuses": {
+        "C_EXCL_PRIOR_ALK": "MET"
+      },
+      "gold_citations": [
+        "clinical_summary:previously treated with Alectinib for 18 months"
+      ],
+      "hard_exclusion_triggered": true
+    },
+    "EVAL-25": {
+      "gold_retrieval_ids": [
+        "NCT02484404"
+      ],
+      "gold_eligibility": "NEEDS_REVIEW",
+      "gold_criteria_statuses": {
+        "C03": "UNKNOWN"
+      },
+      "gold_citations": [
+        "clinical_summary:NGS panel pending at reference laboratory"
+      ],
+      "hard_exclusion_triggered": false
+    },
+    "EVAL-26": {
+      "gold_retrieval_ids": [
+        "NCT02484404"
+      ],
+      "gold_eligibility": "NEEDS_REVIEW",
+      "gold_criteria_statuses": {
+        "C_LVEF": "UNKNOWN"
+      },
+      "gold_citations": [
+        "clinical_summary:Baseline echocardiogram / LVEF evaluation not performed"
+      ],
+      "hard_exclusion_triggered": false
+    },
+    "EVAL-27": {
+      "gold_retrieval_ids": [
+        "NCT03732820"
+      ],
+      "gold_eligibility": "NEEDS_REVIEW",
+      "gold_criteria_statuses": {
+        "C_HER2_STATUS": "UNKNOWN"
+      },
+      "gold_citations": [
+        "biomarkers:HER2 2+ equivocal",
+        "biomarkers:FISH pending"
+      ],
+      "hard_exclusion_triggered": false
+    },
+    "EVAL-28": {
+      "gold_retrieval_ids": [
+        "NCT02484404"
+      ],
+      "gold_eligibility": "NEEDS_REVIEW",
+      "gold_criteria_statuses": {
+        "C_RENAL_BORDERLINE": "UNKNOWN"
+      },
+      "gold_citations": [
+        "labs:CrCl is 49.5 mL/min (borderline against protocol threshold of >= 50 mL/min)"
+      ],
+      "hard_exclusion_triggered": false
+    },
+    "EVAL-29": {
+      "gold_retrieval_ids": [
+        "NCT02365142"
+      ],
+      "gold_eligibility": "NEEDS_REVIEW",
+      "gold_criteria_statuses": {
+        "C_VIRAL_SEROLOGY": "UNKNOWN"
+      },
+      "gold_citations": [
+        "clinical_summary:Viral serologies (HBsAg, anti-HCV, HIV) were not sent"
+      ],
+      "hard_exclusion_triggered": false
+    },
+    "EVAL-30": {
+      "gold_retrieval_ids": [
+        "NCT02484404"
+      ],
+      "gold_eligibility": "NEEDS_REVIEW",
+      "gold_criteria_statuses": {
+        "C05": "UNKNOWN"
+      },
+      "gold_citations": [
+        "labs:platelets 99k/uL (borderline against protocol threshold >= 100k/uL)"
+      ],
+      "hard_exclusion_triggered": false
+    }
+  }
+}
