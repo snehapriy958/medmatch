@@ -85,6 +85,10 @@ spec:
 
               readOnly: true
 
+            - name: tmp
+
+              mountPath: /tmp
+
 
 
 
@@ -210,7 +214,7 @@ spec:
 
             allowPrivilegeEscalation: false
 
-            readOnlyRootFilesystem: false
+            readOnlyRootFilesystem: true
 
 
             capabilities:
@@ -270,6 +274,11 @@ spec:
 
 
       volumes:
+
+
+        - name: tmp
+
+          emptyDir: {}
 
 
         - name: jwt-keys

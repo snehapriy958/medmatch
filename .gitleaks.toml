@@ -1,0 +1,27 @@
+# Gitleaks Configuration for MedMatch V2
+# Strictly scoped allowlist — ZERO directory or path exclusions.
+# Scans all source code, tests, workflows, documentation, and commit history.
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Narrow global allowlist for verified synthetic test tokens and doc sample UUIDs"
+regexes = [
+    # Ephemeral synthetic mock key strings used in CI workflow and unit tests
+    '''test-synthetic(-ci)?-key-12345''',
+    # Documentation sample UUID for HTTP Idempotency-Key header in api-guidelines.md
+    '''4b5d6f78-2c18-4d8a-9d93-53ab2f8e4f41''',
+]
+
+[[rules]]
+id = "private-key"
+[rules.allowlist]
+description = "Strictly scoped allowlist for string parser calls in specific auth service source files"
+paths = [
+    '''services/auth-service/src/main/java/com/medmatch/auth/security/JwtService\.java''',
+    '''services/auth-service/src/main/java/com/medmatch/auth/util/PemUtils\.java''',
+]
+regexes = [
+    '''\.replace\("-----BEGIN''',
+]

@@ -17,9 +17,20 @@ spec:
       labels:
         app.kubernetes.io/name: medmatch-celery-worker
     spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
       containers:
         - name: celery-worker
           image: medmatch/ai-service:latest
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
           command: ["celery", "-A", "app.celery.celery_app", "worker", "--loglevel=info", "-c", "2"]
           env:
             - name: ENVIRONMENT
@@ -59,7 +70,11 @@ spec:
               readOnly: true
             - name: upload-storage
               mountPath: /app/uploads
+            - name: tmp
+              mountPath: /tmp
       volumes:
+        - name: tmp
+          emptyDir: {}
         - name: jwt-public-key
           secret:
             secretName: medmatch-jwt-public-key

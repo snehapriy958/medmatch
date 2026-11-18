@@ -21,9 +21,20 @@ spec:
         prometheus.io/port: "8081"
         prometheus.io/path: "/actuator/prometheus"
     spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
       containers:
         - name: auth-service
           image: medmatch/auth-service:latest
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
           ports:
             - containerPort: 8081
               name: http
@@ -70,7 +81,11 @@ spec:
             - name: jwt-keys
               mountPath: /app/keys
               readOnly: true
+            - name: tmp
+              mountPath: /tmp
       volumes:
+        - name: tmp
+          emptyDir: {}
         - name: jwt-keys
           secret:
             secretName: medmatch-jwt-keypair

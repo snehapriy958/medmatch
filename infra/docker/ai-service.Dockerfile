@@ -13,11 +13,21 @@ RUN python -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
 RUN pip install --no-cache-dir --upgrade pip \
-    && pip install --no-cache-dir --retries 10 --timeout 120 -r requirements.txt
+    && pip install --no-cache-dir --retries 10 --timeout 120 -r requirements.txt \
+    && rm -rf /opt/venv/lib/python3.12/site-packages/pip* /opt/venv/bin/pip*
 
 # ---- Stage 2: Runtime ----
 
 FROM python:3.12-slim
+
+# Security update: apply patched zlib1g (CVE-2026-85091) from Debian security repository.
+RUN apt-get update \
+    && apt-get --only-upgrade install -y --no-install-recommends zlib1g \
+    && rm -rf /var/lib/apt/lists/*
+
+# Remove base image system pip containing legacy vendored setuptools 70.3.0 (CVE-2025-47273).
+# Application runtime operates self-contained inside /opt/venv.
+RUN rm -rf /usr/local/lib/python3.12/site-packages/pip* /usr/local/bin/pip*
 
 RUN groupadd --system --gid 1000 fastapi \
     && useradd --system --uid 1000 --gid fastapi --no-create-home fastapi

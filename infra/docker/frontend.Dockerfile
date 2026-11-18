@@ -49,13 +49,12 @@ COPY frontend/medmatch-ui/ .
 RUN npm run build
 
 # ---- Stage 2: Runtime ----
-# nginx:1.27-alpine — small, well-maintained, standard choice for serving a
-# static SPA build. Reconfigured below to run fully as a non-root user,
-# which is why several defaults (pid path, cache dirs, listen port) are
-# overridden rather than left at the image's defaults.
-FROM nginx:1.27-alpine
+# nginx:1.31.8-alpine-slim (Alpine 3.24) — minimal attack surface, 0 Critical/High CVEs.
+# Pinned to explicit Nginx release 1.31.8 on Alpine 3.24 with zlib patched.
+FROM nginx:1.31.8-alpine-slim
 
-RUN rm -f /etc/nginx/conf.d/default.conf
+RUN apk add --no-cache 'zlib>=1.4-r0' \
+    && rm -f /etc/nginx/conf.d/default.conf
 
 COPY infra/docker/nginx.conf /etc/nginx/nginx.conf
 

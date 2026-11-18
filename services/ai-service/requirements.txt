@@ -13,7 +13,7 @@ pydantic-settings
 redis
 celery
 
-torch==2.8.0+cpu
+torch==2.10.0+cpu
 sentence-transformers==5.7.0
 numpy>=2.1.0,<3.0
 
@@ -21,7 +21,11 @@ pymupdf
 python-multipart
 
 httpx
-PyJWT
+PyJWT>=2.15.0
+urllib3>=2.8.0
+certifi>=2026.10.18
+pyasn1>=0.6.5
+filelock>=4.2.1
 
 prometheus-client
 prometheus-fastapi-instrumentator

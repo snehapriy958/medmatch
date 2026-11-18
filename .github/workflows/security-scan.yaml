@@ -2,29 +2,86 @@ name: Security Scan
 
 on:
   push:
-    branches: [main, phase-0-2-transfer]
+    branches: [main, production-readiness/medmatch-hardening]
   pull_request:
-    branches: [main, phase-0-2-transfer]
+    branches: [main, production-readiness/medmatch-hardening]
 
 permissions:
   contents: read
   security-events: write
 
 jobs:
-  filesystem:
-    name: Filesystem Security Scan
+  gitleaks:
+    name: Secret Detection (Gitleaks)
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0
 
-      - name: Trivy filesystem scan
-        uses: aquasecurity/trivy-action@v0.36.0
+      - name: Run Gitleaks
+        uses: gitleaks/gitleaks-action@f586c14365d4643c6aa59d472ae6e984bf47bb34 # v2.3.8
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_CONFIG: .gitleaks.toml
+
+  python-security:
+    name: Python SAST & Dependency Audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Set up Python
+        uses: actions/setup-python@0b93645e9fea7318ecaed2b359559ac225c90a2b # v5.3.0
+        with:
+          python-version: "3.12"
+
+      - name: Install Security Tools
+        run: pip install bandit pip-audit
+
+      - name: Run Bandit SAST Scan
+        run: bandit -r services/ai-service/app -ll -ii
+
+      - name: Run pip-audit on AI Service Requirements
+        run: pip-audit -r services/ai-service/requirements.txt
+
+  filesystem-vulnerability:
+    name: Trivy Vulnerability Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@3a4f6e1af504cf6a31855fa899c6aa5355ba6c12 # v4.7.0
+        with:
+          java-version: "21"
+          distribution: "temurin"
+          cache: "maven"
+
+      - name: Pre-populate Maven Cache
+        run: |
+          cd services/auth-service
+          mvn dependency:resolve -B
+
+      - name: Trivy Filesystem Scan
+        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         with:
           scan-type: fs
           scan-ref: .
-          scanners: vuln,secret
+          version: "v0.76.2"
+          scanners: vuln
           severity: CRITICAL,HIGH
+          skip-dirs: "services/ai-service/.venv,frontend/medmatch-ui/node_modules,services/auth-service/target"
           ignore-unfixed: true
+          format: "sarif"
+          output: "trivy-results.sarif"
           exit-code: "1"
+
+      - name: Upload Trivy SARIF Report
+        uses: github/codeql-action/upload-sarif@6bb031afdd8eb862ea3fc1848194185e076637e5 # v3.28.11
+        if: always()
+        with:
+          sarif_file: "trivy-results.sarif"
